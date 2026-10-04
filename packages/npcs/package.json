@@ -1,6 +1,6 @@
 {
   "name": "@gurps-sheet/npcs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ready-made GURPS 4e NPCs in the gurps-character format, grouped by adventure style and built only from Basic Set skills, traits and equipment — examples for GMs and fixtures for engine tests.",
   "type": "module",
   "license": "UNLICENSED",

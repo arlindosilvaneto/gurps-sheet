@@ -114,3 +114,7 @@ The tests check the following:
 Separately, the editor's test suite (`test/npcs.test.js` at the repository root) loads every NPC into the sheet and saves it back unchanged.
 
 The catalog's stats were transcribed from the Basic Set tables and cross-checked against the Basic Set data in the GCS master library. The spell entries cite the Basic Set's magic chapter (B242-253) rather than individual pages.
+
+## Releases
+
+Published to npm from CI when a version bump is merged to `main`; each version has a GitHub release tagged `npcs-v<version>` with its changes.

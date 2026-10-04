@@ -237,3 +237,7 @@ Objects are closed (`additionalProperties: false`), so a document written for a 
 - **Readers:** accept documents up to the minor version of the schema they ship (this library: up to 1.3), and reject newer minors with a clear "update the reader" message (`newerVersion`) rather than misreport them as invalid.
 - **Writers:** emit the lowest version whose features they use. The sheet editor writes 1.1 by default, 1.2 when a character uses cost modifiers or has Size Modifier ≥ 1, and 1.3 when it uses NH bonuses or justifications.
 - **Old Size documents:** a document older than 1.2 with Size Modifier ≥ 1 has ST/HP costs computed without the discount. Apply the current rule when reading it.
+
+## Releases
+
+Published to npm from CI when a version bump is merged to `main`; each version has a GitHub release tagged `character-v<version>` with its changes.
