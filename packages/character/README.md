@@ -86,7 +86,7 @@ Document types (`GurpsCharacter` and its parts) are generated from the schema in
 
 | Command | What it does |
 |---|---|
-| `npm run build` | Cleans and compiles `src/*.ts` to `dist/` (`tsconfig.build.json`). Also runs on `npm install` (`prepare`). |
+| `npm run build` | Cleans and compiles `src/*.ts` to `dist/` (`tsconfig.build.json`). Also runs before `npm pack`/`npm publish` (`prepack`). |
 | `npm run typecheck` | Strict type check of sources and tests (`tsconfig.json`). |
 | `npm run test:unit` | `node:test` on `test/*.test.ts`, run from source through `tsx`. |
 | `npm run test:dist` | Builds, then checks the package as an outside consumer sees it: `test/consumer/usage.ts` type-checks against `dist/*.d.ts`, and `test/consumer/smoke.mjs` runs `dist/` on plain Node. |

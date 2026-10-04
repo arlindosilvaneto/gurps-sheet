@@ -11,15 +11,16 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "npm run test:app && npm run test:lib && npm run test:npcs",
-    "test:app": "node --conditions=@gurps-sheet/source --import tsx --test test/",
+    "test:app": "node --conditions=@gurps-sheet/source --import tsx --test test/*.test.js",
     "test:lib": "npm test -w @gurps-sheet/character",
     "test:npcs": "npm test -w @gurps-sheet/npcs"
   },
   "dependencies": {
-    "@gurps-sheet/character": "0.1.0",
+    "@gurps-sheet/character": "^0.1.0",
     "pdf-lib": "^1.17.1"
   },
   "devDependencies": {
+    "semver": "^7.8.5",
     "tsx": "^4.23.15",
     "vite": "^8.3.2"
   },
