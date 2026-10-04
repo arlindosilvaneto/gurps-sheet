@@ -34,13 +34,18 @@ npm run report -w @gurps-sheet/npcs          # per-NPC points, defenses and skil
 ## CI and releases
 
 - **Test globs are shell-expanded** (`test/*.test.js`, `test/*.test.ts`), never bare directories: on Node 22, `node --test test/` treats the directory as a module and fails.
-- **`.github/workflows/ci.yml`** runs on every PR and every push to `main`. It runs `npm ci`, `npm test` and `npm run build` on Node 20.19 and 22. On PRs, the release check (`node scripts/release.mjs check`) also requires two things:
-  - every package changed outside its `test/` folder carries a version that isn't published yet;
-  - every workspace dependency range is satisfied by the local version. Otherwise npm would install the registry copy instead of linking the workspace.
-- **`.github/workflows/release.yml`** runs on pushes to `main` that touch `packages/**`, and manually (with an optional dry run). It runs the tests, then `node scripts/release.mjs publish`, which publishes each package whose version isn't on the registry yet:
-  - dependencies go first (`character` before `npcs`);
-  - prerelease versions use their own dist-tag;
-  - it creates a git tag `<dir>-v<version>` (e.g. `character-v0.2.0`) and a GitHub release with that package's commits since its previous tag.
+- **One workflow, `.github/workflows/ci.yml`:**
+  - **`test`** runs on every PR, push to `main` and manual run: `npm ci`, `npm test` and `npm run build` on Node 20.19 and 22.
+  - **`release-check`** runs on PRs only. It calls `node scripts/release.mjs check`, which requires two things:
+    - every package changed outside its `test/` folder carries a version that isn't published yet;
+    - every workspace dependency range is satisfied by the local version. Otherwise npm would install the registry copy instead of linking the workspace.
+  - **`release`** runs on pushes to `main` and manual runs on `main`, with an optional dry run. It needs every `test` job to pass first. It calls `node scripts/release.mjs publish`, which publishes each package whose version isn't on the registry yet:
+    - dependencies go first (`character` before `npcs`);
+    - prerelease versions use their own dist-tag;
+    - it creates a git tag `<dir>-v<version>` (e.g. `character-v0.2.0`) and a GitHub release with that package's commits since its previous tag.
+
+    When nothing was bumped, it only reports "already published".
+  - **Cancellation:** superseded PR runs are cancelled. Runs on `main` never are, and the release job has its own non-cancelling concurrency group, so a publish is never cut off.
 - **To release**, bump the version in the PR: `npm version patch -w @gurps-sheet/character --no-git-tag-version`. If a dependent's range no longer matches (internal dependencies use `^`, so this happens on a 0.x minor bump), update it too. Merging publishes. `main` only accepts PRs, so CI never commits version bumps itself.
 - **Registry auth** uses the `NPM_REGISTRY_TOKEN` secret. The registry defaults to npmjs; set the repository variable `NPM_REGISTRY_URL` to use another registry, which also turns off provenance. Publishing to npmjs needs an npm organization named `gurps-sheet` that the token's account can publish to.
 - **No build on install:** packages build only on `prepack`. Nothing in the repo needs `dist/` (everything uses the `@gurps-sheet/source` condition). `npm install` runs workspace lifecycle scripts in parallel, so a `prepare` build of `npcs` would race with `character`'s. The `npcs` build therefore builds `character` first.
