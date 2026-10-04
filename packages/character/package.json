@@ -1,6 +1,6 @@
 {
   "name": "@gurps-sheet/character",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Load, validate, verify and update GURPS 4th Edition characters (gurps-character JSON format) — for combat engines, VTT bridges and other tools.",
   "type": "module",
   "license": "UNLICENSED",
