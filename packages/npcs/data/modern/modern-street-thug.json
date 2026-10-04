@@ -1,0 +1,329 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Rico Vance",
+    "height": "1.77 m",
+    "weight": "76 kg",
+    "age": "22",
+    "sizeModifier": 0,
+    "appearance": "Hoodie, gold chain, knuckle tattoos"
+  },
+  "points": {
+    "budget": 25,
+    "spent": 25,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 30,
+      "advantages": 0,
+      "disadvantages": -15,
+      "skills": 10,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 11,
+      "points": 10
+    },
+    "dx": {
+      "value": 11,
+      "points": 20
+    },
+    "iq": {
+      "value": 9,
+      "points": -20
+    },
+    "ht": {
+      "value": 12,
+      "points": 20
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 11,
+      "base": 11,
+      "points": 0,
+      "current": 11
+    },
+    "will": {
+      "value": 9,
+      "base": 9,
+      "points": 0
+    },
+    "per": {
+      "value": 9,
+      "base": 9,
+      "points": 0
+    },
+    "fp": {
+      "value": 12,
+      "base": 12,
+      "points": 0,
+      "current": 12
+    },
+    "basicSpeed": {
+      "value": 5.75,
+      "base": 5.75,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 12,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 12,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 24,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 36,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 72,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 120,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    },
+    "swing": {
+      "notation": "1d+1",
+      "dice": 1,
+      "adds": 1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": "Knife",
+      "value": 9
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 8,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Bully (12)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Social Stigma (Criminal Record)",
+      "type": "disadvantage",
+      "points": -5
+    }
+  ],
+  "skills": [
+    {
+      "name": "Brawling",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Guns (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    },
+    {
+      "name": "Streetwise",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 9,
+      "points": 2
+    },
+    {
+      "name": "Intimidation",
+      "attribute": "will",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 9,
+      "points": 2
+    },
+    {
+      "name": "Driving (Automobile)",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 10,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Large Knife",
+        "damage": [
+          {
+            "notation": "sw-2 cut",
+            "base": "swing",
+            "adds": -2,
+            "type": "cut"
+          },
+          {
+            "notation": "thr imp",
+            "base": "thrust",
+            "adds": 0,
+            "type": "imp"
+          }
+        ],
+        "reach": "C,1",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 6",
+        "cost": 40,
+        "weight": 0.5
+      },
+      {
+        "name": "Brass Knuckles",
+        "damage": [
+          {
+            "notation": "thr cr",
+            "base": "thrust",
+            "adds": 0,
+            "type": "cr"
+          }
+        ],
+        "reach": "C",
+        "parry": {
+          "notation": "0",
+          "modifier": 0,
+          "unbalanced": false
+        },
+        "cost": 10,
+        "weight": 0.125
+      }
+    ],
+    "ranged": [
+      {
+        "name": "Holdout Pistol, .380",
+        "damage": {
+          "notation": "2d pi",
+          "base": "fixed",
+          "dice": 2,
+          "adds": 0,
+          "type": "pi"
+        },
+        "accuracy": "1",
+        "range": {
+          "notation": "125/1500",
+          "halfDamage": 125,
+          "max": 1500
+        },
+        "rateOfFire": "3",
+        "shots": "5+1(3)",
+        "minST": "8",
+        "bulk": -1,
+        "recoil": 3,
+        "legalityClass": 3,
+        "cost": 300,
+        "weight": 0.65
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Cell Phone",
+      "location": "Pocket",
+      "cost": 250,
+      "weight": 0.125
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 600,
+    "weight": 1.4
+  },
+  "notes": [
+    "Brave in a crowd, runs when the first friend goes down."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

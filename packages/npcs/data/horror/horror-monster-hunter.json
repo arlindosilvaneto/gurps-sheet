@@ -1,0 +1,409 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Margaret \"Mags\" Calloway",
+    "height": "1.71 m",
+    "weight": "67 kg",
+    "age": "40",
+    "sizeModifier": 0,
+    "appearance": "Trench coat with sawn-off sleeves, scar across the throat"
+  },
+  "points": {
+    "budget": 150,
+    "spent": 150,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 120,
+      "advantages": 40,
+      "disadvantages": -30,
+      "skills": 20,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 12,
+      "points": 20
+    },
+    "dx": {
+      "value": 13,
+      "points": 60
+    },
+    "iq": {
+      "value": 11,
+      "points": 20
+    },
+    "ht": {
+      "value": 12,
+      "points": 20
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 12,
+      "base": 12,
+      "points": 0,
+      "current": 12
+    },
+    "will": {
+      "value": 11,
+      "base": 11,
+      "points": 0
+    },
+    "per": {
+      "value": 11,
+      "base": 11,
+      "points": 0
+    },
+    "fp": {
+      "value": 12,
+      "base": 12,
+      "points": 0,
+      "current": 12
+    },
+    "basicSpeed": {
+      "value": 6.25,
+      "base": 6.25,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 6,
+      "base": 6,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 14,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 14,
+        "move": 6,
+        "dodge": 9
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 28,
+        "move": 4,
+        "dodge": 8
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 42,
+        "move": 3,
+        "dodge": 7
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 84,
+        "move": 2,
+        "dodge": 6
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 140,
+        "move": 1,
+        "dodge": 5
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    },
+    "swing": {
+      "notation": "1d+2",
+      "dice": 1,
+      "adds": 2
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 9
+    },
+    "parry": {
+      "skill": "Axe/Mace",
+      "value": 9
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [
+    {
+      "location": "Torso",
+      "locationId": "torso",
+      "dr": 1
+    },
+    {
+      "location": "Arms",
+      "locationId": "arms",
+      "dr": 1
+    }
+  ],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 6,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Combat Reflexes",
+      "type": "advantage",
+      "points": 15
+    },
+    {
+      "name": "Unfazeable",
+      "type": "advantage",
+      "points": 15
+    },
+    {
+      "name": "High Pain Threshold",
+      "type": "advantage",
+      "points": 10
+    },
+    {
+      "name": "Obsession (destroy the thing that killed her husband) (12)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Bloodlust (12)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Loner (12)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Nightmares (12)",
+      "type": "disadvantage",
+      "points": -5
+    }
+  ],
+  "skills": [
+    {
+      "name": "Guns (Shotgun)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 2,
+      "level": 15,
+      "points": 4
+    },
+    {
+      "name": "Guns (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Hidden Lore (Spirit Lore)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 2
+    },
+    {
+      "name": "Occultism",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 2
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Tracking",
+      "attribute": "per",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 12,
+      "points": 4
+    },
+    {
+      "name": "Stealth",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 13,
+      "points": 2
+    },
+    {
+      "name": "Axe/Mace",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 13,
+      "points": 2
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Hatchet",
+        "damage": [
+          {
+            "notation": "sw cut",
+            "base": "swing",
+            "adds": 0,
+            "type": "cut"
+          }
+        ],
+        "reach": "1",
+        "parry": {
+          "notation": "0",
+          "modifier": 0,
+          "unbalanced": false
+        },
+        "notes": "ST 8",
+        "cost": 40,
+        "weight": 1
+      },
+      {
+        "name": "Wooden Stake",
+        "damage": [
+          {
+            "notation": "thr(0.5) imp"
+          }
+        ],
+        "reach": "C",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 5",
+        "cost": 4,
+        "weight": 0.25
+      }
+    ],
+    "ranged": [
+      {
+        "name": "Pump Shotgun, 12G",
+        "damage": {
+          "notation": "1d+1 pi",
+          "base": "fixed",
+          "dice": 1,
+          "adds": 1,
+          "type": "pi"
+        },
+        "accuracy": "3",
+        "range": {
+          "notation": "50/125",
+          "halfDamage": 50,
+          "max": 125
+        },
+        "rateOfFire": "2x9",
+        "shots": "5(3i)",
+        "minST": "10†",
+        "bulk": -5,
+        "recoil": 1,
+        "legalityClass": null,
+        "cost": 240,
+        "weight": 4
+      },
+      {
+        "name": "Auto Pistol, .45",
+        "damage": {
+          "notation": "2d pi+",
+          "base": "fixed",
+          "dice": 2,
+          "adds": 0,
+          "type": "pi+"
+        },
+        "accuracy": "2",
+        "range": {
+          "notation": "175/1700",
+          "halfDamage": 175,
+          "max": 1700
+        },
+        "rateOfFire": "3",
+        "shots": "7+1(3)",
+        "minST": "10",
+        "bulk": -2,
+        "recoil": 3,
+        "legalityClass": 3,
+        "cost": 300,
+        "weight": 1.5
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Leather Jacket",
+      "location": "Torso",
+      "cost": 50,
+      "weight": 2
+    },
+    {
+      "name": "Flashlight, Heavy",
+      "location": "Belt",
+      "cost": 20,
+      "weight": 0.5
+    },
+    {
+      "name": "Holster, Shoulder",
+      "location": "Shoulder",
+      "cost": 50,
+      "weight": 0.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 704,
+    "weight": 9.75
+  },
+  "notes": [
+    "Shotgun first, stake and hatchet to finish; has seen too much to be frightened."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

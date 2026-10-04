@@ -1,0 +1,374 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Vincent \"The Ox\" Moretti",
+    "height": "1.88 m",
+    "weight": "115 kg",
+    "age": "39",
+    "sizeModifier": 0,
+    "appearance": "Tailored suit stretched over a boxer's build"
+  },
+  "points": {
+    "budget": 100,
+    "spent": 100,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 84,
+      "advantages": 10,
+      "disadvantages": -20,
+      "skills": 26,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 14,
+      "points": 40
+    },
+    "dx": {
+      "value": 11,
+      "points": 20
+    },
+    "iq": {
+      "value": 10,
+      "points": 0
+    },
+    "ht": {
+      "value": 12,
+      "points": 20
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 16,
+      "base": 14,
+      "points": 4,
+      "current": 16
+    },
+    "will": {
+      "value": 10,
+      "base": 10,
+      "points": 0
+    },
+    "per": {
+      "value": 10,
+      "base": 10,
+      "points": 0
+    },
+    "fp": {
+      "value": 12,
+      "base": 12,
+      "points": 0,
+      "current": 12
+    },
+    "basicSpeed": {
+      "value": 5.75,
+      "base": 5.75,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 20,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 20,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 40,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 60,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 120,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 200,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d",
+      "dice": 1,
+      "adds": 0
+    },
+    "swing": {
+      "notation": "2d",
+      "dice": 2,
+      "adds": 0
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": "Brawling",
+      "value": 9
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 8,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "High Pain Threshold",
+      "type": "advantage",
+      "points": 10
+    },
+    {
+      "name": "Callous",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Bully (12)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Social Stigma (Criminal Record)",
+      "type": "disadvantage",
+      "points": -5
+    }
+  ],
+  "skills": [
+    {
+      "name": "Guns (Submachine Gun)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Guns (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Brawling",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 2,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Intimidation",
+      "attribute": "will",
+      "difficulty": "A",
+      "relativeLevel": 2,
+      "level": 12,
+      "points": 8
+    },
+    {
+      "name": "Streetwise",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 11,
+      "points": 4
+    },
+    {
+      "name": "Driving (Automobile)",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 2
+    },
+    {
+      "name": "Broadsword",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 2
+    },
+    {
+      "name": "Savoir-Faire (Mafia)",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 10,
+      "points": 1
+    },
+    {
+      "name": "Interrogation",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 9,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Light Club",
+        "damage": [
+          {
+            "notation": "sw+1 cr",
+            "base": "swing",
+            "adds": 1,
+            "type": "cr"
+          },
+          {
+            "notation": "thr+1 cr",
+            "base": "thrust",
+            "adds": 1,
+            "type": "cr"
+          }
+        ],
+        "reach": "1",
+        "parry": {
+          "notation": "0",
+          "modifier": 0,
+          "unbalanced": false
+        },
+        "notes": "ST 10",
+        "cost": 5,
+        "weight": 1.5
+      }
+    ],
+    "ranged": [
+      {
+        "name": "SMG, 9mm",
+        "damage": {
+          "notation": "3d-1 pi",
+          "base": "fixed",
+          "dice": 3,
+          "adds": -1,
+          "type": "pi"
+        },
+        "accuracy": "4",
+        "range": {
+          "notation": "160/1900",
+          "halfDamage": 160,
+          "max": 1900
+        },
+        "rateOfFire": "13",
+        "shots": "30+1(3)",
+        "minST": "10†",
+        "bulk": -4,
+        "recoil": 2,
+        "legalityClass": 2,
+        "cost": 1200,
+        "weight": 3.75
+      },
+      {
+        "name": "Revolver, .357M",
+        "damage": {
+          "notation": "3d-1 pi",
+          "base": "fixed",
+          "dice": 3,
+          "adds": -1,
+          "type": "pi"
+        },
+        "accuracy": "2",
+        "range": {
+          "notation": "185/2000",
+          "halfDamage": 185,
+          "max": 2000
+        },
+        "rateOfFire": "3",
+        "shots": "6(3i)",
+        "minST": "10",
+        "bulk": -2,
+        "recoil": 3,
+        "legalityClass": 3,
+        "cost": 500,
+        "weight": 1.5
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Holster, Shoulder",
+      "location": "Shoulder",
+      "cost": 50,
+      "weight": 0.5
+    },
+    {
+      "name": "Cell Phone",
+      "location": "Pocket",
+      "cost": 250,
+      "weight": 0.125
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 2005,
+    "weight": 7.375
+  },
+  "notes": [
+    "Breaks knees with a baseball bat (light club); the SMG comes out for real business."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

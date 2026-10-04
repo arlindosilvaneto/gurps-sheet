@@ -10,9 +10,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "npm run test:app && npm run test:lib",
+    "test": "npm run test:app && npm run test:lib && npm run test:npcs",
     "test:app": "node --conditions=@gurps-sheet/source --import tsx --test test/",
-    "test:lib": "npm test -w @gurps-sheet/character"
+    "test:lib": "npm test -w @gurps-sheet/character",
+    "test:npcs": "npm test -w @gurps-sheet/npcs"
   },
   "dependencies": {
     "@gurps-sheet/character": "0.1.0",

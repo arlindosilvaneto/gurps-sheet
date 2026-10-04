@@ -1,0 +1,356 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Dr. Viktor Strand",
+    "height": "1.82 m",
+    "weight": "76 kg",
+    "age": "55",
+    "sizeModifier": 0,
+    "appearance": "Immaculate white coat, gold pince-nez"
+  },
+  "points": {
+    "budget": 100,
+    "spent": 100,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 80,
+      "advantages": 21,
+      "disadvantages": -45,
+      "skills": 44,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 10,
+      "points": 0
+    },
+    "dx": {
+      "value": 10,
+      "points": 0
+    },
+    "iq": {
+      "value": 14,
+      "points": 80
+    },
+    "ht": {
+      "value": 10,
+      "points": 0
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 10,
+      "base": 10,
+      "points": 0,
+      "current": 10
+    },
+    "will": {
+      "value": 14,
+      "base": 14,
+      "points": 0
+    },
+    "per": {
+      "value": 14,
+      "base": 14,
+      "points": 0
+    },
+    "fp": {
+      "value": 10,
+      "base": 10,
+      "points": 0,
+      "current": 10
+    },
+    "basicSpeed": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 10,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 10,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 20,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 30,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 60,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 100,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-2",
+      "dice": 1,
+      "adds": -2
+    },
+    "swing": {
+      "notation": "1d",
+      "dice": 1,
+      "adds": 0
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": null,
+      "value": null
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [
+    {
+      "source": "status",
+      "modifier": 1,
+      "description": "Respected physician"
+    }
+  ],
+  "techLevel": {
+    "level": 6,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    },
+    {
+      "name": "German",
+      "spoken": "native",
+      "written": "native",
+      "points": 6
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Status 1",
+      "type": "advantage",
+      "points": 5
+    },
+    {
+      "name": "Wealth (Comfortable)",
+      "type": "advantage",
+      "points": 10
+    },
+    {
+      "name": "Sadism (12)",
+      "type": "disadvantage",
+      "points": -15
+    },
+    {
+      "name": "Megalomania",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Secret (experiments on his patients)",
+      "type": "disadvantage",
+      "points": -20
+    }
+  ],
+  "skills": [
+    {
+      "name": "Physician",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 1,
+      "level": 15,
+      "points": 8
+    },
+    {
+      "name": "Psychology",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 2,
+      "level": 16,
+      "points": 12
+    },
+    {
+      "name": "Hypnotism",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 1,
+      "level": 15,
+      "points": 8
+    },
+    {
+      "name": "Pharmacy (Synthetic)",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": -1,
+      "level": 13,
+      "points": 2
+    },
+    {
+      "name": "Diagnosis",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 4
+    },
+    {
+      "name": "Surgery",
+      "attribute": "iq",
+      "difficulty": "VH",
+      "relativeLevel": -2,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Poisons",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": -1,
+      "level": 13,
+      "points": 2
+    },
+    {
+      "name": "Savoir-Faire (High Society)",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 1
+    },
+    {
+      "name": "Interrogation",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Detect Lies",
+      "attribute": "per",
+      "difficulty": "H",
+      "relativeLevel": -1,
+      "level": 13,
+      "points": 2
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 10,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Small Knife",
+        "damage": [
+          {
+            "notation": "sw-3 cut",
+            "base": "swing",
+            "adds": -3,
+            "type": "cut"
+          },
+          {
+            "notation": "thr-1 imp",
+            "base": "thrust",
+            "adds": -1,
+            "type": "imp"
+          }
+        ],
+        "reach": "C,1",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 5",
+        "cost": 30,
+        "weight": 0.25
+      }
+    ],
+    "ranged": []
+  },
+  "equipment": [
+    {
+      "name": "First Aid Kit",
+      "cost": 50,
+      "weight": 1
+    },
+    {
+      "name": "Personal Basics",
+      "cost": 5,
+      "weight": 0.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 85,
+    "weight": 1.75
+  },
+  "notes": [
+    "Never fights in person: orderlies, sedatives and hypnotic suggestion do it for him."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

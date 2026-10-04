@@ -1,0 +1,56 @@
+{
+  "name": "@gurps-sheet/npcs",
+  "version": "0.1.0",
+  "description": "Ready-made GURPS 4e NPCs in the gurps-character format, grouped by adventure style and built only from Basic Set skills, traits and equipment — examples for GMs and fixtures for engine tests.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "exports": {
+    ".": {
+      "@gurps-sheet/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./catalog": {
+      "@gurps-sheet/source": "./src/catalog/index.ts",
+      "types": "./dist/catalog/index.d.ts",
+      "default": "./dist/catalog/index.js"
+    },
+    "./data/*": "./data/*",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "data",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.build.json",
+    "prepare": "npm run build",
+    "generate": "node --conditions=@gurps-sheet/source --import tsx scripts/generate.ts",
+    "test": "npm run typecheck && npm run test:unit && npm run generate -- --check && npm run test:dist",
+    "test:unit": "node --conditions=@gurps-sheet/source --import tsx --test test/*.test.ts",
+    "test:dist": "npm run build && node test/smoke.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "report": "node --conditions=@gurps-sheet/source --import tsx scripts/report.ts"
+  },
+  "dependencies": {
+    "@gurps-sheet/character": "0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "keywords": [
+    "gurps",
+    "npc",
+    "rpg",
+    "fixtures",
+    "combat-engine"
+  ]
+}

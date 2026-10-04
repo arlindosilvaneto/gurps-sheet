@@ -1,0 +1,341 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.3.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Madame Odette Fairweather",
+    "height": "1.60 m",
+    "weight": "72 kg",
+    "age": "48",
+    "sizeModifier": 0,
+    "appearance": "Shawls, rings on every finger, faraway look"
+  },
+  "points": {
+    "budget": 75,
+    "spent": 75,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 40,
+      "advantages": 25,
+      "disadvantages": -15,
+      "skills": 25,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 9,
+      "points": -10
+    },
+    "dx": {
+      "value": 10,
+      "points": 0
+    },
+    "iq": {
+      "value": 12,
+      "points": 40
+    },
+    "ht": {
+      "value": 10,
+      "points": 0
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 9,
+      "base": 9,
+      "points": 0,
+      "current": 9
+    },
+    "will": {
+      "value": 14,
+      "base": 12,
+      "points": 10
+    },
+    "per": {
+      "value": 12,
+      "base": 12,
+      "points": 0
+    },
+    "fp": {
+      "value": 10,
+      "base": 10,
+      "points": 0,
+      "current": 10
+    },
+    "basicSpeed": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 8.1,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 8.1,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 16.2,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 24.3,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 48.6,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 81,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-2",
+      "dice": 1,
+      "adds": -2
+    },
+    "swing": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": null,
+      "value": null
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 6,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Medium",
+      "type": "advantage",
+      "points": 10
+    },
+    {
+      "name": "Empathy",
+      "type": "advantage",
+      "points": 15
+    },
+    {
+      "name": "Secret (fakes séances when the spirits are silent)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Nightmares (12)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Gluttony (12)",
+      "type": "disadvantage",
+      "points": -5
+    }
+  ],
+  "skills": [
+    {
+      "name": "Fast-Talk",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Occultism",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Acting",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Body Language",
+      "attribute": "per",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Detect Lies",
+      "attribute": "per",
+      "difficulty": "H",
+      "relativeLevel": 0,
+      "level": 15,
+      "points": 4,
+      "bonuses": [
+        {
+          "name": "Empathy",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "name": "Hidden Lore (Spirit Lore)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Savoir-Faire (High Society)",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 1
+    },
+    {
+      "name": "Psychology",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": -1,
+      "level": 14,
+      "points": 2,
+      "bonuses": [
+        {
+          "name": "Empathy",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "name": "Exorcism",
+      "attribute": "will",
+      "difficulty": "H",
+      "relativeLevel": -2,
+      "level": 12,
+      "points": 1
+    },
+    {
+      "name": "Guns (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 10,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [],
+    "ranged": [
+      {
+        "name": "Derringer, .41",
+        "damage": {
+          "notation": "1d pi+",
+          "base": "fixed",
+          "dice": 1,
+          "adds": 0,
+          "type": "pi+"
+        },
+        "accuracy": "1",
+        "range": {
+          "notation": "80/650",
+          "halfDamage": 80,
+          "max": 650
+        },
+        "rateOfFire": "1",
+        "shots": "2(3i)",
+        "minST": "9",
+        "bulk": -1,
+        "recoil": 2,
+        "legalityClass": 3,
+        "cost": 100,
+        "weight": 0.25
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Personal Basics",
+      "cost": 5,
+      "weight": 0.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 105,
+    "weight": 0.75
+  },
+  "notes": [
+    "Really does hear the dead, sometimes; Empathy makes her very hard to lie to."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

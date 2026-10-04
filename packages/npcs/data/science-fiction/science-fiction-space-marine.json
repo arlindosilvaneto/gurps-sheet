@@ -1,0 +1,441 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Cpl. Dax Brenner",
+    "height": "1.92 m",
+    "weight": "102 kg",
+    "age": "29",
+    "sizeModifier": 0,
+    "appearance": "Shaved head, unit tattoo, tactical suit"
+  },
+  "points": {
+    "budget": 200,
+    "spent": 200,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 154,
+      "advantages": 40,
+      "disadvantages": -45,
+      "skills": 51,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 13,
+      "points": 30
+    },
+    "dx": {
+      "value": 14,
+      "points": 80
+    },
+    "iq": {
+      "value": 10,
+      "points": 0
+    },
+    "ht": {
+      "value": 14,
+      "points": 40
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 15,
+      "base": 13,
+      "points": 4,
+      "current": 15
+    },
+    "will": {
+      "value": 10,
+      "base": 10,
+      "points": 0
+    },
+    "per": {
+      "value": 10,
+      "base": 10,
+      "points": 0
+    },
+    "fp": {
+      "value": 14,
+      "base": 14,
+      "points": 0,
+      "current": 14
+    },
+    "basicSpeed": {
+      "value": 7,
+      "base": 7,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 7,
+      "base": 7,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 17,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 17,
+        "move": 7,
+        "dodge": 10
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 34,
+        "move": 5,
+        "dodge": 9
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 51,
+        "move": 4,
+        "dodge": 8
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 102,
+        "move": 2,
+        "dodge": 7
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 170,
+        "move": 1,
+        "dodge": 6
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d",
+      "dice": 1,
+      "adds": 0
+    },
+    "swing": {
+      "notation": "2d-1",
+      "dice": 2,
+      "adds": -1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 10
+    },
+    "parry": {
+      "skill": "Knife",
+      "value": 11
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [
+    {
+      "location": "Head",
+      "locationId": "head",
+      "dr": 40
+    },
+    {
+      "location": "Torso",
+      "locationId": "torso",
+      "dr": 40
+    },
+    {
+      "location": "Arms",
+      "locationId": "arms",
+      "dr": 40
+    },
+    {
+      "location": "Hands",
+      "locationId": "hands",
+      "dr": 40
+    },
+    {
+      "location": "Legs",
+      "locationId": "legs",
+      "dr": 40
+    },
+    {
+      "location": "Feet",
+      "locationId": "feet",
+      "dr": 40
+    }
+  ],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 11,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "Galactic Standard",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Combat Reflexes",
+      "type": "advantage",
+      "points": 15
+    },
+    {
+      "name": "High Pain Threshold",
+      "type": "advantage",
+      "points": 10
+    },
+    {
+      "name": "Very Fit",
+      "type": "advantage",
+      "points": 15
+    },
+    {
+      "name": "Duty (the Marine Corps, 15 or less, extremely hazardous)",
+      "type": "disadvantage",
+      "points": -20
+    },
+    {
+      "name": "Code of Honor (Soldier's)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Bloodlust (12)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Sense of Duty (his squad)",
+      "type": "disadvantage",
+      "points": -5
+    }
+  ],
+  "skills": [
+    {
+      "name": "Beam Weapons (Rifle)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 3,
+      "level": 17,
+      "points": 8
+    },
+    {
+      "name": "Beam Weapons (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 15,
+      "points": 2
+    },
+    {
+      "name": "Battlesuit",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 2,
+      "level": 16,
+      "points": 8
+    },
+    {
+      "name": "Soldier",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 2,
+      "level": 12,
+      "points": 8
+    },
+    {
+      "name": "Tactics",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 1,
+      "level": 11,
+      "points": 8
+    },
+    {
+      "name": "Free Fall",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Vacc Suit",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 2,
+      "level": 16,
+      "points": 4
+    },
+    {
+      "name": "Brawling",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 2,
+      "level": 16,
+      "points": 4
+    },
+    {
+      "name": "Throwing",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Explosives (Demolition)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 10,
+      "points": 2
+    },
+    {
+      "name": "First Aid",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 10,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Large Knife",
+        "damage": [
+          {
+            "notation": "sw-2 cut",
+            "base": "swing",
+            "adds": -2,
+            "type": "cut"
+          },
+          {
+            "notation": "thr imp",
+            "base": "thrust",
+            "adds": 0,
+            "type": "imp"
+          }
+        ],
+        "reach": "C,1",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 6",
+        "cost": 40,
+        "weight": 0.5
+      }
+    ],
+    "ranged": [
+      {
+        "name": "Blaster Rifle",
+        "damage": {
+          "notation": "6d(5) burn"
+        },
+        "accuracy": "10+2",
+        "range": {
+          "notation": "700/2100",
+          "halfDamage": 700,
+          "max": 2100
+        },
+        "rateOfFire": "3",
+        "shots": "50(3)",
+        "minST": "7†",
+        "bulk": -4,
+        "recoil": 1,
+        "legalityClass": 2,
+        "cost": 18000,
+        "weight": 5
+      },
+      {
+        "name": "Blaster Pistol",
+        "damage": {
+          "notation": "3d(5) burn"
+        },
+        "accuracy": "5",
+        "range": {
+          "notation": "300/900",
+          "halfDamage": 300,
+          "max": 900
+        },
+        "rateOfFire": "3",
+        "shots": "200(3)",
+        "minST": "4",
+        "bulk": -2,
+        "recoil": 1,
+        "legalityClass": 3,
+        "cost": 2200,
+        "weight": 0.8
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Tactical Suit",
+      "location": "Body",
+      "cost": 3000,
+      "weight": 7.5
+    },
+    {
+      "name": "Radio, Headset",
+      "location": "Head",
+      "cost": 500,
+      "weight": 0.25
+    },
+    {
+      "name": "First Aid Kit",
+      "cost": 50,
+      "weight": 1
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 23790,
+    "weight": 15.05
+  },
+  "notes": [
+    "DR 40 everywhere: low-tech weapons barely scratch him."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

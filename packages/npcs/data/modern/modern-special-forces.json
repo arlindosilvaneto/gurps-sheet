@@ -1,0 +1,470 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Sgt. Marcus Okafor",
+    "height": "1.86 m",
+    "weight": "88 kg",
+    "age": "30",
+    "sizeModifier": 0,
+    "appearance": "Plate carrier, night-vision mount, calm voice"
+  },
+  "points": {
+    "budget": 150,
+    "spent": 150,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 125,
+      "advantages": 30,
+      "disadvantages": -35,
+      "skills": 30,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 12,
+      "points": 20
+    },
+    "dx": {
+      "value": 13,
+      "points": 60
+    },
+    "iq": {
+      "value": 11,
+      "points": 20
+    },
+    "ht": {
+      "value": 12,
+      "points": 20
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 12,
+      "base": 12,
+      "points": 0,
+      "current": 12
+    },
+    "will": {
+      "value": 11,
+      "base": 11,
+      "points": 0
+    },
+    "per": {
+      "value": 12,
+      "base": 11,
+      "points": 5
+    },
+    "fp": {
+      "value": 12,
+      "base": 12,
+      "points": 0,
+      "current": 12
+    },
+    "basicSpeed": {
+      "value": 6.25,
+      "base": 6.25,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 6,
+      "base": 6,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 14,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 14,
+        "move": 6,
+        "dodge": 9
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 28,
+        "move": 4,
+        "dodge": 8
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 42,
+        "move": 3,
+        "dodge": 7
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 84,
+        "move": 2,
+        "dodge": 6
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 140,
+        "move": 1,
+        "dodge": 5
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    },
+    "swing": {
+      "notation": "1d+2",
+      "dice": 1,
+      "adds": 2
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 9
+    },
+    "parry": {
+      "skill": "Knife",
+      "value": 10
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [
+    {
+      "location": "Head",
+      "locationId": "head",
+      "dr": 12
+    },
+    {
+      "location": "Torso",
+      "locationId": "torso",
+      "dr": 12
+    },
+    {
+      "location": "Feet",
+      "locationId": "feet",
+      "dr": 2
+    }
+  ],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 8,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Combat Reflexes",
+      "type": "advantage",
+      "points": 15
+    },
+    {
+      "name": "Fit",
+      "type": "advantage",
+      "points": 5
+    },
+    {
+      "name": "High Pain Threshold",
+      "type": "advantage",
+      "points": 10
+    },
+    {
+      "name": "Duty (the Army, 15 or less, extremely hazardous)",
+      "type": "disadvantage",
+      "points": -20
+    },
+    {
+      "name": "Code of Honor (Soldier's)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Sense of Duty (his squad)",
+      "type": "disadvantage",
+      "points": -5
+    }
+  ],
+  "skills": [
+    {
+      "name": "Guns (Rifle)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 3,
+      "level": 16,
+      "points": 8
+    },
+    {
+      "name": "Guns (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Soldier",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 12,
+      "points": 4
+    },
+    {
+      "name": "Tactics",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 4
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Brawling",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Stealth",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 13,
+      "points": 2
+    },
+    {
+      "name": "Throwing",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 13,
+      "points": 2
+    },
+    {
+      "name": "Explosives (Demolition)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 10,
+      "points": 1
+    },
+    {
+      "name": "First Aid",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    },
+    {
+      "name": "Navigation (Land)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 10,
+      "points": 1
+    },
+    {
+      "name": "Electronics Operation (Communications)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 10,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Large Knife",
+        "damage": [
+          {
+            "notation": "sw-2 cut",
+            "base": "swing",
+            "adds": -2,
+            "type": "cut"
+          },
+          {
+            "notation": "thr imp",
+            "base": "thrust",
+            "adds": 0,
+            "type": "imp"
+          }
+        ],
+        "reach": "C,1",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 6",
+        "cost": 40,
+        "weight": 0.5
+      }
+    ],
+    "ranged": [
+      {
+        "name": "Assault Carbine, 5.56mm",
+        "damage": {
+          "notation": "4d+2 pi",
+          "base": "fixed",
+          "dice": 4,
+          "adds": 2,
+          "type": "pi"
+        },
+        "accuracy": "4",
+        "range": {
+          "notation": "400/3000",
+          "halfDamage": 400,
+          "max": 3000
+        },
+        "rateOfFire": "15",
+        "shots": "30+1(3)",
+        "minST": "9†",
+        "bulk": -3,
+        "recoil": 2,
+        "legalityClass": 2,
+        "cost": 900,
+        "weight": 3.65
+      },
+      {
+        "name": "Auto Pistol, 9mm",
+        "damage": {
+          "notation": "2d+2 pi",
+          "base": "fixed",
+          "dice": 2,
+          "adds": 2,
+          "type": "pi"
+        },
+        "accuracy": "2",
+        "range": {
+          "notation": "150/1850",
+          "halfDamage": 150,
+          "max": 1850
+        },
+        "rateOfFire": "3",
+        "shots": "15+1(3)",
+        "minST": "9",
+        "bulk": -2,
+        "recoil": 2,
+        "legalityClass": 3,
+        "cost": 600,
+        "weight": 1.3
+      },
+      {
+        "name": "Hand Grenade, Fragmentation",
+        "damage": {
+          "notation": "8d cr ex [3d cut]"
+        },
+        "accuracy": "0",
+        "range": {
+          "notation": "42"
+        },
+        "rateOfFire": "1",
+        "shots": "1",
+        "bulk": null,
+        "recoil": null,
+        "legalityClass": 2,
+        "cost": 40,
+        "weight": 0.5
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Tactical Vest",
+      "location": "Torso",
+      "cost": 900,
+      "weight": 4.5
+    },
+    {
+      "name": "Ballistic Helmet",
+      "location": "Head",
+      "cost": 250,
+      "weight": 1.5
+    },
+    {
+      "name": "Reinforced Boots",
+      "location": "Feet",
+      "cost": 75,
+      "weight": 1.5
+    },
+    {
+      "name": "Radio, Headset",
+      "location": "Head",
+      "cost": 500,
+      "weight": 0.25
+    },
+    {
+      "name": "Night Vision Goggles",
+      "location": "Head",
+      "cost": 600,
+      "weight": 1
+    },
+    {
+      "name": "First Aid Kit",
+      "cost": 50,
+      "weight": 1
+    },
+    {
+      "name": "Backpack, Small",
+      "location": "Back",
+      "cost": 60,
+      "weight": 1.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 4015,
+    "weight": 17.2
+  },
+  "notes": [
+    "Moves in bounds with his fire team; uses grenades on fortified positions."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

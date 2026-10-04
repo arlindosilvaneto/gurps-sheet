@@ -1,0 +1,435 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.3.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Captain Bess Harrow",
+    "height": "1.73 m",
+    "weight": "66 kg",
+    "age": "34",
+    "sizeModifier": 0,
+    "appearance": "Red coat, a brace of pistols, gold earring"
+  },
+  "points": {
+    "budget": 150,
+    "spent": 150,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 140,
+      "advantages": 21,
+      "disadvantages": -31,
+      "skills": 20,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 12,
+      "points": 20
+    },
+    "dx": {
+      "value": 13,
+      "points": 60
+    },
+    "iq": {
+      "value": 12,
+      "points": 40
+    },
+    "ht": {
+      "value": 12,
+      "points": 20
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 12,
+      "base": 12,
+      "points": 0,
+      "current": 12
+    },
+    "will": {
+      "value": 12,
+      "base": 12,
+      "points": 0
+    },
+    "per": {
+      "value": 12,
+      "base": 12,
+      "points": 0
+    },
+    "fp": {
+      "value": 12,
+      "base": 12,
+      "points": 0,
+      "current": 12
+    },
+    "basicSpeed": {
+      "value": 6.25,
+      "base": 6.25,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 6,
+      "base": 6,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 14,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 14,
+        "move": 6,
+        "dodge": 9
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 28,
+        "move": 4,
+        "dodge": 8
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 42,
+        "move": 3,
+        "dodge": 7
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 84,
+        "move": 2,
+        "dodge": 6
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 140,
+        "move": 1,
+        "dodge": 5
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    },
+    "swing": {
+      "notation": "1d+2",
+      "dice": 1,
+      "adds": 2
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 9
+    },
+    "parry": {
+      "skill": "Shortsword",
+      "value": 10
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [
+    {
+      "location": "Torso",
+      "locationId": "torso",
+      "dr": 1
+    },
+    {
+      "location": "Arms",
+      "locationId": "arms",
+      "dr": 1
+    },
+    {
+      "location": "Feet",
+      "locationId": "feet",
+      "dr": 2
+    }
+  ],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 4,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    },
+    {
+      "name": "Spanish",
+      "spoken": "broken",
+      "written": "none",
+      "points": 1
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Combat Reflexes",
+      "type": "advantage",
+      "points": 15
+    },
+    {
+      "name": "Charisma 1",
+      "type": "advantage",
+      "points": 5
+    },
+    {
+      "name": "Code of Honor (Pirate's)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Greed (12)",
+      "type": "disadvantage",
+      "points": -15
+    },
+    {
+      "name": "Bad Temper (12)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Keeps a journal of every prize taken",
+      "type": "quirk",
+      "points": -1
+    }
+  ],
+  "skills": [
+    {
+      "name": "Shortsword",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 2,
+      "level": 15,
+      "points": 8
+    },
+    {
+      "name": "Guns (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 13,
+      "points": 1
+    },
+    {
+      "name": "Leadership",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 14,
+      "points": 4,
+      "bonuses": [
+        {
+          "name": "Charisma 1",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "name": "Seamanship",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 13,
+      "points": 2
+    },
+    {
+      "name": "Navigation (Sea)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 11,
+      "points": 1
+    },
+    {
+      "name": "Intimidation",
+      "attribute": "will",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Brawling",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 13,
+      "points": 1
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 13,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Cutlass",
+        "damage": [
+          {
+            "notation": "sw cut",
+            "base": "swing",
+            "adds": 0,
+            "type": "cut"
+          },
+          {
+            "notation": "thr imp",
+            "base": "thrust",
+            "adds": 0,
+            "type": "imp"
+          }
+        ],
+        "reach": "1",
+        "parry": {
+          "notation": "0",
+          "modifier": 0,
+          "unbalanced": false
+        },
+        "notes": "ST 8",
+        "cost": 300,
+        "weight": 1
+      },
+      {
+        "name": "Large Knife",
+        "damage": [
+          {
+            "notation": "sw-2 cut",
+            "base": "swing",
+            "adds": -2,
+            "type": "cut"
+          },
+          {
+            "notation": "thr imp",
+            "base": "thrust",
+            "adds": 0,
+            "type": "imp"
+          }
+        ],
+        "reach": "C,1",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 6",
+        "cost": 40,
+        "weight": 0.5
+      }
+    ],
+    "ranged": [
+      {
+        "name": "Flintlock Pistol, .51",
+        "damage": {
+          "notation": "2d-1 pi+",
+          "base": "fixed",
+          "dice": 2,
+          "adds": -1,
+          "type": "pi+"
+        },
+        "accuracy": "1",
+        "range": {
+          "notation": "75/450",
+          "halfDamage": 75,
+          "max": 450
+        },
+        "rateOfFire": "1",
+        "shots": "1(20)",
+        "minST": "10",
+        "bulk": -3,
+        "recoil": 2,
+        "legalityClass": 3,
+        "cost": 200,
+        "weight": 1.5
+      },
+      {
+        "name": "Flintlock Pistol, .51",
+        "damage": {
+          "notation": "2d-1 pi+",
+          "base": "fixed",
+          "dice": 2,
+          "adds": -1,
+          "type": "pi+"
+        },
+        "accuracy": "1",
+        "range": {
+          "notation": "75/450",
+          "halfDamage": 75,
+          "max": 450
+        },
+        "rateOfFire": "1",
+        "shots": "1(20)",
+        "minST": "10",
+        "bulk": -3,
+        "recoil": 2,
+        "legalityClass": 3,
+        "cost": 200,
+        "weight": 1.5
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Leather Jacket",
+      "location": "Torso",
+      "cost": 50,
+      "weight": 2
+    },
+    {
+      "name": "Boots",
+      "location": "Feet",
+      "cost": 80,
+      "weight": 1.5
+    },
+    {
+      "name": "Personal Basics",
+      "cost": 5,
+      "weight": 0.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 875,
+    "weight": 8.5
+  },
+  "notes": [
+    "Two loaded pistols for the boarding; leads from the front with the cutlass."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

@@ -1,0 +1,300 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Theo \"Null\" Park",
+    "height": "1.74 m",
+    "weight": "61 kg",
+    "age": "24",
+    "sizeModifier": 0,
+    "appearance": "Headphones, energy drinks, three-day stubble"
+  },
+  "points": {
+    "budget": 75,
+    "spent": 75,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 70,
+      "advantages": 7,
+      "disadvantages": -20,
+      "skills": 18,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 9,
+      "points": -10
+    },
+    "dx": {
+      "value": 10,
+      "points": 0
+    },
+    "iq": {
+      "value": 14,
+      "points": 80
+    },
+    "ht": {
+      "value": 10,
+      "points": 0
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 9,
+      "base": 9,
+      "points": 0,
+      "current": 9
+    },
+    "will": {
+      "value": 14,
+      "base": 14,
+      "points": 0
+    },
+    "per": {
+      "value": 14,
+      "base": 14,
+      "points": 0
+    },
+    "fp": {
+      "value": 10,
+      "base": 10,
+      "points": 0,
+      "current": 10
+    },
+    "basicSpeed": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 8.1,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 8.1,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 16.2,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 24.3,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 48.6,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 81,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-2",
+      "dice": 1,
+      "adds": -2
+    },
+    "swing": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": null,
+      "value": null
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 8,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Lightning Calculator",
+      "type": "advantage",
+      "points": 2
+    },
+    {
+      "name": "Single-Minded",
+      "type": "advantage",
+      "points": 5
+    },
+    {
+      "name": "Curious (12)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Overconfidence (12)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Insomniac (Mild)",
+      "type": "disadvantage",
+      "points": -10
+    }
+  ],
+  "skills": [
+    {
+      "name": "Computer Hacking",
+      "attribute": "iq",
+      "difficulty": "VH",
+      "relativeLevel": -1,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Computer Programming",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 4
+    },
+    {
+      "name": "Computer Operation",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 15,
+      "points": 2
+    },
+    {
+      "name": "Electronics Operation (Communications)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 13,
+      "points": 1
+    },
+    {
+      "name": "Electronics Repair (Computers)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Research",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Current Affairs (Science & Technology)",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 1
+    },
+    {
+      "name": "Cryptography",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": -1,
+      "level": 13,
+      "points": 2
+    }
+  ],
+  "weapons": {
+    "melee": [],
+    "ranged": []
+  },
+  "equipment": [
+    {
+      "name": "Computer, Laptop",
+      "cost": 1500,
+      "weight": 1.5
+    },
+    {
+      "name": "Cell Phone",
+      "location": "Pocket",
+      "cost": 250,
+      "weight": 0.125
+    },
+    {
+      "name": "Backpack, Small",
+      "location": "Back",
+      "cost": 60,
+      "weight": 1.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 1810,
+    "weight": 3.125
+  },
+  "notes": [
+    "Unarmed; surrenders at once and then tries to bargain with what he knows."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

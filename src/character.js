@@ -59,7 +59,11 @@ const DIFF_TO_SCHEMA = { F: 'E', E: 'E', M: 'A', A: 'A', D: 'H', H: 'H', MD: 'VH
 const DIFF_TO_SHEET = { E: 'F', A: 'M', H: 'D', VH: 'MD' };
 const LEVEL_TO_SCHEMA = { '': 'none', nenhum: 'none', none: 'none', rudimentar: 'broken', broken: 'broken', sotaque: 'accented', accented: 'accented', nativo: 'native', native: 'native' };
 const LEVEL_TO_SHEET = { none: 'Nenhum', broken: 'Rudimentar', accented: 'Sotaque', native: 'Nativo' };
-const LOCATION_IDS = { cabeca: 'head', cranio: 'skull', rosto: 'face', olhos: 'eyes', pescoco: 'neck', tronco: 'torso', torso: 'torso', 'orgaos vitais': 'vitals', vitais: 'vitals', virilha: 'groin', bracos: 'arms', maos: 'hands', pernas: 'legs', pes: 'feet' };
+const LOCATION_IDS = {
+  cabeca: 'head', cranio: 'skull', rosto: 'face', olhos: 'eyes', pescoco: 'neck', tronco: 'torso', torso: 'torso', 'orgaos vitais': 'vitals', vitais: 'vitals', virilha: 'groin', bracos: 'arms', maos: 'hands', pernas: 'legs', pes: 'feet',
+  // English names (e.g. the @gurps-sheet/npcs library)
+  head: 'head', skull: 'skull', face: 'face', eyes: 'eyes', neck: 'neck', vitals: 'vitals', groin: 'groin', arms: 'arms', hands: 'hands', legs: 'legs', feet: 'feet',
+};
 const DAMAGE_TYPES = { cort: 'cut', cut: 'cut', cont: 'cr', cr: 'cr', perf: 'imp', imp: 'imp', 'pa-': 'pi-', 'pi-': 'pi-', pa: 'pi', pi: 'pi', 'pa+': 'pi+', 'pi+': 'pi+', 'pa++': 'pi++', 'pi++': 'pi++', qmd: 'burn', burn: 'burn', cor: 'cor', fad: 'fat', fat: 'fat', tox: 'tox', tbb: 'tbb', aff: 'aff', spec: 'spec' };
 const ENCUMBRANCE = [['none', 'Nenhuma', 'Esquiva'], ['light', 'Leve', 'Esquiva-1'], ['medium', 'Media', 'Esquiva-2'], ['heavy', 'Pesada', 'Esquiva-3'], ['extraHeavy', 'Mto_Pesada', 'Esquiva-4']];
 const ENCUMBRANCE_PT = ['Nenhuma', 'Leve', 'Média', 'Pesada', 'Muito Pesada'];
@@ -81,8 +85,8 @@ export function parseWeaponDamage(text) {
 function parseParry(text) {
   const notation = String(text).trim();
   if (/^(n|no|nao)$/i.test(strip(notation))) return { notation, modifier: null };
-  const m = /^([+-]?\d+)\s*([ud])?$/i.exec(notation);
-  return m ? { notation, modifier: Number(m[1]), unbalanced: Boolean(m[2]) } : { notation };
+  const m = /^([+-]?\d+)\s*([udf])?$/i.exec(notation); // U/D: unbalanced (Basic Set / pt-BR); F: fencing
+  return m ? { notation, modifier: Number(m[1]), unbalanced: /[ud]/i.test(m[2] ?? '') } : { notation };
 }
 
 function parseRange(text) {
