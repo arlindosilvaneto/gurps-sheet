@@ -35,11 +35,11 @@ npm run report -w @gurps-sheet/npcs          # per-NPC points, defenses and skil
 
 - **Test globs are shell-expanded** (`test/*.test.js`, `test/*.test.ts`), never bare directories: on Node 22, `node --test test/` treats the directory as a module and fails.
 - **One workflow, `.github/workflows/ci.yml`:**
-  - **`test`** runs on every PR, push to `main` and manual run: `npm ci`, `npm test` and `npm run build` on Node 20.19 and 22.
+  - **`test`** runs on every PR, push to `main` and manual run: `npm ci`, `npm test` and `npm run build` on Node 20.19, the minimum the packages support (`engines`).
   - **`release-check`** runs on PRs only. It calls `node scripts/release.mjs check`, which requires two things:
     - every package changed outside its `test/` folder carries a version that isn't published yet;
     - every workspace dependency range is satisfied by the local version. Otherwise npm would install the registry copy instead of linking the workspace.
-  - **`release`** runs on pushes to `main` and manual runs on `main`, with an optional dry run. It needs every `test` job to pass first. It calls `node scripts/release.mjs publish`, which publishes each package whose version isn't on the registry yet:
+  - **`release`** runs on pushes to `main` and manual runs on `main`, with an optional dry run. It needs `test` to pass first. It calls `node scripts/release.mjs publish`, which publishes each package whose version isn't on the registry yet:
     - dependencies go first (`character` before `npcs`);
     - prerelease versions use their own dist-tag;
     - it creates a git tag `<dir>-v<version>` (e.g. `character-v0.2.0`) and a GitHub release with that package's commits since its previous tag.

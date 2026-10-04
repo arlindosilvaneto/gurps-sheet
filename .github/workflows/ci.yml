@@ -1,6 +1,6 @@
 name: CI
 
-# Pull requests: tests on Node 20.19 and 22, the app build, and the release check.
+# Pull requests: tests and the app build on Node 20.19 (the minimum the packages support), and the release check.
 # Pushes to main (and manual runs on main): the same tests, then the release job publishes every package under
 # packages/ whose package.json version is not on the registry yet. To release, bump the version in the PR.
 on:
@@ -24,17 +24,13 @@ concurrency:
 
 jobs:
   test:
-    name: Test (Node ${{ matrix.node }})
+    name: Test
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node: ['20.19', '22']
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node }}
+          node-version: '20.19'
           cache: npm
       - run: npm ci
       - run: npm test # app, then each package: typecheck, tests, generated files, dist consumer checks
@@ -61,7 +57,7 @@ jobs:
 
   release:
     name: Release packages
-    needs: test # every test job, on every Node version, must pass first
+    needs: test # nothing publishes unless the tests pass
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
