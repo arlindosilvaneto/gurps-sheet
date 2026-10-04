@@ -18,12 +18,13 @@ npm install          # installs all workspaces (links packages/* into node_modul
 npm run dev          # Vite dev server (http://localhost:5173)
 npm run build        # static build -> dist/
 npm test             # app tests, then each library's (typecheck, tests, generated-file freshness, dist consumer check)
-npm run test:app     # node:test on test/ (built-in runner; Vitest 5 needs Node 22, this targets Node 20.19+); the library runs from its .ts source via tsx
+npm run test:app     # node:test on test/*.test.js (built-in runner; Vitest 5 needs Node 22, this targets Node 20.19+)
 npm run test:lib     # @gurps-sheet/character only
 npm run test:npcs    # @gurps-sheet/npcs only
-node --test test/rules.test.js                         # one file
-node --test --test-name-pattern="skill cost" test/     # one test by name
-GURPS_PDF_OUT=/tmp/out.pdf node --test test/pdf.test.js  # also write a sample export to inspect
+# Single app tests need the same flags as test:app (the libraries run from their .ts source; dist/ isn't built on install):
+node --conditions=@gurps-sheet/source --import tsx --test test/rules.test.js                          # one file
+node --conditions=@gurps-sheet/source --import tsx --test --test-name-pattern="skill cost" test/*.test.js  # one test by name
+GURPS_PDF_OUT=/tmp/out.pdf node --conditions=@gurps-sheet/source --import tsx --test test/pdf.test.js   # also write a sample export
 npm run types -w @gurps-sheet/character      # regenerate src/character.generated.ts after a schema change
 npm run build -w @gurps-sheet/character      # compile the library to packages/character/dist (also runs on npm pack/publish)
 npm run generate -w @gurps-sheet/npcs        # rewrite packages/npcs/data/*.json after changing an NPC or the catalog
@@ -32,6 +33,7 @@ npm run report -w @gurps-sheet/npcs          # per-NPC points, defenses and skil
 
 ## CI and releases
 
+- **Test globs are shell-expanded** (`test/*.test.js`, `test/*.test.ts`), never bare directories: on Node 22, `node --test test/` treats the directory as a module and fails.
 - **`.github/workflows/ci.yml`** runs on every PR and every push to `main`. It runs `npm ci`, `npm test` and `npm run build` on Node 20.19 and 22. On PRs, the release check (`node scripts/release.mjs check`) also requires two things:
   - every package changed outside its `test/` folder carries a version that isn't published yet;
   - every workspace dependency range is satisfied by the local version. Otherwise npm would install the registry copy instead of linking the workspace.
