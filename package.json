@@ -3,18 +3,22 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test test/"
+    "test": "node --test test/ && npm test -w @gurps-sheet/character",
+    "test:app": "node --test test/",
+    "test:lib": "npm test -w @gurps-sheet/character"
   },
   "dependencies": {
+    "@gurps-sheet/character": "0.1.0",
     "pdf-lib": "^1.17.1"
   },
   "devDependencies": {
-    "ajv": "^8.20.0",
-    "ajv-formats": "^3.0.1",
     "vite": "^8.3.2"
   },
   "engines": {

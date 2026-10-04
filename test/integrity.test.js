@@ -1,18 +1,17 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import Ajv2020 from 'ajv/dist/2020.js';
-import addFormats from 'ajv-formats';
+import * as lib from '@gurps-sheet/character';
 import { compute } from '../src/rules.js';
 import { STRICT_FIELDS, PAID_OVERRIDES, sheetDeviations, sheetIssues, sameValue, fieldLabel } from '../src/integrity.js';
-import { toCharacter, fromCharacter, createValidator } from '../src/character.js';
-import { deviations, recompute } from '../schema/formula.js';
+import { toCharacter, fromCharacter, checkSchema } from '../src/character.js';
+import { deviations, recompute } from '@gurps-sheet/character/formula';
 
 const read = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url)));
 const layout = read('../src/layout.json');
-const schema = read('../schema/gurps-character.schema.json');
-const validate = createValidator(Ajv2020, addFormats, schema, read('../schema/x-gurps-vocabulary.schema.json'));
-const rurik = read('../schema/examples/rurik.json');
+const { schema } = lib;
+const validate = (doc, labels) => checkSchema(lib, doc, labels);
+const rurik = read('../packages/character/examples/rurik.json');
 const now = new Date('2026-10-04T12:00:00Z');
 
 const drifting = {

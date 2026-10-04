@@ -1,17 +1,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import Ajv2020 from 'ajv/dist/2020.js';
-import addFormats from 'ajv-formats';
+import * as lib from '@gurps-sheet/character';
 import { compute, costModifiers, modifiedCost, COST_MODS } from '../src/rules.js';
 import { sheetDeviations } from '../src/integrity.js';
-import { toCharacter, fromCharacter, createValidator } from '../src/character.js';
-import { deviations } from '../schema/formula.js';
+import { toCharacter, fromCharacter, checkSchema } from '../src/character.js';
+import { deviations } from '@gurps-sheet/character/formula';
 
 const read = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url)));
 const layout = read('../src/layout.json');
-const schema = read('../schema/gurps-character.schema.json');
-const validate = createValidator(Ajv2020, addFormats, schema, read('../schema/x-gurps-vocabulary.schema.json'));
+const { schema } = lib;
+const validate = (doc, labels) => checkSchema(lib, doc, labels);
 const now = new Date('2026-10-04T12:00:00Z');
 const costs = (values) => {
   const { out } = compute(values);

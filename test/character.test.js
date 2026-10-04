@@ -1,22 +1,21 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import Ajv2020 from 'ajv/dist/2020.js';
-import addFormats from 'ajv-formats';
+import * as lib from '@gurps-sheet/character';
 import {
-  toCharacter, fromCharacter, parseCharacterFile, createValidator, sheetTables, parseWeaponDamage, SheetFileError,
+  toCharacter, fromCharacter, parseCharacterFile, sheetTables, parseWeaponDamage, SheetFileError, checkSchema,
 } from '../src/character.js';
 
 const read = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url)));
 const layout = read('../src/layout.json');
-const schema = read('../schema/gurps-character.schema.json');
-const validate = createValidator(Ajv2020, addFormats, schema, read('../schema/x-gurps-vocabulary.schema.json'));
-const rurik = read('../schema/examples/rurik.json');
+const { schema } = lib;
+const validate = (doc, labels) => checkSchema(lib, doc, labels);
+const rurik = read('../packages/character/examples/rurik.json');
 const now = new Date('2026-10-04T12:00:00Z');
 
 const loadError = (text) => {
   try {
-    parseCharacterFile(text, validate, layout);
+    parseCharacterFile(text, lib, layout);
   } catch (err) {
     assert.ok(err instanceof SheetFileError, `expected SheetFileError, got ${err}`);
     return err;
@@ -40,7 +39,7 @@ test('page-2 tables resolve to complete rows (every price/weight field used exac
   for (const r of t.melee) assert.equal(r.damage.length, 2, r.name);
   for (const r of t.ranged) {
     assert.equal(r.damage.length, 1, r.name);
-    assert.equal(r.minST.length, 1, `${r.name}: duplicate ST widgets must be dropped by the extractor`);
+    assert.equal(r.minST.length, 1, `${r.name}: layout.json must not contain stacked duplicate ST fields`);
   }
   const money = [...t.melee, ...t.ranged, ...t.equipment].flatMap((r) => [...r.cost, ...r.weight]);
   assert.equal(money.length, 98);
@@ -177,7 +176,7 @@ test('weapon damage text is structured when recognised (pt-BR and English)', () 
 });
 
 test('loading a valid file returns sheet values, creation date and file context', () => {
-  const { values, createdAt, context } = parseCharacterFile(JSON.stringify(rurik), validate, layout);
+  const { values, createdAt, context } = parseCharacterFile(JSON.stringify(rurik), lib, layout);
   assert.equal(values.Nome, 'Rurik Bjornsson');
   assert.equal(values.PV, '15'); // bought-up HP restored as an override
   assert.equal(values.Tipo_2, 'F');
@@ -204,7 +203,7 @@ test('load errors: old format, bad JSON, wrong format, versions, schema violatio
   const v10 = structuredClone(rurik); // a 1.0 file has no integrity block and must still load
   v10.formatVersion = '1.0.0';
   delete v10.integrity;
-  assert.equal(parseCharacterFile(JSON.stringify(v10), validate, layout).flags.experimental, false);
+  assert.equal(parseCharacterFile(JSON.stringify(v10), lib, layout).flags.experimental, false);
 
   const bad = structuredClone(rurik);
   bad.attributes.st.value = '13';

@@ -1,11 +1,11 @@
-// GURPS 4e cost/derived-stat rules, ported from the XFA calculate scripts of
-// "Planilha Personagem Editavel v2.12 GURPS 4ed.pdf". Pure functions only — no DOM.
+// GURPS 4e cost/derived-stat rules, originally ported from the XFA calculate scripts of the pt-BR
+// "Planilha Personagem Editavel v2.12" PDF form (not kept in the repo). Pure functions only — no DOM.
 //
 // Model: `values` is a flat map { fieldId: string } of what the user typed. Every id in
 // COMPUTED is auto-calculated, but (like the XFA override="warning" fields) a non-empty
 // user value overrides it, and downstream rules use that override.
 
-import { roundUp } from '../schema/formula.js';
+import { roundUp } from '@gurps-sheet/character/formula';
 
 export const ATTRS = ['ST', 'DX', 'IQ', 'HT', 'Vont', 'Per'];
 /** Rows per list on the sheet — single source for the rules and the file mapping (src/character.js). */

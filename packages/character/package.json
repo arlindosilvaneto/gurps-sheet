@@ -1,0 +1,52 @@
+{
+  "name": "@gurps-sheet/character",
+  "version": "0.1.0",
+  "description": "Load, validate, verify and update GURPS 4th Edition characters (gurps-character JSON format) — for combat engines, VTT bridges and other tools.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./formula": {
+      "types": "./types/formula.d.ts",
+      "default": "./src/formula.js"
+    },
+    "./constants": "./src/constants.js",
+    "./schema": "./schema/gurps-character.schema.json",
+    "./vocabulary": "./schema/x-gurps-vocabulary.schema.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "schema",
+    "examples",
+    "types",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/ && node scripts/generate-types.mjs --check && npm run typecheck",
+    "types": "node scripts/generate-types.mjs",
+    "typecheck": "tsc --noEmit --strict --module nodenext --moduleResolution nodenext --target es2022 --skipLibCheck false types/usage.ts"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "keywords": [
+    "gurps",
+    "rpg",
+    "character-sheet",
+    "json-schema",
+    "combat-engine"
+  ],
+  "devDependencies": {
+    "json-schema-to-typescript": "^15.0.4",
+    "typescript": "^5.9.3"
+  },
+  "types": "./types/index.d.ts"
+}

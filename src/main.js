@@ -3,7 +3,7 @@ import layout from './layout.json';
 import labels from './labels.json';
 import { compute, display, fmt, COMPUTED, READ_ONLY, ATTRS, COSTED, COST_MODS, SKILL_BONUSES, JUSTIFICATIONS, MIN_COST_MULTIPLIER } from './rules.js';
 import { resolveHelp } from './help.js';
-import { toCharacter, parseCharacterFile, SheetFileError, MAX_FILE_BYTES } from './character.js';
+import { toCharacter, parseCharacterFile, checkSchema, SheetFileError, MAX_FILE_BYTES } from './character.js';
 import { STRICT_FIELDS, sheetDeviations, sheetIssues, sameValue, isOverridden, fieldLabel, CHARACTERISTIC_LABELS } from './integrity.js';
 import { version } from '../package.json';
 
@@ -602,10 +602,10 @@ function wireToolbar() {
 
   document.getElementById('btn-save').addEventListener('click', async () => {
     try {
-      const { validateCharacter, schema } = await import('./validate.js'); // Ajv is large; load on demand
-      const { doc, problems, labels } = toCharacter(values, layout, { schema, createdAt, context, flags, generator: { name: 'gurps-sheet', version } });
+      const lib = await import('@gurps-sheet/character'); // the full library includes Ajv: load on demand
+      const { doc, problems, labels } = toCharacter(values, layout, { schema: lib.schema, createdAt, context, flags, generator: { name: 'gurps-sheet', version } });
       // Sheet-level problems first (they name rows); schema errors only once those are fixed, mapped to sheet rows.
-      const all = problems.length ? problems : validateCharacter(doc, labels).problems;
+      const all = problems.length ? problems : checkSchema(lib, doc, labels).problems;
       if (all.length) {
         showProblems('Não foi possível salvar a ficha', all, 'Corrija os itens abaixo e salve de novo. Nada foi baixado.');
         return;
@@ -640,8 +640,8 @@ function wireToolbar() {
       } catch (err) {
         throw new SheetFileError('Não foi possível ler o arquivo.', [String(err?.message ?? err)]);
       }
-      const { validateCharacter } = await import('./validate.js');
-      const loaded = parseCharacterFile(text, validateCharacter, layout);
+      const lib = await import('@gurps-sheet/character');
+      const loaded = parseCharacterFile(text, lib, layout);
       values = loaded.values;
       createdAt = loaded.createdAt;
       context = loaded.context;

@@ -1,14 +1,13 @@
-// Maps the sheet's flat field values <-> gurps-character documents (schema/gurps-character.schema.json).
+// Maps the sheet's flat field values <-> gurps-character documents (@gurps-sheet/character schema).
 // Pure module (no DOM, no Ajv import) so the browser and node tests share it.
 
 import { compute, display, num, ROWS, range, COST_MODS, SKILL_BONUSES, JUSTIFICATIONS, skillBonuses, isOverridden } from './rules.js';
-import { parseDice, deviations as engineDeviations } from '../schema/formula.js';
+import { parseDice, deviations as engineDeviations } from '@gurps-sheet/character/formula';
+import { FORMAT, LATEST_VERSION, SUPPORTED_MINOR, MAX_DOCUMENT_BYTES } from '@gurps-sheet/character/constants';
 import { sheetDeviations, sheetIssues, fieldLabel, STRICT_FIELDS } from './integrity.js';
 
-export const FORMAT = 'gurps-character';
-export const FORMAT_VERSION = '1.3.0'; // latest this app knows; files get the lowest version they need (lowestVersion)
-const SUPPORTED_MINOR = 3; // closed schema: newer minors may add properties this reader would reject
-export const MAX_FILE_BYTES = 2_000_000;
+export { FORMAT };
+export const MAX_FILE_BYTES = MAX_DOCUMENT_BYTES;
 
 /** A sheet file could not be loaded/saved; `problems` are user-facing pt-BR messages. */
 export class SheetFileError extends Error {
@@ -396,7 +395,7 @@ export function toCharacter(values, layout, { now = new Date(), createdAt, gener
 
   const doc = {
     format: FORMAT,
-    formatVersion: FORMAT_VERSION,
+    formatVersion: LATEST_VERSION, // replaced below by lowestVersion()
     ruleset: { system: 'GURPS', edition: 4, units: 'metric', currency: context.currency ?? '$' },
     meta: { locale: context.locale ?? 'pt-BR', createdAt: createdAt ?? now.toISOString(), updatedAt: now.toISOString(), ...(generator ? { generator } : {}) },
     profile,
@@ -777,7 +776,7 @@ export function formatAjvErrors(errors = [], labels = null) {
   };
   for (const e of errors) {
     if (e.keyword === 'propertyNames' || e.keyword === 'if') continue; // the specific child error is reported too
-    const pointer = e.instancePath ?? '';
+    const pointer = e.pointer ?? '';
     const where = !pointer ? (labels ? 'ficha' : 'raiz do arquivo') : labels ? sheetPath(pointer) : docPath(pointer);
     const p = e.params ?? {};
     const types = [].concat(p.type ?? []).map((t) => TYPE_NAMES[t] ?? t).join(' ou ');
@@ -813,64 +812,53 @@ export function formatAjvErrors(errors = [], labels = null) {
 }
 
 /**
- * Builds a validator from injected Ajv classes (keeps Ajv out of this module's imports).
- * @returns {(doc: object, labels?: object) => { valid: boolean, problems: string[] }}
+ * Validates a document with the library and reports problems in pt-BR, by sheet row when `labels` is given.
+ * @param {typeof import('@gurps-sheet/character')} lib the (lazily imported) library
+ * @returns {{ valid: boolean, problems: string[] }}
  */
-export function createValidator(Ajv2020, addFormats, schema, vocabulary) {
-  const ajv = new Ajv2020({ strict: true, allErrors: true, allowUnionTypes: true });
-  addFormats(ajv);
-  ajv.addKeyword({ keyword: 'x-gurps', metaSchema: vocabulary.$defs.annotation });
-  ajv.addKeyword({ keyword: 'x-gurps-tables', metaSchema: vocabulary.$defs.tables });
-  const validate = ajv.compile(schema);
-  return (doc, labels = null) => (validate(doc) ? { valid: true, problems: [] } : { valid: false, problems: formatAjvErrors(validate.errors, labels) });
+export function checkSchema(lib, doc, labels = null) {
+  const { valid, errors } = lib.validateCharacter(doc);
+  return { valid, problems: formatAjvErrors(errors, labels) };
 }
 
-/** JSON.parse error -> pt-BR message with line/column when the engine reports them. */
-function jsonSyntaxMessage(err, text) {
-  const msg = String(err?.message ?? '');
-  let line = /line (\d+)/.exec(msg)?.[1];
-  let column = /column (\d+)/.exec(msg)?.[1];
-  const position = /position (\d+)/.exec(msg)?.[1];
-  if (!line && position !== undefined) {
-    const before = text.slice(0, Number(position)).split('\n');
-    line = before.length;
-    column = before.at(-1).length + 1;
+/** Library error (coded, English) -> sheet error (pt-BR, for the problems dialog). */
+function sheetError(err) {
+  const d = err.details ?? {};
+  switch (err.code) {
+    case 'tooLarge':
+      return new SheetFileError('Arquivo grande demais.', [`O arquivo tem ${Math.round(d.size / 1024)} KB; uma ficha tem poucos KB (limite ${d.limit / 1_000_000} MB).`]);
+    case 'invalidJson':
+      return new SheetFileError('O arquivo não é um JSON válido.', [d.line ? `Erro de sintaxe JSON na linha ${d.line}, coluna ${d.column}.`
+        : d.truncated ? 'O arquivo termina antes do fim do JSON (está incompleto).' : 'Erro de sintaxe JSON.']);
+    case 'notAnObject':
+      return new SheetFileError('Este arquivo não é uma ficha GURPS.', ['O conteúdo deveria ser um objeto JSON com "format": "gurps-character".']);
+    case 'legacyFormat':
+      return new SheetFileError('Formato antigo não suportado.', ['Este arquivo usa o formato antigo "gurps-sheet", que não é mais aceito. Só fichas no formato "gurps-character" podem ser abertas.']);
+    case 'wrongFormat':
+      return new SheetFileError('Este arquivo não é uma ficha GURPS.', [`O campo "format" deveria ser "${FORMAT}" (encontrado: ${JSON.stringify(d.format ?? null)}).`]);
+    case 'unsupportedVersion':
+      return new SheetFileError('Versão da ficha não suportada.', [`Esta planilha lê a versão ${d.supported} do formato; o arquivo é da versão ${JSON.stringify(d.formatVersion ?? null)}.`]);
+    case 'newerVersion':
+      return new SheetFileError('Ficha criada por uma versão mais nova.', [`O arquivo usa a versão ${d.formatVersion} do formato, mais nova que a ${d.supported} que esta planilha entende. Atualize a planilha para abri-lo.`]);
+    case 'schema':
+      return new SheetFileError('A ficha não segue o esquema gurps-character.', formatAjvErrors(d.errors));
+    default:
+      return new SheetFileError('Não foi possível abrir a ficha.', [err.message]);
   }
-  if (/end of (json|data)|unterminated/i.test(msg) && !line) return 'O arquivo termina antes do fim do JSON (está incompleto).';
-  return line ? `Erro de sintaxe JSON na linha ${line}, coluna ${column}.` : 'Erro de sintaxe JSON.';
 }
 
 /**
- * Parses and validates a sheet file. gurps-character 1.0 to 1.3 are accepted.
+ * Parses, validates and maps a sheet file. Loading itself (size, JSON, format, version, schema) is the library's
+ * parseCharacter(); this adds the pt-BR messages and the sheet mapping.
+ * @param {typeof import('@gurps-sheet/character')} lib the (lazily imported) library
  * @throws {SheetFileError} with user-facing problems
  */
-export function parseCharacterFile(text, validate, layout) {
-  if (text.length > MAX_FILE_BYTES) {
-    throw new SheetFileError('Arquivo grande demais.', [`O arquivo tem ${Math.round(text.length / 1024)} KB; uma ficha tem poucos KB (limite ${MAX_FILE_BYTES / 1_000_000} MB).`]);
-  }
-  let doc;
+export function parseCharacterFile(text, lib, layout) {
+  let loaded;
   try {
-    doc = JSON.parse(text);
+    loaded = lib.parseCharacter(text, { maxBytes: MAX_FILE_BYTES });
   } catch (err) {
-    throw new SheetFileError('O arquivo não é um JSON válido.', [jsonSyntaxMessage(err, text)]);
+    throw err instanceof lib.CharacterError ? sheetError(err) : err;
   }
-  if (!doc || typeof doc !== 'object' || Array.isArray(doc)) {
-    throw new SheetFileError('Este arquivo não é uma ficha GURPS.', ['O conteúdo deveria ser um objeto JSON com "format": "gurps-character".']);
-  }
-  if (doc.format === 'gurps-sheet') {
-    throw new SheetFileError('Formato antigo não suportado.', ['Este arquivo usa o formato antigo "gurps-sheet", que não é mais aceito. Só fichas no formato "gurps-character" podem ser abertas.']);
-  }
-  if (doc.format !== FORMAT) {
-    throw new SheetFileError('Este arquivo não é uma ficha GURPS.', [`O campo "format" deveria ser "${FORMAT}" (encontrado: ${JSON.stringify(doc.format ?? null)}).`]);
-  }
-  const version = /^(\d+)\.(\d+)\.\d+$/.exec(typeof doc.formatVersion === 'string' ? doc.formatVersion : '');
-  if (!version || version[1] !== '1') {
-    throw new SheetFileError('Versão da ficha não suportada.', [`Esta planilha lê a versão 1.${SUPPORTED_MINOR} do formato; o arquivo é da versão ${JSON.stringify(doc.formatVersion ?? null)}.`]);
-  }
-  if (Number(version[2]) > SUPPORTED_MINOR) {
-    throw new SheetFileError('Ficha criada por uma versão mais nova.', [`O arquivo usa a versão ${doc.formatVersion} do formato, mais nova que a 1.${SUPPORTED_MINOR} que esta planilha entende. Atualize a planilha para abri-lo.`]);
-  }
-  const result = validate(doc);
-  if (!result.valid) throw new SheetFileError('A ficha não segue o esquema gurps-character.', result.problems);
-  return fromCharacter(doc, layout);
+  return fromCharacter(loaded.character, layout);
 }

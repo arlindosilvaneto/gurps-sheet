@@ -2,18 +2,17 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import Ajv2020 from 'ajv/dist/2020.js';
-import addFormats from 'ajv-formats';
+import * as lib from '@gurps-sheet/character';
 import { compute, modifiedCost, COST_MODS, SKILL_BONUSES, JUSTIFICATIONS } from '../src/rules.js';
-import { toCharacter, fromCharacter, parseCharacterFile, createValidator } from '../src/character.js';
-import { deviations } from '../schema/formula.js';
+import { toCharacter, fromCharacter, parseCharacterFile, checkSchema } from '../src/character.js';
+import { deviations } from '@gurps-sheet/character/formula';
 
 const read = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url)));
 const layout = read('../src/layout.json');
-const schema = read('../schema/gurps-character.schema.json');
-const validate = createValidator(Ajv2020, addFormats, schema, read('../schema/x-gurps-vocabulary.schema.json'));
-const rurik = read('../schema/examples/rurik.json');
-const jotun = read('../schema/examples/jotun.json');
+const { schema } = lib;
+const validate = (doc, labels) => checkSchema(lib, doc, labels);
+const rurik = read('../packages/character/examples/rurik.json');
+const jotun = read('../packages/character/examples/jotun.json');
 const now = new Date('2026-10-04T12:00:00Z');
 
 test('manual NH/cost or bonuses on an empty skill row block the save instead of producing a false "compliant" file', () => {
@@ -41,14 +40,14 @@ test('pre-1.2 files with SM >= 1 get the Size discount applied, with a warning, 
   delete old.integrity;
   old.profile.sizeModifier = 2;
   old.points.breakdown.attributes = 99; // unchanged totals written by a 1.0 writer
-  const { values, warnings } = parseCharacterFile(JSON.stringify(old), validate, layout);
+  const { values, warnings } = parseCharacterFile(JSON.stringify(old), lib, layout);
   assert.equal(values.Custo_ST, undefined); // recalculated, not kept as a manual value
   assert.equal(compute(values).out.Custo_ST, '24'); // ⌈30 × 80%⌉
   assert.ok(warnings.includes('Custo de ST recalculado com o desconto de Tamanho (MT +2), regra adotada na versão 1.2 do formato: 30 → 24 pts.'), warnings.join('\n'));
   assert.ok(!warnings.some((w) => w.startsWith('Custo de PV')), 'HP: ⌈4 × 80%⌉ = 4, unchanged, so no warning');
   // A deliberate old manual cost (not the old formula's value) stays a manual value.
   old.attributes.st.points = 18;
-  assert.equal(parseCharacterFile(JSON.stringify(old), validate, layout).values.Custo_ST, '18');
+  assert.equal(parseCharacterFile(JSON.stringify(old), lib, layout).values.Custo_ST, '18');
 });
 
 test('a file claiming compliance while over budget, or with stale totals, is called out on load', () => {
