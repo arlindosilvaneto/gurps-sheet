@@ -1,10 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { schema, validateCharacter, parseFormula, recompute, deviations } from '../src/index.js';
-import rurik from '../examples/rurik.json' with { type: 'json' };
-import jotun from '../examples/jotun.json' with { type: 'json' };
+import { schema, validateCharacter, parseFormula, recompute, deviations, type DiceValue } from '@gurps-sheet/character';
+import { rurik, jotun } from './fixtures.js';
 
-const clone = (o) => structuredClone(o);
+// The failure cases break the document on purpose, so they work on an untyped copy.
+const clone = (o: object): any => structuredClone(o);
 
 test('the schema compiles in strict mode and both examples are valid', () => {
   // validateCharacter compiles on first use and throws if the schema or an x-gurps annotation is invalid.
@@ -13,7 +13,7 @@ test('the schema compiles in strict mode and both examples are valid', () => {
 });
 
 test('invalid documents are rejected with pointers and keywords', () => {
-  const cases = {
+  const cases: Record<string, [(d: any) => void, string, string]> = {
     'attribute as string': [(d) => { d.attributes.st.value = '13'; }, '/attributes/st/value', 'type'],
     'unknown top-level key': [(d) => { d.Vantagem1 = 'x'; }, '', 'additionalProperties'],
     'Portuguese difficulty code': [(d) => { d.skills[0].difficulty = 'M'; }, '/skills/0/difficulty', 'enum'],
@@ -35,19 +35,19 @@ test('invalid documents are rejected with pointers and keywords', () => {
 });
 
 test('every formula and bound in the schema parses', () => {
-  const exprs = JSON.stringify(schema).match(/"(formula|min|max)":"(?:[^"\\]|\\.)*"/g).map((s) => Object.values(JSON.parse(`{${s}}`))[0]);
+  const exprs = JSON.stringify(schema).match(/"(formula|min|max)":"(?:[^"\\]|\\.)*"/g)!.map((s) => Object.values(JSON.parse(`{${s}}`) as Record<string, string>)[0] as string);
   assert.ok(exprs.length > 30);
   for (const f of exprs) assert.doesNotThrow(() => parseFormula(f), f);
 });
 
 test('derived values in the examples equal their formulas; overridable ones differ only where overridden', () => {
   const results = recompute(schema, rurik);
-  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
   assert.deepEqual(results.filter((r) => r.role === 'derived' && !same(r.stored, r.computed)).map((r) => r.pointer), []);
   assert.deepEqual(results.filter((r) => r.role === 'overridable' && !same(r.stored, r.computed)).map((r) => r.pointer),
     ['/secondary/hp/value', '/secondary/per/value']); // bought-up HP and Per (paid)
   // $ref siblings carry formulas too (damage.thrust = dice $def + its own x-gurps.formula).
-  assert.deepEqual(results.filter((r) => r.pointer.startsWith('/damage')).map((r) => [r.pointer, r.computed.notation]), [['/damage/thrust', '1d'], ['/damage/swing', '2d-1']]);
+  assert.deepEqual(results.filter((r) => r.pointer.startsWith('/damage')).map((r) => [r.pointer, (r.computed as DiceValue).notation]), [['/damage/thrust', '1d'], ['/damage/swing', '2d-1']]);
   assert.deepEqual(deviations(schema, rurik), []);
   assert.deepEqual(deviations(schema, jotun).map((d) => d.pointer), ['/defenses/dodge/value']); // only the justified Dodge
 });

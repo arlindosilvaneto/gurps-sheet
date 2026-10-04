@@ -1,0 +1,14 @@
+{
+  // An external consumer's view: no custom conditions, so '@gurps-sheet/character' resolves to the built dist/*.d.ts.
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "types": [],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "skipLibCheck": false,
+    "noEmit": true
+  },
+  "files": ["usage.ts"]
+}

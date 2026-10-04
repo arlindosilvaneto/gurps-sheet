@@ -16,13 +16,14 @@ It is an npm-workspaces monorepo:
 npm install          # installs both workspaces (links packages/character into node_modules)
 npm run dev          # Vite dev server (http://localhost:5173)
 npm run build        # static build -> dist/
-npm test             # app tests, then the library's (tests + types freshness + typecheck)
-npm run test:app     # node:test on test/ (built-in runner; Vitest 5 needs Node 22, this targets Node 20.19+)
+npm test             # app tests, then the library's (typecheck, tests, types freshness, dist consumer check)
+npm run test:app     # node:test on test/ (built-in runner; Vitest 5 needs Node 22, this targets Node 20.19+); the library runs from its .ts source via tsx
 npm run test:lib     # library only
 node --test test/rules.test.js                         # one file
 node --test --test-name-pattern="skill cost" test/     # one test by name
 GURPS_PDF_OUT=/tmp/out.pdf node --test test/pdf.test.js  # also write a sample export to inspect
-npm run types -w @gurps-sheet/character      # regenerate types/character.d.ts after a schema change
+npm run types -w @gurps-sheet/character      # regenerate src/character.generated.ts after a schema change
+npm run build -w @gurps-sheet/character      # compile the library to packages/character/dist (also runs on npm install)
 ```
 
 ## Architecture
@@ -56,20 +57,27 @@ At runtime the same `layout.json` drives both outputs, which keeps screen and PD
 
 `schema/gurps-character.schema.json` (JSON Schema 2020-12) is the engine-neutral character format, specified in the package `README.md`, which is also the API guide for engine authors. Its keys are English. Each parameter carries an `x-gurps` annotation (role, formula, unit, cost, Basic Set page, original `sheetField`, pt-BR label, `bounds` for in-play state), and rule tables live in `x-gurps-tables`.
 
+The library is TypeScript (strict, `module: nodenext`, so relative imports use `.js` extensions). `tsc -p tsconfig.build.json` compiles `src/` to `dist/` (git-ignored), which is what outside consumers get.
+- **Source condition:** the `exports` map has a custom `@gurps-sheet/source` condition pointing at `src/*.ts`. Everything in this repo enables it: Vite (`resolve.conditions` in `vite.config.js`), the tests (`node --conditions=@gurps-sheet/source --import tsx`), and `tsc` (`customConditions`). Dev, build and tests therefore always use the current source, and a stale `dist/` can't affect them.
+- **Consumer check:** `npm run test:dist` builds, then checks the package without the condition, the way consumers see it. `test/consumer/usage.ts` type-checks against `dist/*.d.ts` with no Node or DOM types, and `test/consumer/smoke.mjs` runs `dist/` on plain Node.
+- **Schema JSON:** the schema files are imported once, in `src/schemas.ts`, and typed there as `CharacterSchema` (`src/schema-types.ts` types the x-gurps vocabulary and rule tables). The `../schema/` paths resolve the same from `src/` and `dist/`.
+- **Ajv interop:** `Ajv2020` is a named import. `ajv-formats` is CommonJS with only a default export, so it is called through `.default`, which works in Node, `tsc` and Vite.
+
 Modules in `src/`:
-- `formula.js`: the dependency-free evaluator, `recompute()` and `deviations()`.
-- `constants.js`: dependency-free.
-- `validate.js`: Ajv, compiled lazily, with structured errors `{ pointer, keyword, params, message }`.
-- `load.js`: `parseCharacter` / `serializeCharacter` / `checkEnvelope`, throwing `CharacterError` with a stable `code` and `details`.
-- `verify.js`: `verifyCharacter`, which never trusts `integrity`.
-- `update.js`: `getUpdatableFields` / `updateCharacter` and the HP/FP helpers.
-- `stats.js`: `combatStats`.
+- `formula.ts`: the dependency-free evaluator, `recompute()` and `deviations()`.
+- `constants.ts`: dependency-free.
+- `validate.ts`: Ajv, compiled lazily, with structured errors `{ pointer, keyword, params, message }`.
+- `load.ts`: `parseCharacter` / `serializeCharacter` / `checkEnvelope`, throwing `CharacterError` with a stable `code` and `details`.
+- `verify.ts`: `verifyCharacter`, which never trusts `integrity`.
+- `update.ts`: `getUpdatableFields` / `updateCharacter` and the HP/FP helpers.
+- `stats.ts`: `combatStats`.
+- `character.generated.ts`: the document types, generated from the schema.
 
 Rules for the library:
 - **The schema decides what engines may update.** Values with `x-gurps.role: "state"` (today current HP/FP), within `x-gurps.bounds`. `updateCharacter` is strict (throws, all-or-nothing); the combat helpers clamp. Never add updatable fields in code: annotate the schema.
 - **The library never mutates inputs.** Updates return a new document and set `meta.updatedAt`.
 - **Messages:** engine-facing messages are English. The app translates `CharacterError` codes into pt-BR (`sheetError()` in `src/character.js`).
-- **Types:** `types/character.d.ts` is generated (`npm run types`), and the library's `npm test` fails when it is stale. `types/index.d.ts` / `formula.d.ts` are hand-written, and `types/usage.ts` is compiled by `npm run typecheck` to keep them honest. Update them when the API changes.
+- **Types:** `src/character.generated.ts` is generated (`npm run types`); never edit it by hand. The library's `npm test` fails when it is stale. Public API types live next to their code, and `src/index.ts` re-exports them.
 - **The app keeps Ajv out of its main bundle.** It imports only `@gurps-sheet/character/formula` and `/constants` statically, and loads the full library with `import()` when saving or opening a file.
 
 The schema and `src/rules.js` (the app's rules engine) encode the same rules twice. `test/schema-sync.test.js` keeps them in sync: tables are checked against `damage()`/`skillCost()`, and the example character is recomputed through both. When a rule changes, update both. Schema-only tests live in `packages/character/test/`.

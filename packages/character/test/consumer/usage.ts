@@ -1,4 +1,4 @@
-// Compile-only check of the public type declarations (`npm run typecheck`); never executed.
+// Compile-only check, as an external consumer sees the package: resolved through "exports" to dist/*.d.ts (`npm run test:dist`).
 import {
   parseCharacter, verifyCharacter, applyDamage, heal, updateCharacter, getUpdatableFields, combatStats,
   serializeCharacter, CharacterError, type GurpsCharacter, type VerificationReport, type CombatStats,
@@ -23,10 +23,11 @@ const formulas = recompute({}, character).map((r) => r.pointer);
 const flagged = deviations({}, character).filter((d) => d.reason === 'override');
 const value = evaluate('1 + 2', { root: character, tables: {} });
 
+let blocked: Record<string, unknown> | undefined;
 try {
   updateCharacter(character, { '/attributes/st/value': 20 });
 } catch (err) {
-  if (err instanceof CharacterError && err.code === 'notUpdatable') console.log(err.details);
+  if (err instanceof CharacterError && err.code === 'notUpdatable') blocked = err.details;
 }
 
-export { ok, pointers, hp, swing, json, st, skillName, formulas, flagged, value };
+export { ok, pointers, hp, swing, json, st, skillName, formulas, flagged, value, blocked };

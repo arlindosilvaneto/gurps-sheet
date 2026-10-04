@@ -2,9 +2,9 @@
 
 Load, validate, verify and update GURPS 4th Edition characters saved by the GURPS sheet editor, in the engine-neutral **`gurps-character`** JSON format (v1.3). Built for combat engines, VTT bridges and any other tool that needs to use exported sheets.
 
-- **Plain ES modules, no build step.** Runs in Node ≥ 20.19 and in browsers via any bundler.
+- **Written in TypeScript, shipped as ES modules** (`dist/`, with declarations and source maps). Runs in Node ≥ 20.19 and in browsers via any bundler.
 - **One dependency** (Ajv, for schema validation). The rule evaluator in `@gurps-sheet/character/formula` has none.
-- **TypeScript declarations included.** Document types are generated from the schema.
+- **Typed end to end.** Document types are generated from the schema; the API types come from the source.
 
 ## Quick start (a combat engine)
 
@@ -80,7 +80,19 @@ The bounds keep values inside what the rules allow. Rule consequences, such as d
 import { parseCharacter, type GurpsCharacter, type VerificationReport } from '@gurps-sheet/character';
 ```
 
-`types/character.d.ts` is generated from the schema (`npm run types`); `npm test` fails when it is stale. `types/usage.ts` is compiled by `npm run typecheck` to keep the hand-written API declarations honest.
+Document types (`GurpsCharacter` and its parts) are generated from the schema into `src/character.generated.ts` (`npm run types`); `npm test` fails when that file is stale. Everything else is typed in the source itself.
+
+### Developing the package
+
+| Command | What it does |
+|---|---|
+| `npm run build` | Cleans and compiles `src/*.ts` to `dist/` (`tsconfig.build.json`). Also runs on `npm install` (`prepare`). |
+| `npm run typecheck` | Strict type check of sources and tests (`tsconfig.json`). |
+| `npm run test:unit` | `node:test` on `test/*.test.ts`, run from source through `tsx`. |
+| `npm run test:dist` | Builds, then checks the package as an outside consumer sees it: `test/consumer/usage.ts` type-checks against `dist/*.d.ts`, and `test/consumer/smoke.mjs` runs `dist/` on plain Node. |
+| `npm test` | All of the above, plus the generated-types freshness check. |
+
+The `exports` map has a custom `@gurps-sheet/source` condition pointing at `src/*.ts`. Tools in this repository enable it (the tests with `node --conditions`, the type check with `customConditions`, the sheet editor's Vite config), so they always run the current source and never a stale build. Consumers that don't set it get `dist/`.
 
 ---
 
@@ -90,7 +102,7 @@ import { parseCharacter, type GurpsCharacter, type VerificationReport } from '@g
 |---|---|
 | `schema/gurps-character.schema.json` | The schema (JSON Schema draft 2020-12), with rule tables in `x-gurps-tables` |
 | `schema/x-gurps-vocabulary.schema.json` | Meta-schema for the `x-gurps` / `x-gurps-tables` annotation keywords |
-| `src/formula.js` | Dependency-free reference evaluator for the formulas |
+| `src/formula.ts` | Dependency-free reference evaluator for the formulas (`@gurps-sheet/character/formula`) |
 | `examples/rurik.json` | A complete, valid character (1.1: no optional features) |
 | `examples/jotun.json` | A 1.3 character: Size discount, a cost limitation, an NH bonus, a justified deviation |
 

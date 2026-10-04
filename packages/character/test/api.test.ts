@@ -3,13 +3,12 @@ import assert from 'node:assert/strict';
 import {
   parseCharacter, serializeCharacter, verifyCharacter, validateCharacter, CharacterError,
   getUpdatableFields, updateCharacter, getPool, applyDamage, heal, spendFatigue, recoverFatigue, combatStats,
-  FORMAT, LATEST_VERSION,
-} from '../src/index.js';
-import rurik from '../examples/rurik.json' with { type: 'json' };
-import jotun from '../examples/jotun.json' with { type: 'json' };
+  FORMAT, LATEST_VERSION, type GurpsCharacter,
+} from '@gurps-sheet/character';
+import { rurik, jotun } from './fixtures.js';
 
 const now = new Date('2026-10-05T10:00:00Z');
-const code = (fn) => {
+const code = (fn: () => unknown): CharacterError => {
   try {
     fn();
   } catch (err) {
@@ -18,12 +17,14 @@ const code = (fn) => {
   }
   assert.fail('expected a CharacterError');
 };
+/** A deliberately invalid document, for the failure cases. */
+const invalid = (doc: object) => doc as GurpsCharacter;
 
 test('parseCharacter loads JSON text or objects and attaches an independent rule report', () => {
   const { character, report } = parseCharacter(JSON.stringify(rurik));
   assert.equal(character.profile.name, 'Rurik Bjornsson');
   assert.deepEqual(report, { rulesCompliant: true, experimental: false, declaredCompliant: true, claimConsistent: true, deviations: [], inconsistencies: [], issues: [] });
-  assert.equal(parseCharacter(jotun).report.deviations[0].justification, 'Reflexos sobrenaturais concedidos por Loki (aprovado pelo mestre)');
+  assert.equal(parseCharacter(jotun).report.deviations[0]?.justification, 'Reflexos sobrenaturais concedidos por Loki (aprovado pelo mestre)');
   assert.equal(FORMAT, 'gurps-character');
   assert.equal(LATEST_VERSION, '1.3.0');
 });
@@ -40,7 +41,7 @@ test('parseCharacter fails with stable codes and localizable details', () => {
   assert.deepEqual([newer.code, newer.details], ['newerVersion', { formatVersion: '1.4.0', supported: '1.3' }]);
   const bad = code(() => parseCharacter({ ...rurik, profile: { name: 7 } }));
   assert.equal(bad.code, 'schema');
-  assert.deepEqual(bad.details.errors.map((e) => [e.pointer, e.keyword]), [['/profile/name', 'type']]);
+  assert.deepEqual((bad.details.errors as Array<{ pointer: string; keyword: string }>).map((e) => [e.pointer, e.keyword]), [['/profile/name', 'type']]);
 });
 
 test('verifyCharacter never trusts the file: tampered totals, false claims and overspending are reported', () => {
@@ -67,7 +68,7 @@ test('only schema "state" fields are updatable: current HP and FP, with formula 
     ['/secondary/hp/current', 'integer', { min: '-10 * value', max: 'value' }],
     ['/secondary/fp/current', 'integer', { min: '-1 * value', max: 'value' }],
   ]);
-  assert.equal(getUpdatableFields()[0].title, 'Hit Points (current)');
+  assert.equal(getUpdatableFields()[0]?.title, 'Hit Points (current)');
   assert.ok(Object.isFrozen(getUpdatableFields()) && Object.isFrozen(getUpdatableFields()[0]));
 });
 
@@ -88,7 +89,7 @@ test('updateCharacter returns a new valid document, never touches the input, and
   assert.deepEqual([above.code, above.details], ['outOfBounds', { pointer: '/secondary/hp/current', value: 16, min: -150, max: 15 }]);
   assert.equal(code(() => updateCharacter(rurik, { '/secondary/fp/current': -13 })).code, 'outOfBounds');
   // all-or-nothing: one bad change and nothing is applied (the input is untouched anyway)
-  assert.equal(code(() => updateCharacter(rurik, { '/secondary/hp/current': 1, '/profile/name': 'x' })).code, 'notUpdatable');
+  assert.equal(code(() => updateCharacter(rurik, { '/secondary/hp/current': 1, '/profile/name': 'x' } as unknown as Record<string, number>)).code, 'notUpdatable');
 });
 
 test('combat helpers adjust the pools relative to the current value, clamped to the bounds', () => {
@@ -112,14 +113,14 @@ test('combatStats gives engines one read-only view of what combat needs', () => 
     parry: { skill: 'Machado/Maça', value: 9 }, block: { skill: 'Escudo', value: 10 }, move: 6,
   });
   assert.deepEqual(s.damage.swing, { notation: '2d-1', dice: 2, adds: -1 });
-  assert.equal(s.encumbrance[2].dodge, 7);
+  assert.equal(s.encumbrance[2]?.dodge, 7);
   assert.deepEqual(s.skills[0], { name: 'Machado/Maça', level: 13, attribute: 'dx', difficulty: 'A' });
-  s.skills[0].level = 99; // a copy: mutating it never reaches the document
-  assert.equal(rurik.skills[0].level, 13);
+  s.skills[0]!.level = 99; // a copy: mutating it never reaches the document
+  assert.equal(rurik.skills[0]?.level, 13);
 });
 
 test('serializeCharacter writes valid documents only', () => {
   const text = serializeCharacter(updateCharacter(rurik, { '/secondary/hp/current': 5 }, { now }));
   assert.equal(parseCharacter(text).character.secondary.hp.current, 5);
-  assert.equal(code(() => serializeCharacter({ ...rurik, profile: {} })).code, 'schema');
+  assert.equal(code(() => serializeCharacter(invalid({ ...rurik, profile: {} }))).code, 'schema');
 });

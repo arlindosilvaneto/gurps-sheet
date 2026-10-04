@@ -10,8 +10,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test test/ && npm test -w @gurps-sheet/character",
-    "test:app": "node --test test/",
+    "test": "npm run test:app && npm run test:lib",
+    "test:app": "node --conditions=@gurps-sheet/source --import tsx --test test/",
     "test:lib": "npm test -w @gurps-sheet/character"
   },
   "dependencies": {
@@ -19,6 +19,7 @@
     "pdf-lib": "^1.17.1"
   },
   "devDependencies": {
+    "tsx": "^4.23.15",
     "vite": "^8.3.2"
   },
   "engines": {
