@@ -15,6 +15,9 @@
         <label class="toggle" title="Mostra explicações ao passar o mouse sobre títulos e campos">
           <input id="help-toggle" type="checkbox" /> Ajuda imediata
         </label>
+        <label class="toggle" title="Edita campos calculados sem pedir confirmação; a ficha salva é marcada como experimental">
+          <input id="experimental-toggle" type="checkbox" /> Modo experimental
+        </label>
         <button id="btn-pdf" class="primary" type="button">Exportar PDF</button>
         <button id="btn-save" type="button">Salvar ficha</button>
         <button id="btn-open" type="button">Abrir ficha</button>
@@ -26,9 +29,52 @@
       <span class="swatch calc"></span> calculado automaticamente
       <span class="swatch override"></span> valor manual (apague para recalcular)
       <span class="swatch noprint"></span> não sai no PDF (dificuldade F/M/D/MD)
+      <span class="swatch adjusted"></span> ajustado (modificador/bônus)
+      <span class="swatch deviation"></span> fora das regras
     </p>
+    <details id="integrity" class="integrity" open>
+      <summary><span class="title">Integridade da ficha</span> <span class="badge"></span></summary>
+      <p class="mode" hidden>Modo experimental: campos calculados podem ser editados sem confirmação e a ficha salva é marcada como experimental. Os desvios continuam listados abaixo.</p>
+      <ul class="items"></ul>
+    </details>
     <main id="sheet"></main>
     <div id="tip" class="tip" role="tooltip" hidden></div>
+    <dialog id="adjust" class="problems adjust-dialog" aria-labelledby="adjust-title">
+      <h2 id="adjust-title"></h2>
+      <p class="lead"></p>
+      <ul class="mods"></ul>
+      <form class="add-mod" novalidate>
+        <input name="adj-name" type="text" aria-label="Nome" autocomplete="off" />
+        <input name="adj-value" type="text" aria-label="Valor (pode ser negativo)" autocomplete="off" />
+        <button type="submit">Adicionar</button>
+        <span class="error-text" role="alert"></span>
+      </form>
+      <p class="result"></p>
+      <div class="choices">
+        <button type="button" data-action="restore" hidden>Restaurar cálculo</button>
+        <button type="button" data-action="manual" class="link">Valor manual (fora das regras)…</button>
+        <button type="button" data-action="close">Fechar</button>
+      </div>
+    </dialog>
+    <dialog id="justify" class="problems warning" aria-labelledby="justify-title">
+      <h2 id="justify-title"></h2>
+      <p class="lead"></p>
+      <form method="dialog">
+        <textarea name="why" rows="3" maxlength="500" placeholder="Ex.: bênção de Odin, aprovada pelo mestre na sessão 3"></textarea>
+        <div class="choices">
+          <button type="submit" value="cancel">Cancelar</button>
+          <button type="submit" value="ok" class="danger">Salvar justificativa</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="confirm" class="problems warning" aria-labelledby="confirm-title">
+      <h2 id="confirm-title"></h2>
+      <p class="lead"></p>
+      <form method="dialog" class="choices">
+        <button type="submit" value="cancel" autofocus>Cancelar</button>
+        <button type="submit" value="ok" class="danger">Confirmar</button>
+      </form>
+    </dialog>
     <dialog id="problems" class="problems" aria-labelledby="problems-title">
       <h2 id="problems-title"></h2>
       <p class="lead"></p>

@@ -3,6 +3,9 @@
 
 const DICE = /^(\d+)d([+-]\d+)?$/;
 
+/** ceil() that ignores float noise below 1e-9 (40 * 0.8 -> 32, not 33). Shared with the app's rules engine. */
+export const roundUp = (x) => Math.ceil(x - 1e-9);
+
 /** Parses "2d-1" -> { notation, dice, adds }; null if not dice notation. */
 export function parseDice(notation) {
   const m = DICE.exec(String(notation ?? '').trim());
@@ -185,12 +188,13 @@ export function evaluate(formula, ctx) {
   const num = (v) => (typeof v === 'number' && Number.isFinite(v) ? v : null);
   const fns = {
     floor: (x) => (num(x) === null ? null : Math.floor(x)),
-    ceil: (x) => (num(x) === null ? null : Math.ceil(x)),
+    ceil: (x) => (num(x) === null ? null : roundUp(x)),
     round: (x, d = 0) => (num(x) === null ? null : Math.round(x * 10 ** d) / 10 ** d),
     abs: (x) => (num(x) === null ? null : Math.abs(x)),
     min: (...xs) => (xs.some((x) => num(x) === null) ? null : Math.min(...xs)),
     max: (...xs) => (xs.some((x) => num(x) === null) ? null : Math.max(...xs)),
     sum: (xs) => (Array.isArray(xs) ? xs : [xs]).reduce((a, x) => a + (num(x) ?? 0), 0),
+    coalesce: (...xs) => xs.find((x) => x !== null && x !== undefined) ?? null,
     lookup: (name, key) => lookup(tables, name, key),
     attr: (id) => {
       const group = ATTR_PATHS[id];
@@ -259,7 +263,7 @@ function resolveRef(schema, node) {
 
 /**
  * Walks `doc` alongside `schema` and yields every value whose schema carries an x-gurps.formula.
- * @returns {Array<{ pointer: string, role: string, formula: string, sheetField?: string, stored: any, computed: any }>}
+ * @returns {Array<{ pointer: string, role: string, override?: 'paid'|'unpaid', formula: string, sheetField?: string, stored: any, computed: any }>}
  */
 export function recompute(schema, doc) {
   const tables = schema['x-gurps-tables'] ?? {};
@@ -270,7 +274,7 @@ export function recompute(schema, doc) {
     const meta = node['x-gurps'];
     if (meta?.formula && owner !== undefined) {
       out.push({
-        pointer, role: meta.role, formula: meta.formula, sheetField: meta.sheetField, stored: value ?? null,
+        pointer, role: meta.role, override: meta.override, formula: meta.formula, sheetField: meta.sheetField, stored: value ?? null,
         computed: evaluate(meta.formula, { root: doc, local: owner, tables }),
       });
     }
@@ -283,4 +287,22 @@ export function recompute(schema, doc) {
   }
   visit(schema, doc, undefined, '');
   return out;
+}
+
+/** Reported form of a value: dice objects as their notation, everything else as-is. */
+const plain = (x) => (x && typeof x === 'object' && 'notation' in x ? x.notation : x ?? null);
+const same = (a, b) => (typeof a === 'number' && typeof b === 'number' ? Math.abs(a - b) < 1e-9 : a === b);
+
+/**
+ * Independent rule check for engines (does not trust the document's own `integrity` block).
+ * - reason "override": an overridable value with `override: "unpaid"` differs from its formula (no cost backs it).
+ * - reason "inconsistent": a derived value (totals, bases) differs from its formula — the file was edited by hand.
+ * Paid overrides (bought-up HP etc.) are legitimate and not reported.
+ * @returns {Array<{ pointer: string, reason: 'override'|'inconsistent', expected: any, actual: any }>}
+ */
+export function deviations(schema, doc) {
+  return recompute(schema, doc)
+    .map((r) => ({ ...r, expected: plain(r.computed), actual: plain(r.stored) }))
+    .filter((r) => (r.role === 'derived' || (r.role === 'overridable' && r.override !== 'paid')) && !same(r.expected, r.actual))
+    .map((r) => ({ pointer: r.pointer, reason: r.role === 'derived' ? 'inconsistent' : 'override', expected: r.expected, actual: r.actual }));
 }

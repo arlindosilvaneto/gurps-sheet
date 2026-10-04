@@ -11,6 +11,8 @@
 }
 
 * { box-sizing: border-box; }
+/* `hidden` must win over component display rules (e.g. the flex add-form in the adjust dialog). */
+[hidden] { display: none !important; }
 
 body {
   margin: 0;
@@ -65,6 +67,8 @@ body {
 .swatch.calc { background: var(--calc-bg); }
 .swatch.override { background: var(--override-bg); }
 .swatch.noprint { background: var(--noprint-bg); }
+.swatch.adjusted { background: transparent; border-bottom: 2px solid #2e7d32; }
+.swatch.deviation { background: rgba(200, 60, 160, 0.2); border-bottom: 2px solid #b0308a; }
 
 main {
   display: flex;
@@ -115,6 +119,11 @@ main {
 .field.override { background: var(--override-bg); }
 .field.noprint { background: var(--noprint-bg); }
 .field.error { background: rgba(220, 30, 30, 0.25); box-shadow: 0 0 0 1px #c00; }
+.field.deviation { background: rgba(200, 60, 160, 0.2); box-shadow: inset 0 -2px 0 #b0308a; }
+.field.locked { cursor: default; }
+.field.adjusted { box-shadow: inset 0 -2px 0 #2e7d32; }
+.field.flash { animation: flash 1.2s ease-out; }
+@keyframes flash { 0%, 30% { box-shadow: 0 0 0 3px #e0a000; } 100% { box-shadow: 0 0 0 0 transparent; } }
 .field[readonly] { cursor: default; }
 /* Datalist arrow would eat most of the 20pt-wide attribute/difficulty columns. */
 .field::-webkit-calendar-picker-indicator { display: none !important; }
@@ -160,6 +169,60 @@ body.help-on .label-help { display: block; }
 }
 .tip[hidden] { display: none; }
 
+/* Integrity panel */
+.integrity {
+  width: calc(var(--page-w) * var(--pt) * 1px);
+  max-width: 100%;
+  margin: 10px auto 0;
+  padding: 8px 14px;
+  background: #fbfaf7;
+  border: 1px solid #c9c4b8;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #222;
+}
+.integrity summary { cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600; list-style-position: inside; }
+.integrity .badge { font-weight: 600; font-size: 12px; padding: 2px 8px; border-radius: 10px; }
+.integrity .badge.ok { background: #dcefdc; color: #1d5e20; }
+.integrity .badge.warn { background: #f6dcef; color: #8a1f6a; }
+.integrity .badge.exp { background: #ffedc2; color: #7a5300; }
+.integrity .mode { margin: 8px 0 0; padding: 6px 10px; background: #fff6dd; border-left: 3px solid #d9a400; }
+.integrity .items { list-style: none; margin: 8px 0 2px; padding: 0; }
+.integrity .items li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; padding: 6px 0; border-top: 1px solid #eee8dc; }
+.integrity .items li:first-child { border-top: 0; }
+.integrity .items li.deviation { border-left: 3px solid #b0308a; padding-left: 8px; }
+.integrity .items li.justified { border-left-color: #c98a00; }
+.integrity .items .why { display: block; font-size: 12px; color: #6b5300; margin-top: 2px; }
+.integrity .badge.justified { background: #ffedc2; color: #7a5300; }
+.integrity .items li.issue { border-left: 3px solid #b3261e; padding-left: 8px; }
+.integrity .items li.empty { color: #1d5e20; }
+.integrity .actions { display: flex; gap: 6px; }
+.integrity button { font: inherit; font-size: 12px; padding: 3px 9px; border: 1px solid #aaa; border-radius: 4px; background: #fff; cursor: pointer; }
+.integrity button:hover { background: #f0f0f0; }
+
+/* "Ajustar custo" dialog */
+.problems.adjust-dialog { border-top-color: #2e7d32; }
+.adjust-dialog .mods { list-style: none; padding: 0; margin: 0 0 10px; }
+.adjust-dialog .mods li { display: flex; align-items: center; gap: 10px; padding: 5px 0; border-top: 1px solid #eee; }
+.adjust-dialog .mods li:first-child { border-top: 0; }
+.adjust-dialog .mods .name { flex: 1; }
+.adjust-dialog .mods .pct { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 48px; text-align: right; }
+.adjust-dialog .mods .auto { font-size: 12px; color: #666; }
+.adjust-dialog .mods li.empty { color: #777; }
+.adjust-dialog .add-mod { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; justify-content: flex-start; }
+.adjust-dialog .add-mod input { font: inherit; padding: 5px 8px; border: 1px solid #aaa; border-radius: 4px; }
+.adjust-dialog .add-mod input[name=adj-name] { flex: 1 1 220px; min-width: 0; }
+.adjust-dialog .add-mod input[name=adj-value] { width: 72px; }
+.adjust-dialog .error-text { flex-basis: 100%; color: #b3261e; font-size: 12px; }
+.adjust-dialog .error-text:empty { display: none; }
+.adjust-dialog .result { margin: 0 0 12px; padding: 8px 10px; background: #eef6ee; border-radius: 4px; }
+.adjust-dialog .choices { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.adjust-dialog .choices .link { border: 0; background: none; color: #8a1f6a; text-decoration: underline; padding: 6px 4px; margin-right: auto; }
+
+#justify form { display: block; }
+#justify textarea { width: 100%; font: inherit; padding: 6px 8px; border: 1px solid #aaa; border-radius: 4px; margin: 0 0 12px; resize: vertical; }
+#justify .choices { display: flex; justify-content: flex-end; gap: 8px; }
+
 /* Load/save problems dialog */
 .problems {
   width: min(560px, calc(100vw - 32px));
@@ -179,8 +242,9 @@ body.help-on .label-help { display: block; }
 .problems .lead:empty { display: none; }
 .problems ul { margin: 0 0 14px; padding-left: 20px; max-height: 50vh; overflow: auto; }
 .problems li { margin: 3px 0; overflow-wrap: anywhere; }
-.problems form { display: flex; justify-content: flex-end; margin: 0; }
-.problems button {
+.problems form { display: flex; justify-content: flex-end; gap: 8px; margin: 0; }
+.problems button.danger { background: #8a1f6a; border-color: #8a1f6a; color: #fff; }
+.problems button, .adjust-dialog .add-mod button {
   font: inherit;
   padding: 6px 16px;
   border: 1px solid #888;
@@ -191,7 +255,7 @@ body.help-on .label-help { display: block; }
 
 @media print {
   .label-help, .tip { display: none !important; }
-  .toolbar, .legend { display: none; }
+  .toolbar, .legend, .integrity { display: none; }
   body { background: #fff; }
   main { padding: 0; gap: 0; }
   .page { box-shadow: none; break-after: page; }

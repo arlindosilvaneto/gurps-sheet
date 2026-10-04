@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:gurps-sheet:schema:gurps-character:1.0.0",
+  "$id": "urn:gurps-sheet:schema:gurps-character:1.3.0",
   "title": "GURPS 4th Edition Character",
   "description": "Engine-neutral GURPS 4e character document. Keys are English; free-text content is in the language declared by meta.locale. Every parameter carries an `x-gurps` annotation (role, formula, unit, cost, Basic Set reference, original sheet field, localized label). Derived values are stored for convenience and can be recomputed from their formulas with the rule tables in `x-gurps-tables` (see schema/README.md for the expression language).",
   "type": "object",
@@ -12,7 +12,7 @@
     "formatVersion": {
       "type": "string",
       "pattern": "^1\\.\\d+\\.\\d+$",
-      "description": "Semantic version of this schema the document conforms to. Minor versions only add optional properties."
+      "description": "Semantic version of this schema the document conforms to. Minor versions only add optional properties (1.1 added `integrity`; 1.2 added `costModifiers`; 1.3 added skill `bonuses` and deviation `justification`)."
     },
     "ruleset": {
       "type": "object",
@@ -113,7 +113,7 @@
       "required": ["st", "dx", "iq", "ht"],
       "additionalProperties": false,
       "properties": {
-        "st": { "$ref": "#/$defs/primaryAttribute", "title": "Strength", "x-gurps": { "costPerLevel": 10, "reference": "B14", "sheetField": "ST", "label": { "pt-BR": "ST (Força)" } } },
+        "st": { "$ref": "#/$defs/primaryAttributeSt", "title": "Strength", "x-gurps": { "costPerLevel": 10, "reference": "B14", "sheetField": "ST", "label": { "pt-BR": "ST (Força)" } } },
         "dx": { "$ref": "#/$defs/primaryAttributeDxIq", "title": "Dexterity", "x-gurps": { "costPerLevel": 20, "reference": "B15", "sheetField": "DX", "label": { "pt-BR": "DX (Destreza)" } } },
         "iq": { "$ref": "#/$defs/primaryAttributeDxIq", "title": "Intelligence", "x-gurps": { "costPerLevel": 20, "reference": "B15", "sheetField": "IQ", "label": { "pt-BR": "IQ (Inteligência)" } } },
         "ht": { "$ref": "#/$defs/primaryAttribute", "title": "Health", "x-gurps": { "costPerLevel": 10, "reference": "B15", "sheetField": "HT", "label": { "pt-BR": "HT (Vitalidade)" } } }
@@ -131,9 +131,10 @@
           "additionalProperties": false,
           "x-gurps": { "costPerLevel": 2, "reference": "B16", "sheetField": "PV", "label": { "pt-BR": "PV (Pontos de Vida)" } },
           "properties": {
-            "value": { "type": "integer", "x-gurps": { "role": "overridable", "formula": "base", "description": "Bought value; defaults to base." } },
+            "value": { "type": "integer", "x-gurps": { "role": "overridable", "override": "paid", "formula": "base", "description": "Bought value; defaults to base." } },
             "base": { "type": "integer", "x-gurps": { "role": "derived", "formula": "$.attributes.st.value" } },
-            "points": { "type": "integer", "x-gurps": { "role": "overridable", "unit": "points", "formula": "(value - base) * 2", "sheetField": "Custo_PV" } },
+            "points": { "type": "integer", "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "points", "formula": "if((value - base) * 2 > 0, ceil((value - base) * 2 * max(0.2, 1 + (sum(costModifiers.percent) + if(coalesce($.profile.sizeModifier, 0) >= 1, -10 * coalesce($.profile.sizeModifier, 0), 0)) / 100)), (value - base) * 2)", "sheetField": "Custo_PV" } },
+            "costModifiers": { "type": "array", "items": { "$ref": "#/$defs/costModifier" }, "x-gurps": { "role": "input", "description": "Enhancements/limitations on this purchase (since 1.2). The Size discount is not listed: it is derived from profile.sizeModifier." } },
             "current": { "type": "integer", "x-gurps": { "role": "state", "description": "Current HP during play.", "sheetField": "PV_Atual", "label": { "pt-BR": "PV atual" } } }
           }
         },
@@ -146,9 +147,10 @@
           "additionalProperties": false,
           "x-gurps": { "costPerLevel": 3, "reference": "B16", "sheetField": "PF", "label": { "pt-BR": "PF (Pontos de Fadiga)" } },
           "properties": {
-            "value": { "type": "integer", "x-gurps": { "role": "overridable", "formula": "base" } },
+            "value": { "type": "integer", "x-gurps": { "role": "overridable", "override": "paid", "formula": "base" } },
             "base": { "type": "integer", "x-gurps": { "role": "derived", "formula": "$.attributes.ht.value" } },
-            "points": { "type": "integer", "x-gurps": { "role": "overridable", "unit": "points", "formula": "(value - base) * 3", "sheetField": "Custo_PF" } },
+            "points": { "type": "integer", "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "points", "formula": "if((value - base) * 3 > 0, ceil((value - base) * 3 * max(0.2, 1 + (sum(costModifiers.percent)) / 100)), (value - base) * 3)", "sheetField": "Custo_PF" } },
+            "costModifiers": { "type": "array", "items": { "$ref": "#/$defs/costModifier" }, "x-gurps": { "role": "input", "description": "Enhancements/limitations on this purchase (since 1.2). The Size discount is not listed: it is derived from profile.sizeModifier." } },
             "current": { "type": "integer", "x-gurps": { "role": "state", "description": "Current FP during play.", "sheetField": "PF_Atual", "label": { "pt-BR": "PF atual" } } }
           }
         },
@@ -159,9 +161,10 @@
           "additionalProperties": false,
           "x-gurps": { "costPerLevel": 20, "unit": "m/s", "reference": "B17", "sheetField": "Vel_Basica", "label": { "pt-BR": "Velocidade Básica" }, "description": "Cost is per +1.00 (5 points per +0.25)." },
           "properties": {
-            "value": { "type": "number", "multipleOf": 0.25, "x-gurps": { "role": "overridable", "formula": "base" } },
+            "value": { "type": "number", "multipleOf": 0.25, "x-gurps": { "role": "overridable", "override": "paid", "formula": "base" } },
             "base": { "type": "number", "multipleOf": 0.25, "x-gurps": { "role": "derived", "formula": "($.attributes.dx.value + $.attributes.ht.value) / 4" } },
-            "points": { "type": "number", "x-gurps": { "role": "overridable", "unit": "points", "formula": "(value - base) * 20", "sheetField": "Custo_Vel_Basica" } }
+            "points": { "type": "number", "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "points", "formula": "if((value - base) * 20 > 0, ceil((value - base) * 20 * max(0.2, 1 + (sum(costModifiers.percent)) / 100)), (value - base) * 20)", "sheetField": "Custo_Vel_Basica" } },
+            "costModifiers": { "type": "array", "items": { "$ref": "#/$defs/costModifier" }, "x-gurps": { "role": "input", "description": "Enhancements/limitations on this purchase (since 1.2). The Size discount is not listed: it is derived from profile.sizeModifier." } }
           }
         },
         "basicMove": {
@@ -171,9 +174,10 @@
           "additionalProperties": false,
           "x-gurps": { "costPerLevel": 5, "unit": "m", "reference": "B17", "sheetField": "Desl_Basico", "label": { "pt-BR": "Deslocamento Básico" } },
           "properties": {
-            "value": { "type": "integer", "x-gurps": { "role": "overridable", "formula": "base" } },
+            "value": { "type": "integer", "x-gurps": { "role": "overridable", "override": "paid", "formula": "base" } },
             "base": { "type": "integer", "x-gurps": { "role": "derived", "formula": "floor($.secondary.basicSpeed.value)" } },
-            "points": { "type": "integer", "x-gurps": { "role": "overridable", "unit": "points", "formula": "(value - base) * 5", "sheetField": "Custo_Desl_Basico" } }
+            "points": { "type": "integer", "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "points", "formula": "if((value - base) * 5 > 0, ceil((value - base) * 5 * max(0.2, 1 + (sum(costModifiers.percent)) / 100)), (value - base) * 5)", "sheetField": "Custo_Desl_Basico" } },
+            "costModifiers": { "type": "array", "items": { "$ref": "#/$defs/costModifier" }, "x-gurps": { "role": "input", "description": "Enhancements/limitations on this purchase (since 1.2). The Size discount is not listed: it is derived from profile.sizeModifier." } }
           }
         }
       }
@@ -187,7 +191,7 @@
           "type": "number",
           "minimum": 0,
           "description": "ST×ST/10 kg, rounded to whole kg when 10 or more.",
-          "x-gurps": { "role": "overridable", "unit": "kg", "reference": "B15", "formula": "if($.attributes.st.value * $.attributes.st.value / 10 >= 10, round($.attributes.st.value * $.attributes.st.value / 10), round($.attributes.st.value * $.attributes.st.value / 10, 1))", "sheetField": "Base_Carga", "label": { "pt-BR": "Base de Carga (BC)" } }
+          "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "kg", "reference": "B15", "formula": "if($.attributes.st.value * $.attributes.st.value / 10 >= 10, round($.attributes.st.value * $.attributes.st.value / 10), round($.attributes.st.value * $.attributes.st.value / 10, 1))", "sheetField": "Base_Carga", "label": { "pt-BR": "Base de Carga (BC)" } }
         },
         "levels": {
           "type": "array",
@@ -204,8 +208,8 @@
       "additionalProperties": false,
       "x-gurps": { "reference": "B16" },
       "properties": {
-        "thrust": { "$ref": "#/$defs/dice", "x-gurps": { "role": "overridable", "formula": "lookup('thrust', $.attributes.st.value)", "sheetField": "Dano_GdP", "label": { "pt-BR": "Dano GdP (golpe de ponta)" } } },
-        "swing": { "$ref": "#/$defs/dice", "x-gurps": { "role": "overridable", "formula": "lookup('swing', $.attributes.st.value)", "sheetField": "Dano_GeB", "label": { "pt-BR": "Dano GeB (golpe em balanço)" } } }
+        "thrust": { "$ref": "#/$defs/dice", "x-gurps": { "role": "overridable", "override": "unpaid", "formula": "lookup('thrust', $.attributes.st.value)", "sheetField": "Dano_GdP", "label": { "pt-BR": "Dano GdP (golpe de ponta)" } } },
+        "swing": { "$ref": "#/$defs/dice", "x-gurps": { "role": "overridable", "override": "unpaid", "formula": "lookup('swing', $.attributes.st.value)", "sheetField": "Dano_GeB", "label": { "pt-BR": "Dano GeB (golpe em balanço)" } } }
       }
     },
     "defenses": {
@@ -218,7 +222,7 @@
           "required": ["value"],
           "additionalProperties": false,
           "properties": {
-            "value": { "type": "integer", "x-gurps": { "role": "overridable", "formula": "floor($.secondary.basicSpeed.value) + 3", "reference": "B17", "sheetField": "Esquiva", "label": { "pt-BR": "Esquiva" }, "description": "Unencumbered. Enhanced Dodge and shield DB are not included in the formula." } }
+            "value": { "type": "integer", "x-gurps": { "role": "overridable", "override": "unpaid", "formula": "floor($.secondary.basicSpeed.value) + 3", "reference": "B17", "sheetField": "Esquiva", "label": { "pt-BR": "Esquiva" }, "description": "Unencumbered. Enhanced Dodge and shield DB are not included in the formula." } }
           }
         },
         "parry": { "$ref": "#/$defs/skillDefense", "x-gurps": { "reference": "B376", "sheetField": "Aparar", "label": { "pt-BR": "Aparar" } } },
@@ -292,6 +296,34 @@
       "items": { "type": "string" },
       "x-gurps": { "sheetField": "Anotações{n} (n=1..9)", "label": { "pt-BR": "Anotações do Personagem" } }
     },
+    "integrity": {
+      "type": "object",
+      "required": ["experimental", "rulesCompliant", "deviations", "issues"],
+      "additionalProperties": false,
+      "description": "Self-reported rule status (since 1.1). Written by the editor, so it can be edited too: engines that need trust should verify with schema/formula.js deviations(), which recomputes every value from the rule formulas.",
+      "properties": {
+        "experimental": {
+          "type": "boolean",
+          "description": "Declared by the player: rule validations were intentionally relaxed (experimentation, quick game setup). Engines may sandbox or refuse such characters.",
+          "x-gurps": { "role": "input", "label": { "pt-BR": "Modo experimental" } }
+        },
+        "rulesCompliant": {
+          "type": "boolean",
+          "description": "True when there are no deviations and no issues.",
+          "x-gurps": { "role": "derived", "label": { "pt-BR": "Dentro das regras" } }
+        },
+        "deviations": {
+          "type": "array",
+          "description": "Values that differ from their rule formula without a cost paying for it (role overridable + override unpaid), e.g. a hand-edited Dodge or a discounted cost.",
+          "items": { "$ref": "#/$defs/deviation" }
+        },
+        "issues": {
+          "type": "array",
+          "description": "Rule violations that are not single-value drift, e.g. spending more points than the budget.",
+          "items": { "$ref": "#/$defs/issue" }
+        }
+      }
+    },
     "extensions": {
       "type": "object",
       "description": "Engine-specific data. Keys must be reverse-DNS style namespaces (e.g. \"com.example.combat\") so tools never collide.",
@@ -300,13 +332,67 @@
   },
 
   "$defs": {
+    "skillBonus": {
+      "type": "object",
+      "required": ["name", "amount"],
+      "additionalProperties": false,
+      "description": "A named bonus (or penalty) added to a skill's NH, e.g. Talent (B89).",
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "examples": ["Talento Artista"] },
+        "amount": { "type": "integer", "minimum": -20, "maximum": 20, "not": { "const": 0 } }
+      }
+    },
+    "costModifier": {
+      "type": "object",
+      "required": ["name", "percent"],
+      "additionalProperties": false,
+      "description": "An enhancement (+) or limitation (-) on a characteristic purchase. Net modifiers never reduce a cost by more than 80%; costs round up; selling a characteristic below its base is not modified.",
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "examples": ["Sem Manipuladores Finos", "Efeito Sobrenatural"] },
+        "percent": { "type": "integer", "minimum": -99, "maximum": 1000, "not": { "const": 0 } }
+      }
+    },
+    "deviation": {
+      "type": "object",
+      "required": ["pointer", "expected", "actual"],
+      "additionalProperties": false,
+      "properties": {
+        "pointer": { "type": "string", "pattern": "^(/[^/]+)+$", "description": "JSON Pointer to the deviating value." },
+        "expected": { "type": ["number", "string", "null"], "description": "Value the rule formula gives (dice as notation)." },
+        "actual": { "type": ["number", "string", "null"], "description": "Value stored in the document (dice as notation)." },
+        "sheetField": { "type": "string", "description": "Field id in the sheet editor." },
+        "label": { "type": "string", "description": "Human label in meta.locale." },
+        "justification": { "type": "string", "minLength": 1, "description": "The player's reason for the manual value (since 1.3). Documents intent only: the sheet is still not rulesCompliant; accepting it is up to the GM or engine." }
+      }
+    },
+    "issue": {
+      "type": "object",
+      "required": ["code", "message"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "enum": ["overBudget"], "description": "overBudget: points.spent > points.budget." },
+        "pointer": { "type": "string", "pattern": "^(/[^/]+)+$" },
+        "message": { "type": "string", "description": "Human message in meta.locale." }
+      }
+    },
+    "primaryAttributeSt": {
+      "type": "object",
+      "required": ["value", "points"],
+      "additionalProperties": false,
+      "properties": {
+        "value": { "type": "integer", "minimum": 0, "default": 10, "x-gurps": { "role": "input", "default": 10, "description": "10 is the free human average." } },
+        "points": { "type": "integer", "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "points", "formula": "if((value - 10) * 10 > 0, ceil((value - 10) * 10 * max(0.2, 1 + (sum(costModifiers.percent) + if(coalesce($.profile.sizeModifier, 0) >= 1, -10 * coalesce($.profile.sizeModifier, 0), 0)) / 100)), (value - 10) * 10)" } },
+        "costModifiers": { "type": "array", "items": { "$ref": "#/$defs/costModifier" }, "x-gurps": { "role": "input", "description": "Enhancements/limitations on this purchase (since 1.2). The Size discount is not listed: it is derived from profile.sizeModifier." } }
+      }
+    },
     "primaryAttribute": {
       "type": "object",
       "required": ["value", "points"],
       "additionalProperties": false,
       "properties": {
         "value": { "type": "integer", "minimum": 0, "default": 10, "x-gurps": { "role": "input", "default": 10, "description": "10 is the free human average." } },
-        "points": { "type": "integer", "x-gurps": { "role": "overridable", "unit": "points", "formula": "(value - 10) * 10" } }
+        "points": { "type": "integer", "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "points", "formula": "if((value - 10) * 10 > 0, ceil((value - 10) * 10 * max(0.2, 1 + (sum(costModifiers.percent)) / 100)), (value - 10) * 10)" } },
+        "costModifiers": { "type": "array", "items": { "$ref": "#/$defs/costModifier" }, "x-gurps": { "role": "input", "description": "Enhancements/limitations on this purchase (since 1.2). The Size discount is not listed: it is derived from profile.sizeModifier." } }
       }
     },
     "primaryAttributeDxIq": {
@@ -315,7 +401,8 @@
       "additionalProperties": false,
       "properties": {
         "value": { "type": "integer", "minimum": 0, "default": 10, "x-gurps": { "role": "input", "default": 10, "description": "10 is the free human average." } },
-        "points": { "type": "integer", "x-gurps": { "role": "overridable", "unit": "points", "formula": "(value - 10) * 20" } }
+        "points": { "type": "integer", "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "points", "formula": "if((value - 10) * 20 > 0, ceil((value - 10) * 20 * max(0.2, 1 + (sum(costModifiers.percent)) / 100)), (value - 10) * 20)" } },
+        "costModifiers": { "type": "array", "items": { "$ref": "#/$defs/costModifier" }, "x-gurps": { "role": "input", "description": "Enhancements/limitations on this purchase (since 1.2). The Size discount is not listed: it is derived from profile.sizeModifier." } }
       }
     },
     "secondaryFromIq5": {
@@ -324,9 +411,10 @@
       "additionalProperties": false,
       "x-gurps": { "costPerLevel": 5 },
       "properties": {
-        "value": { "type": "integer", "x-gurps": { "role": "overridable", "formula": "base" } },
+        "value": { "type": "integer", "x-gurps": { "role": "overridable", "override": "paid", "formula": "base" } },
         "base": { "type": "integer", "x-gurps": { "role": "derived", "formula": "$.attributes.iq.value" } },
-        "points": { "type": "integer", "x-gurps": { "role": "overridable", "unit": "points", "formula": "(value - base) * 5" } }
+        "points": { "type": "integer", "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "points", "formula": "if((value - base) * 5 > 0, ceil((value - base) * 5 * max(0.2, 1 + (sum(costModifiers.percent)) / 100)), (value - base) * 5)" } },
+        "costModifiers": { "type": "array", "items": { "$ref": "#/$defs/costModifier" }, "x-gurps": { "role": "input", "description": "Enhancements/limitations on this purchase (since 1.2). The Size discount is not listed: it is derived from profile.sizeModifier." } }
       }
     },
     "dice": {
@@ -348,9 +436,9 @@
       "properties": {
         "level": { "type": "integer", "minimum": 0, "maximum": 4 },
         "id": { "enum": ["none", "light", "medium", "heavy", "extraHeavy"] },
-        "maxLoad": { "type": "number", "x-gurps": { "role": "overridable", "unit": "kg", "formula": "round($.encumbrance.basicLift * lookup('encumbranceLoad', level), 1)", "sheetField": "Base_Carga_{Nenhuma|Leve|Media|Pesada|Mto_Pesada}" } },
-        "move": { "type": "integer", "x-gurps": { "role": "overridable", "unit": "m", "formula": "floor($.secondary.basicMove.value * lookup('encumbranceMove', level))", "sheetField": "DB_{Nenhuma|Leve|Media|Pesada|Mto_Pesada}" } },
-        "dodge": { "type": "integer", "x-gurps": { "role": "overridable", "formula": "$.defenses.dodge.value - level", "sheetField": "Esquiva, Esquiva-1..4" } }
+        "maxLoad": { "type": "number", "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "kg", "formula": "round($.encumbrance.basicLift * lookup('encumbranceLoad', level), 1)", "sheetField": "Base_Carga_{Nenhuma|Leve|Media|Pesada|Mto_Pesada}" } },
+        "move": { "type": "integer", "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "m", "formula": "floor($.secondary.basicMove.value * lookup('encumbranceMove', level))", "sheetField": "DB_{Nenhuma|Leve|Media|Pesada|Mto_Pesada}" } },
+        "dodge": { "type": "integer", "x-gurps": { "role": "overridable", "override": "unpaid", "formula": "$.defenses.dodge.value - level", "sheetField": "Esquiva, Esquiva-1..4" } }
       }
     },
     "skillDefense": {
@@ -359,7 +447,7 @@
       "additionalProperties": false,
       "properties": {
         "skill": { "type": ["string", "null"], "description": "Name of the skill (in skills[]) this defense is based on.", "x-gurps": { "role": "input", "sheetField": "Aparar2 / Bloqueio2" } },
-        "value": { "type": ["integer", "null"], "x-gurps": { "role": "overridable", "formula": "floor(skillLevel(skill) / 2) + 3", "description": "Weapon parry modifiers, shield DB and Combat Reflexes are not in the formula; an override carries them." } }
+        "value": { "type": ["integer", "null"], "x-gurps": { "role": "overridable", "override": "unpaid", "formula": "floor(skillLevel(skill) / 2) + 3", "description": "Weapon parry modifiers, shield DB and Combat Reflexes are not in the formula; an override carries them." } }
       }
     },
     "drEntry": {
@@ -428,8 +516,9 @@
         "attribute": { "enum": ["st", "dx", "iq", "ht", "will", "per"], "x-gurps": { "role": "input", "sheetField": "NH_Relativo_{n}A" } },
         "difficulty": { "enum": ["E", "A", "H", "VH"], "description": "Easy, Average, Hard, Very Hard (sheet: F, M, D, MD).", "x-gurps": { "role": "input", "sheetField": "Tipo_{n}" } },
         "relativeLevel": { "type": "integer", "x-gurps": { "role": "input", "sheetField": "NH_Relativo_{n}B" } },
-        "level": { "type": "integer", "x-gurps": { "role": "overridable", "formula": "attr(attribute) + relativeLevel", "sheetField": "NH{n}" } },
-        "points": { "type": "integer", "minimum": 1, "x-gurps": { "role": "overridable", "unit": "points", "formula": "lookup('skillCost', relativeLevel + lookup('difficultyOffset', difficulty))", "sheetField": "Custo_Pericia_{n}" } },
+        "level": { "type": "integer", "x-gurps": { "role": "overridable", "override": "unpaid", "formula": "attr(attribute) + relativeLevel + sum(bonuses.amount)", "sheetField": "NH{n}" } },
+        "bonuses": { "type": "array", "items": { "$ref": "#/$defs/skillBonus" }, "x-gurps": { "role": "input", "description": "Named NH bonuses, e.g. a Talent (B89): +1 per level to a group of skills. The trait itself is paid in traits[] (since 1.3)." } },
+        "points": { "type": "integer", "minimum": 1, "x-gurps": { "role": "overridable", "override": "unpaid", "unit": "points", "formula": "lookup('skillCost', relativeLevel + lookup('difficultyOffset', difficulty))", "sheetField": "Custo_Pericia_{n}" } },
         "notes": { "type": "string" }
       }
     },

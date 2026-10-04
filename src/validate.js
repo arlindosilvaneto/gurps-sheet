@@ -6,3 +6,4 @@ import vocabulary from '../schema/x-gurps-vocabulary.schema.json';
 import { createValidator } from './character.js';
 
 export const validateCharacter = createValidator(Ajv2020, addFormats, schema, vocabulary);
+export { schema }; // toCharacter builds `integrity` from the schema's engine-side check

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:gurps-sheet:schema:x-gurps-vocabulary:1.0.0",
+  "$id": "urn:gurps-sheet:schema:x-gurps-vocabulary:1.1.0",
   "title": "x-gurps annotation vocabulary",
   "description": "Defines the custom annotation keywords used by gurps-character.schema.json. Validators that do not know these keywords can ignore them; tools that do (e.g. Ajv addKeyword with these metaSchemas) can validate them.",
   "$defs": {
@@ -11,6 +11,10 @@
         "role": {
           "enum": ["input", "derived", "overridable", "state"],
           "description": "input: entered by the player. derived: always equals its formula. overridable: formula gives the default, a different stored value is a deliberate override (e.g. bought-up HP). state: changes during play (current HP/FP)."
+        },
+        "override": {
+          "enum": ["paid", "unpaid"],
+          "description": "For role overridable. paid: a different value is priced by a sibling points formula (bought-up HP). unpaid: no cost backs it, so a different value is a rule deviation (see integrity)."
         },
         "formula": { "type": "string", "minLength": 1, "description": "Expression in the language described in schema/README.md." },
         "unit": { "enum": ["points", "kg", "m", "m/s", "currency"] },

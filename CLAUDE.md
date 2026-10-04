@@ -59,7 +59,10 @@ At runtime the same `layout.json` drives both outputs, which keeps screen and PD
 The schema and `src/rules.js` encode the same rules twice. `test/schema.test.js` keeps them in sync: tables are checked against `damage()`/`skillCost()`, and the example character is recomputed through both. When a rule changes, update both.
 
 **Save/load** (`src/character.js`, pure; `src/validate.js` wraps Ajv and is loaded on demand). The goal is that sheet → file → sheet returns exactly the same values, and nothing is ever silently dropped. `test/character.test.js` round-trips a deliberately messy sheet to enforce this.
-- **Files:** only `gurps-character` 1.0.x documents are read. The schema is closed (`additionalProperties: false`), so a newer minor version (1.1+) gets an "update the reader" message rather than a misleading schema error. The old flat `gurps-sheet` format is rejected and never converted.
+- **Files:** `gurps-character` 1.0 to 1.3 are read (`SUPPORTED_MINOR`). The schema is closed (`additionalProperties: false`), so a newer minor version gets an "update the reader" message rather than a misleading schema error.
+  - Files are written at the lowest version they need (`lowestVersion()`): 1.1 base (integrity), 1.2 with cost modifiers or SM ≥ 1, 1.3 with NH bonuses or justifications.
+  - Pre-1.2 files with SM ≥ 1 have their ST/HP costs recalculated with the Size discount, with a warning, instead of becoming deviations.
+  - The old flat `gurps-sheet` format is rejected and never converted.
 - **Saving:** `toCharacter()` returns `{ doc, problems, labels }`.
   - Every numeric field goes through `numField()`. Text in a number field, a non-integer where the schema wants an integer, or an out-of-range value becomes a problem named by sheet row ("Desvantagens, linha 1 (Teimosia) › custo: …"), never a silent 0. Rows with problems are left out.
   - `main.js` runs Ajv only once there are no problems, passing `labels` (JSON pointer → sheet row) so schema errors also name sheet rows. Any problem blocks the download.
@@ -79,6 +82,41 @@ The schema and `src/rules.js` encode the same rules twice. `test/schema.test.js`
 - **Row counts:** `ROWS` in `rules.js` is the single source for how many rows each list has; both the rules and the mapping use it.
 - **Browser autosave:** `localStorage` key `gurps-sheet:v1` holds the internal draft `{ values, createdAt, context }`, deliberately not the schema, so half-typed values never fail validation.
 - **Dev server:** `vite.config.js` pre-bundles pdf-lib and Ajv. Without that, Vite discovers them on first use and reloads the page in the middle of an export or file open.
+
+### Rule integrity (anti-cheat)
+
+`src/integrity.js` (pure) splits the overridable calculated fields into two groups:
+- **`PAID_OVERRIDES`:** ST/DX/IQ/HT, PV, Vont, Per, PF, Basic Speed and Basic Move. A cost formula prices the change, so they are freely editable.
+- **`STRICT_FIELDS`:** every other non-read-only calculated field (costs, NH, Dodge/Parry/Block, damage, Basic Lift and the encumbrance rows). No cost backs an override.
+
+How the editor treats strict fields (`main.js`):
+- **Locked by default:** a strict field is read-only until the first edit attempt (keydown, paste, double-click, or a second tap) is confirmed in the `#confirm` dialog. The unlock lasts for the session; clearing the override locks the field again.
+- **Experimental mode:** the toolbar toggle (`flags.experimental` in the draft and in files) skips the confirmations.
+- **Integrity panel:** `sheetDeviations()` (a strict field whose typed value ≠ the computed one; a blank cost counts as 0) and `sheetIssues()` (over budget, skill below minimum) feed the `#integrity` panel and the magenta `.deviation` field style.
+
+How files carry it (schema 1.1):
+- `toCharacter()` requires `opts.schema` and writes `integrity { experimental, rulesCompliant, deviations[{pointer, expected, actual, sheetField, label, justification?}], issues[] }`.
+  - The deviation list is produced by the engine-side `deviations()` on the document itself, so the file can't disagree with an engine.
+  - An `inconsistent` derived value (the mapping lost something) blocks the save as an internal error.
+  - Manual NH/cost or bonuses on an empty skill row are reported as problems.
+  - Totals are summed from exact values, never from the 2-decimal display strings.
+- In the schema, every `overridable` node carries `x-gurps.override: "paid" | "unpaid"`. `PAID_OVERRIDES` must match the paid nodes, and a test checks this.
+- `schema/formula.js` `deviations(schema, doc)` is the engine-side check, which never trusts `integrity`. `test/integrity.test.js` asserts that the app's reported deviations equal what `deviations()` finds.
+- On load, `fromCharacter()` recomputes once. It warns when a file claims `rulesCompliant: true` despite deviations or issues (e.g. over budget), and when its totals differ from the calculated ones.
+- Examples: `schema/examples/rurik.json` (1.1, plain) and `jotun.json` (1.3: Size, a cost limitation, an NH bonus, a justified deviation).
+
+### Rule-backed adjustments: cost modifiers, NH bonuses, justifications
+
+Purchases of the 10 `COSTED` characteristics cost `⌈raw × max(20%, 1 + Σ%)⌉`. This is `modifiedCost()` in `rules.js`, and the identical formula is in the schema.
+- **Which modifiers apply:** `costModifiers(id, values)` returns the automatic Size discount (−10% per +1 Mod. de Tamanho, ST and PV only, never stored) plus the player's own, kept in `values.costModifiers` (`COST_MODS`, the only non-string key in `values`).
+- **When they apply:** only to purchases. Selling below base is unmodified.
+- **Breakdown for the UI:** `compute()` also returns `costs[id]` (raw cost, modifiers, multiplier, final cost).
+- **UI:** the adjust dialog (`#adjust`) is what cost fields open, by double-click, by an edit attempt on a locked cost, or from a cost deviation in the panel. A modifier keeps the sheet within the rules, and "Valor manual" is the flagged escape hatch.
+- **In files:** `costModifiers` is exported per characteristic (schema 1.2). `test/costs.test.js` checks the app against the schema formulas over a grid of ST, SM and modifiers.
+- **NH bonuses (schema 1.3):** `values.skillBonuses` (`SKILL_BONUSES`) is keyed by sheet skill row. NH = attribute + relative level + Σ bonuses, and `compute()` returns `skills[row]` for the UI. Bonuses follow packed rows on save/load, and they never change the skill's point cost.
+- **The adjust dialog (`#adjust`):** one dialog serves both costs and NH through `adjusterFor(fieldId)`. Each field type supplies its title, breakdown, items, validation and result text. Adjusted fields get the green `.adjusted` underline.
+- **Justifications (schema 1.3):** `values.justifications` (`JUSTIFICATIONS`) maps a field to the player's reason for a manual value. They are edited from the panel ("Justificar") in `#justify`, exported as `integrity.deviations[].justification`, and dropped when the manual value is cleared. They don't make the sheet compliant. On load they are matched by `sheetField`, else by pointer; a stale one becomes a warning.
+- `values` therefore has three non-string keys: `costModifiers`, `skillBonuses` and `justifications`.
 
 ### Deliberate deviations from the original XFA scripts
 

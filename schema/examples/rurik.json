@@ -1,7 +1,7 @@
 {
   "$schema": "../gurps-character.schema.json",
   "format": "gurps-character",
-  "formatVersion": "1.0.0",
+  "formatVersion": "1.1.0",
   "ruleset": { "system": "GURPS", "edition": 4, "units": "metric", "currency": "$" },
   "meta": {
     "locale": "pt-BR",
@@ -124,5 +124,6 @@
     { "name": "Mochila", "location": "Costas", "cost": 60, "weight": 1.5 }
   ],
   "possessionsTotal": { "cost": 450, "weight": 23 },
-  "notes": ["Busca vingança pelo irmão morto em Lindisfarne."]
+  "notes": ["Busca vingança pelo irmão morto em Lindisfarne."],
+  "integrity": { "experimental": false, "rulesCompliant": true, "deviations": [], "issues": [] }
 }

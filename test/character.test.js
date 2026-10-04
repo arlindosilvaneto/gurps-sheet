@@ -26,7 +26,7 @@ const loadError = (text) => {
 
 /** Saves sheet values to a document (asserting it is clean and valid) and loads it back. */
 function roundTrip(values, opts = {}) {
-  const { doc, problems, labels } = toCharacter(values, layout, { now, ...opts });
+  const { doc, problems, labels } = toCharacter(values, layout, { schema, now, ...opts });
   assert.deepEqual(problems, []);
   assert.deepEqual(validate(doc, labels), { valid: true, problems: [] });
   return { doc, ...fromCharacter(doc, layout) };
@@ -51,7 +51,7 @@ test('document -> sheet -> document is lossless for the example (DR notes includ
   const { values, warnings, context } = fromCharacter(rurik, layout);
   assert.deepEqual(warnings, []);
   assert.deepEqual(context, { locale: 'pt-BR', currency: '$' });
-  const { doc, problems } = toCharacter(values, layout, { now, context, createdAt: rurik.meta.createdAt, generator: rurik.meta.generator });
+  const { doc, problems } = toCharacter(values, layout, { schema, now, context, createdAt: rurik.meta.createdAt, generator: rurik.meta.generator });
   assert.deepEqual(problems, []);
   const expected = structuredClone(rurik);
   delete expected.$schema;
@@ -102,7 +102,7 @@ test('anything the document cannot carry blocks the save, named by sheet row (ne
     Lingua1: 'Latim', Falada1: 'fluente', Escrita1: 'Nativo',
     ModificadorTamanho: 'grande', Pontos_Gastar: 'cem', PV_Atual: 'x', Custo_ST: 'dezoito',
     RD1a: 'Tronco', RD1b: '4,5', RD2a: 'Pés', Vel_Basica: '5,1', ArmaCD1: 'Arco', MagnitudeCD1: 'muito',
-  }, layout, { now });
+  }, layout, { now, schema });
   assert.deepEqual(problems, [
     'Mod. de Tamanho: "grande" não é um número.',
     'Pontos p/ Gastar: "cem" não é um número.',
@@ -128,7 +128,7 @@ test('anything the document cannot carry blocks the save, named by sheet row (ne
 });
 
 test('schema errors on save are reported by sheet row, not by document path', () => {
-  const { doc, labels } = toCharacter({ Vantagem1: 'A', Custo_Vantagem_1: '5', Desvantagem1: 'Teimosia', Custo_desvantagem_1: '-5' }, layout, { now });
+  const { doc, labels } = toCharacter({ Vantagem1: 'A', Custo_Vantagem_1: '5', Desvantagem1: 'Teimosia', Custo_desvantagem_1: '-5' }, layout, { schema, now });
   doc.traits[1].points = 2.5; // a value the sheet checks would have refused
   assert.deepEqual(validate(doc, labels).problems, ['Desvantagens, linha 1 (Teimosia) › custo: deveria ser um número inteiro.']);
 });
@@ -141,7 +141,7 @@ test('a loaded file keeps its locale, currency and structured damage on re-save'
   const { values, warnings, context } = fromCharacter(foreign, layout);
   assert.deepEqual(warnings, []);
   assert.equal(values.DanoArma1ACC, 'sw+2 cut'); // type made explicit so re-parsing keeps it
-  const { doc } = toCharacter(values, layout, { now, context });
+  const { doc } = toCharacter(values, layout, { schema, now, context });
   assert.equal(doc.ruleset.currency, 'R$');
   assert.equal(doc.meta.locale, 'en');
   assert.equal(doc.weapons.melee[0].damage[0].type, 'cut');
@@ -160,11 +160,13 @@ test('loading warns about everything that will not survive a re-save unchanged',
     'Modificador de reação "Covarde": as linhas extras não guardam a origem (reputation); será salvo como "other".',
     'Aparar de "Machado" "0": os campos estruturados não correspondem ao texto e serão recalculados a partir dele ao salvar.',
     'Dados de extensões (com.example.combat) não são exibidos na planilha e não serão mantidos.',
+    // the hand-added trait isn't in the file's totals: the sheet says so and uses its own
+    'Totais do arquivo diferentes dos calculados pelas regras (Total de Pontos: arquivo 115, regras 116; Vantagens: arquivo 27, regras 28); a ficha usa os valores calculados.',
   ]);
 });
 
 test('1-point advantages export as perks and -1-point disadvantages as quirks', () => {
-  const { doc } = toCharacter({ Vantagem1: 'Ambidestria leve', Custo_Vantagem_1: '1', Desvantagem1: 'Ronca', Custo_desvantagem_1: '-1' }, layout, { now });
+  const { doc } = toCharacter({ Vantagem1: 'Ambidestria leve', Custo_Vantagem_1: '1', Desvantagem1: 'Ronca', Custo_desvantagem_1: '-1' }, layout, { schema, now });
   assert.deepEqual(doc.traits.map((t) => t.type), ['perk', 'quirk']);
 });
 
@@ -196,8 +198,13 @@ test('load errors: old format, bad JSON, wrong format, versions, schema violatio
   assert.equal(loadError('[1, 2]').title, 'Este arquivo não é uma ficha GURPS.');
   assert.equal(loadError(JSON.stringify({ format: 'gcs' })).title, 'Este arquivo não é uma ficha GURPS.');
   assert.equal(loadError(JSON.stringify({ ...rurik, formatVersion: '2.0.0' })).title, 'Versão da ficha não suportada.');
-  const newer = loadError(JSON.stringify({ ...rurik, formatVersion: '1.1.0', profile: { ...rurik.profile, gender: 'm' } }));
+  const newer = loadError(JSON.stringify({ ...rurik, formatVersion: '1.4.0', profile: { ...rurik.profile, gender: 'm' } }));
   assert.equal(newer.title, 'Ficha criada por uma versão mais nova.'); // not misreported as a schema error
+
+  const v10 = structuredClone(rurik); // a 1.0 file has no integrity block and must still load
+  v10.formatVersion = '1.0.0';
+  delete v10.integrity;
+  assert.equal(parseCharacterFile(JSON.stringify(v10), validate, layout).flags.experimental, false);
 
   const bad = structuredClone(rurik);
   bad.attributes.st.value = '13';

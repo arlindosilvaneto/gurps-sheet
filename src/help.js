@@ -19,13 +19,13 @@ export const HELP = [
   at(0, 'Total de Pontos', 'Soma dos pontos gastos: atributos, vantagens, desvantagens, perícias e outros. Fica vermelho se passar de "Pontos p/ Gastar".'),
   at(0, 'Altura', 'Altura do personagem. Não afeta cálculos.'),
   at(0, 'Peso', 'Peso corporal do personagem (não é o peso carregado). Não afeta cálculos.'),
-  at(0, 'Mod. de Tamanho', 'Modificador de Tamanho (MT): 0 para humanos. Criaturas maiores recebem desconto em ST e PV (10% por MT) — não aplicado automaticamente.'),
+  at(0, 'Mod. de Tamanho', 'Modificador de Tamanho (MT): 0 para humanos. Com MT +1 ou mais, o custo de ST e PV recebe desconto de 10% por nível de MT (aplicado automaticamente; máx. 80% somando outros modificadores).'),
   at(0, 'Idade', 'Idade do personagem.'),
   at(0, 'Pontos p/ Gastar', 'Orçamento de pontos da campanha (ex.: 100 ou 150), definido pelo mestre. Não entra na soma do Total de Pontos.'),
   at(0, 'Aparência', 'Descrição física. O nível de Aparência (atraente, feio…) é vantagem/desvantagem e seu modificador vai em Modificadores de Reação.'),
 
   // ---------------- Atributos ----------------
-  at(0, 'ST', 'Força. Padrão 10 (grátis); ±10 pts por nível. Define PV, Base de Carga e dano (GdP/GeB).'),
+  at(0, 'ST', 'Força. Padrão 10 (grátis); ±10 pts por nível. Define PV, Base de Carga e dano (GdP/GeB). Clique duas vezes no custo [ ] para aplicar ampliações/limitações.'),
   at(0, 'DX', 'Destreza. Padrão 10 (grátis); ±20 pts por nível. Base das perícias físicas e da Velocidade Básica.'),
   at(0, 'IQ', 'Inteligência. Padrão 10 (grátis); ±20 pts por nível. Base das perícias mentais, Vontade e Percepção.'),
   at(0, 'HT', 'Vitalidade. Padrão 10 (grátis); ±10 pts por nível. Base dos PF e da Velocidade Básica.'),
@@ -82,7 +82,7 @@ export const HELP = [
   at(0, 'DESVANTAGENS E PECULIARIDADES', 'Desvantagens (custo negativo — digite com sinal −) e Peculiaridades (−1 pt cada, máx. 5). O Módulo Básico sugere limitar desvantagens a 50% dos pontos iniciais.'),
   at(0, 'PERÍCIAS', `Perícias aprendidas. Preencha nome, atributo + nível relativo e a dificuldade (campo cinza); NH e custo são calculados. ${SKILL_COST}`),
   at(0, 'Nome', 'Nome da perícia. É por este nome que os campos sob APARAR e BLOQUEIO encontram a perícia.', { n: 1 }),
-  at(0, 'NH', 'Nível de Habilidade = atributo + nível relativo (calculado). Digite por cima para casos especiais, como Aptidão Mágica.'),
+  at(0, 'NH', 'Nível de Habilidade = atributo + nível relativo + bônus (calculado). Clique duas vezes no NH para adicionar bônus, como Talento (+1 por nível); valores manuais ficam fora das regras.'),
   at(0, 'NH Relativo', `Atributo base (ST, DX, IQ, HT, Vont, Per), nível relativo (ex.: +1, −2) e, no campo cinza, a dificuldade F/M/D/MD. ${SKILL_COST}`),
 
   // ---------------- Página 2 ----------------

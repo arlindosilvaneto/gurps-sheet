@@ -5,6 +5,8 @@
 // COMPUTED is auto-calculated, but (like the XFA override="warning" fields) a non-empty
 // user value overrides it, and downstream rules use that override.
 
+import { roundUp } from '../schema/formula.js';
+
 export const ATTRS = ['ST', 'DX', 'IQ', 'HT', 'Vont', 'Per'];
 /** Rows per list on the sheet — single source for the rules and the file mapping (src/character.js). */
 export const ROWS = {
@@ -105,26 +107,80 @@ export function basicLift(st) {
 
 const sum = (xs) => xs.reduce((a, x) => a + (x ?? 0), 0);
 
+/** True when the user typed a value over an (editable) calculated field. */
+export const isOverridden = (id, values) => COMPUTED.has(id) && !READ_ONLY.has(id) && String(values[id] ?? '').trim() !== '';
+
+/** values key holding per-characteristic cost modifiers: { ST: [{ name, percent }], PV: [...], ... } */
+export const COST_MODS = 'costModifiers';
+/** values key holding NH bonuses per skill row: { "3": [{ name, amount }] } (e.g. Talent, B89) */
+export const SKILL_BONUSES = 'skillBonuses';
+/** values key holding the player's reason for a manual (rule-breaking) value: { fieldId: text } */
+export const JUSTIFICATIONS = 'justifications';
+
+/** NH bonuses recorded for a skill row. */
+export const skillBonuses = (row, values) => values[SKILL_BONUSES]?.[String(row)] ?? [];
+/** Characteristics whose purchase cost can carry enhancements/limitations (their cost field is Custo_<id>). */
+export const COSTED = ['ST', 'DX', 'IQ', 'HT', 'PV', 'Vont', 'Per', 'PF', 'Vel_Basica', 'Desl_Basico'];
+const SIZE_DISCOUNTED = new Set(['ST', 'PV']); // B19: ST and HP cost -10% per +1 SM
+export const MIN_COST_MULTIPLIER = 0.2; // modifiers never reduce a cost by more than 80% (B101)
+
+export { roundUp };
+
+/**
+ * Modifiers applied to a characteristic's cost: the automatic Size discount (ST/PV with SM >= 1),
+ * then the player's own (stored in values[COST_MODS]).
+ * @returns {Array<{ name: string, percent: number, source: 'size'|'custom' }>}
+ */
+export function costModifiers(id, values) {
+  const mods = [];
+  const sm = num(values.ModificadorTamanho);
+  if (SIZE_DISCOUNTED.has(id) && Number.isInteger(sm) && sm >= 1) mods.push({ name: `Tamanho (MT +${sm})`, percent: -10 * sm, source: 'size' });
+  for (const m of values[COST_MODS]?.[id] ?? []) mods.push({ name: m.name, percent: m.percent, source: 'custom' });
+  return mods;
+}
+
+/** Final cost of buying `rawCost` points of a characteristic with these modifiers (selling down is unmodified). */
+export function modifiedCost(rawCost, mods) {
+  const net = sum(mods.map((m) => m.percent));
+  const multiplier = Math.max(MIN_COST_MULTIPLIER, 1 + net / 100);
+  const applies = rawCost > 0 && mods.length > 0;
+  // Integer percents: compare them, not floats (1 + -80/100 is 0.19999999999999996).
+  const capped = net < -Math.round((1 - MIN_COST_MULTIPLIER) * 100);
+  return { cost: applies ? roundUp(rawCost * multiplier) : rawCost, netPercent: net, multiplier, capped, applies };
+}
+
 /**
  * Computes every COMPUTED field.
  * @param {Record<string,string>} values user input (including overrides of computed fields)
- * @returns {{ out: Record<string,string>, errors: Record<string,string> }} display strings for computed ids
+ * @returns {{ out: Record<string,string>, errors: Record<string,string>, costs: Record<string, object>, skills: Record<number, object> }}
+ *   display strings for computed ids; `costs[id]` explains each characteristic's cost (levels, modifiers, final);
+ *   `skills[row]` explains each NH (attribute, base, relative level, bonuses)
  */
 export function compute(values) {
   const out = {};
   const errors = {};
+  const costs = {};
+  const skills = {};
   const raw = (id) => values[id] ?? '';
-  const overridden = (id) => COMPUTED.has(id) && !READ_ONLY.has(id) && String(raw(id)).trim() !== '';
   // Effective numeric value: override if present, else computed, else plain input.
-  const eff = (id) => num(overridden(id) || !COMPUTED.has(id) ? raw(id) : out[id]);
+  const eff = (id) => num(isOverridden(id, values) || !COMPUTED.has(id) ? raw(id) : out[id]);
   const set = (id, v) => { out[id] = typeof v === 'number' ? fmt(v) : (v ?? ''); };
 
   // Every attribute defaults to a base value that costs nothing; buying it up/down costs per level.
   // Cost is blank at the default (free), like the XFA secondary-characteristic costs.
+  // Purchases carry cost modifiers (Size discount, enhancements/limitations); see modifiedCost().
   const characteristic = (id, base, perLevel) => {
     set(id, base);
     const v = eff(id);
-    set(`Custo_${id}`, base === null || v === null || v === base ? null : (v - base) * perLevel);
+    if (base === null || v === null) {
+      set(`Custo_${id}`, null);
+      return v;
+    }
+    const rawCost = (v - base) * perLevel;
+    const modifiers = costModifiers(id, values);
+    const m = modifiedCost(rawCost, modifiers);
+    costs[id] = { base, value: v, perLevel, rawCost, modifiers, ...m };
+    set(`Custo_${id}`, v === base ? null : m.cost);
     return v;
   };
   // Primary attributes: default 10; ST/HT 10 pts/level, DX/IQ 20 pts/level.
@@ -162,13 +218,17 @@ export function compute(values) {
   set('Dano_GdP', gdp);
   set('Dano_GeB', geb);
 
-  // Skills: NH = attribute (effective, so bought-up Per/Vont count) + relative level.
+  // Skills: NH = attribute (effective, so bought-up Per/Vont count) + relative level + bonuses (Talent etc.).
   const attrByName = Object.fromEntries(ATTRS.map((a) => [a.toUpperCase(), a]));
   for (let i = 1; i <= SKILL_ROWS; i++) {
     const attr = attrByName[String(raw(`NH_Relativo_${i}A`)).trim().toUpperCase()];
     const rel = num(raw(`NH_Relativo_${i}B`));
     const base = attr ? eff(attr) : null;
-    set(`NH${i}`, base === null ? null : base + (rel ?? 0));
+    const bonuses = skillBonuses(i, values);
+    const bonus = sum(bonuses.map((b) => b.amount));
+    const level = base === null ? null : base + (rel ?? 0) + bonus;
+    skills[i] = { attr, base, rel: rel ?? 0, bonuses, bonus, level };
+    set(`NH${i}`, level);
     const { cost, error } = skillCost(rel, raw(`Tipo_${i}`));
     set(`Custo_Pericia_${i}`, cost);
     if (error) errors[`Custo_Pericia_${i}`] = error;
@@ -215,13 +275,11 @@ export function compute(values) {
   set('Preço_Total', blankZero(sum(range(ITEM_ROWS).map((i) => num(raw(`Preço${i}`))))));
   set('Peso_Total', blankZero(sum(range(ITEM_ROWS).map((i) => num(raw(`Peso${i}`))))));
 
-  return { out, errors };
+  return { out, errors, costs, skills };
 }
 
 /** What a field shows: user value for inputs/overrides, otherwise the computed value. */
 export function display(id, values, out) {
-  const v = values[id] ?? '';
-  if (!COMPUTED.has(id)) return v;
-  if (!READ_ONLY.has(id) && String(v).trim() !== '') return v;
+  if (!COMPUTED.has(id) || isOverridden(id, values)) return values[id] ?? '';
   return out[id] ?? '';
 }

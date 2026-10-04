@@ -1,12 +1,13 @@
 // Maps the sheet's flat field values <-> gurps-character documents (schema/gurps-character.schema.json).
 // Pure module (no DOM, no Ajv import) so the browser and node tests share it.
 
-import { compute, display, num, ROWS, range } from './rules.js';
-import { parseDice } from '../schema/formula.js';
+import { compute, display, num, ROWS, range, COST_MODS, SKILL_BONUSES, JUSTIFICATIONS, skillBonuses, isOverridden } from './rules.js';
+import { parseDice, deviations as engineDeviations } from '../schema/formula.js';
+import { sheetDeviations, sheetIssues, fieldLabel, STRICT_FIELDS } from './integrity.js';
 
 export const FORMAT = 'gurps-character';
-export const FORMAT_VERSION = '1.0.0';
-const SUPPORTED_MINOR = 0; // closed schema: newer minors may add properties this reader would reject
+export const FORMAT_VERSION = '1.3.0'; // latest this app knows; files get the lowest version they need (lowestVersion)
+const SUPPORTED_MINOR = 3; // closed schema: newer minors may add properties this reader would reject
 export const MAX_FILE_BYTES = 2_000_000;
 
 /** A sheet file could not be loaded/saved; `problems` are user-facing pt-BR messages. */
@@ -106,11 +107,15 @@ const signedModifier = (x) => (x < 0 ? String(x) : `+${x}`); // reaction modifie
 /**
  * Builds a gurps-character document from the sheet.
  * @param {object} [opts.context] { locale, currency } carried over from a loaded file (defaults pt-BR / $)
+ * @param {object} [opts.flags] { experimental } — the sheet's experimental mode
+ * @param {object} opts.schema gurps-character schema: `integrity` is built from its engine-side deviations() check,
+ *   so what the file reports always equals what an engine verifies
  * @returns {{ doc: object, problems: string[], labels: Record<string,string> }}
  *   problems = sheet data the document cannot carry (the save must be blocked);
  *   labels = JSON pointer -> sheet location, for turning schema errors into sheet-row messages.
  */
-export function toCharacter(values, layout, { now = new Date(), createdAt, generator, context = {} } = {}) {
+export function toCharacter(values, layout, { now = new Date(), createdAt, generator, context = {}, flags = {}, schema } = {}) {
+  if (!schema) throw new TypeError('toCharacter: opts.schema is required');
   const { out, errors } = compute(values);
   const v = (id) => String(display(id, values, out) ?? '').trim();
   const problems = [];
@@ -145,7 +150,15 @@ export function toCharacter(values, layout, { now = new Date(), createdAt, gener
 
   const budget = numField('Pontos_Gastar', 'Pontos p/ Gastar', { integer: true });
   const other = numField('Resumo_Pontos5', 'Resumo dos pontos › Outros');
-  const spent = num(out.Total_Pontos) ?? 0;
+  // Totals are summed from exact values: the sheet's display strings round to 2 decimals.
+  const breakdown = {
+    attributes: num(out.Resumo_Pontos1) ?? 0,
+    advantages: num(out.Resumo_Pontos2) ?? 0,
+    disadvantages: num(out.Resumo_Pontos3) ?? 0,
+    skills: num(out.Resumo_Pontos4) ?? 0,
+    other: other ?? 0,
+  };
+  const spent = breakdown.attributes + breakdown.advantages + breakdown.disadvantages + breakdown.skills + breakdown.other;
   labels['/points/budget'] = 'Pontos p/ Gastar';
 
   // ---- attributes & secondary characteristics ----
@@ -155,6 +168,8 @@ export function toCharacter(values, layout, { now = new Date(), createdAt, gener
     if (base) c.base = num(out[id]);
     c.points = numField(costId, `${label} › custo`, step ? {} : { integer: true }) ?? 0;
     if (currentId) opt(c, 'current', numField(currentId, `${label} atual`, { integer: true }));
+    const mods = values[COST_MODS]?.[id] ?? []; // the Size discount is derived from sizeModifier, never stored
+    if (mods.length) c.costModifiers = mods.map(({ name, percent }) => ({ name, percent }));
     return c;
   };
 
@@ -181,11 +196,19 @@ export function toCharacter(values, layout, { now = new Date(), createdAt, gener
 
   // ---- skills ----
   const skills = [];
+  const skillIndex = {}; // sheet row -> index in skills[] (rows are packed)
   for (const i of range(ROWS.skills)) {
     const name = v(`Pericia${i}`);
     const attrText = v(`NH_Relativo_${i}A`);
     const diffText = v(`Tipo_${i}`);
-    if (!name && !attrText && !diffText && !v(`NH_Relativo_${i}B`)) continue;
+    if (!name && !attrText && !diffText && !v(`NH_Relativo_${i}B`)) {
+      // An empty row exports nothing, so anything typed over its NH/cost would vanish from the file.
+      for (const id of [`NH${i}`, `Custo_Pericia_${i}`]) {
+        if (isOverridden(id, values)) problems.push(`Perícias, linha ${i}: há um valor manual de ${id.startsWith('NH') ? 'NH' : 'custo'} ("${values[id]}") numa linha sem perícia — apague-o ou preencha a perícia.`);
+      }
+      if (skillBonuses(i, values).length) problems.push(`Perícias, linha ${i}: há bônus de NH numa linha sem perícia — remova-os ou preencha a perícia.`);
+      continue;
+    }
     const where = `Perícias, linha ${i}${name ? ` (${name})` : ''}`;
     const before = problems.length;
     const attribute = ATTR_TO_SCHEMA[attrText.toUpperCase()];
@@ -199,7 +222,11 @@ export function toCharacter(values, layout, { now = new Date(), createdAt, gener
     const points = numField(`Custo_Pericia_${i}`, `${where} › custo`, { integer: true, min: 1 });
     if (problems.length > before) continue;
     labels[`/skills/${skills.length}`] = where;
-    skills.push({ name, attribute, difficulty, relativeLevel: relativeLevel ?? 0, level, points });
+    skillIndex[i] = skills.length;
+    const skill = { name, attribute, difficulty, relativeLevel: relativeLevel ?? 0, level, points };
+    const bonuses = skillBonuses(i, values);
+    if (bonuses.length) skill.bonuses = bonuses.map(({ name: n, amount }) => ({ name: n, amount }));
+    skills.push(skill);
   }
 
   // ---- languages, cultures ----
@@ -377,13 +404,7 @@ export function toCharacter(values, layout, { now = new Date(), createdAt, gener
       budget: budget ?? null,
       spent,
       unspent: budget === null || budget === undefined ? null : budget - spent,
-      breakdown: {
-        attributes: num(out.Resumo_Pontos1) ?? 0,
-        advantages: num(out.Resumo_Pontos2) ?? 0,
-        disadvantages: num(out.Resumo_Pontos3) ?? 0,
-        skills: num(out.Resumo_Pontos4) ?? 0,
-        other: other ?? 0,
-      },
+      breakdown,
     },
     attributes: {
       st: characteristic('/attributes/st', 'ST', 'Custo_ST', 'ST'),
@@ -418,10 +439,65 @@ export function toCharacter(values, layout, { now = new Date(), createdAt, gener
     skills,
     weapons: { melee, ranged },
     equipment,
-    possessionsTotal: { cost: num(out['Preço_Total']) ?? 0, weight: num(out.Peso_Total) ?? 0 },
+    possessionsTotal: {
+      cost: [melee, ranged, equipment].reduce((a, list) => a + list.reduce((b, x) => b + (x.cost ?? 0), 0), 0),
+      weight: [melee, ranged, equipment].reduce((a, list) => a + list.reduce((b, x) => b + (x.weight ?? 0), 0), 0),
+    },
     notes: range(ROWS.notes).map((i) => v(`Anotações${i}`)).filter(Boolean),
   };
+  doc.integrity = integrityBlock(doc, values, errors, skillIndex, flags, schema, problems);
+  doc.formatVersion = lowestVersion(doc);
   return { doc, problems, labels };
+}
+
+/** Lowest format version whose features the document uses, so older readers can still open it. */
+function lowestVersion(doc) {
+  const characteristics = [...Object.values(doc.attributes), ...Object.values(doc.secondary)];
+  if (doc.skills.some((s) => s.bonuses) || doc.integrity.deviations.some((d) => d.justification)) return '1.3.0';
+  // 1.2 added cost modifiers and the Size discount inside the ST/HP cost formulas.
+  if (characteristics.some((c) => c.costModifiers) || doc.profile.sizeModifier >= 1) return '1.2.0';
+  return '1.1.0'; // integrity is always written
+}
+
+// Sheet field -> JSON pointer of the value it becomes in the document.
+const POINTERS = {
+  Custo_ST: '/attributes/st/points', Custo_DX: '/attributes/dx/points', Custo_IQ: '/attributes/iq/points', Custo_HT: '/attributes/ht/points',
+  Custo_PV: '/secondary/hp/points', Custo_Vont: '/secondary/will/points', Custo_Per: '/secondary/per/points', Custo_PF: '/secondary/fp/points',
+  Custo_Vel_Basica: '/secondary/basicSpeed/points', Custo_Desl_Basico: '/secondary/basicMove/points',
+  Base_Carga: '/encumbrance/basicLift', Esquiva: '/defenses/dodge/value', Aparar: '/defenses/parry/value', Bloqueio: '/defenses/block/value',
+  Dano_GdP: '/damage/thrust', Dano_GeB: '/damage/swing',
+};
+function pointerFor(id, skillIndex) {
+  if (POINTERS[id]) return POINTERS[id];
+  let m = /^(NH|Custo_Pericia_)(\d+)$/.exec(id);
+  if (m) return skillIndex[m[2]] === undefined ? null : `/skills/${skillIndex[m[2]]}/${m[1] === 'NH' ? 'level' : 'points'}`;
+  m = /^(Base_Carga|DB)_(\w+)$/.exec(id);
+  if (m) return `/encumbrance/levels/${ENCUMBRANCE.findIndex((e) => e[1] === m[2])}/${m[1] === 'DB' ? 'move' : 'maxLoad'}`;
+  m = /^Esquiva-(\d)$/.exec(id);
+  return m ? `/encumbrance/levels/${m[1]}/dodge` : null;
+}
+
+/**
+ * The document's self-reported rule status (schema `integrity`, since 1.1), built from the engine-side
+ * deviations() check on the document itself — never from a parallel list that could drift from it.
+ * A derived value that disagrees with its formula means the mapping lost something: that blocks the save.
+ */
+function integrityBlock(doc, values, errors, skillIndex, flags, schema, problems) {
+  const idByPointer = new Map([...STRICT_FIELDS].map((id) => [pointerFor(id, skillIndex), id]).filter(([ptr]) => ptr));
+  const reasons = values[JUSTIFICATIONS] ?? {};
+  const found = engineDeviations(schema, doc);
+  if (!problems.length) { // rows already reported as problems are left out, which would also skew totals
+    for (const d of found.filter((x) => x.reason === 'inconsistent')) {
+      problems.push(`Inconsistência interna em ${d.pointer}: as regras dão ${d.expected}, o arquivo teria ${d.actual}. Isto é um erro da planilha — use "Salvar" de novo após recarregar e, se persistir, reporte.`);
+    }
+  }
+  const deviations = found.filter((d) => d.reason === 'override').map(({ pointer, expected, actual }) => {
+    const id = idByPointer.get(pointer);
+    const why = id ? String(reasons[id] ?? '').trim() : '';
+    return { pointer, expected, actual, ...(id ? { sheetField: id, label: fieldLabel(id, values) } : {}), ...(why ? { justification: why } : {}) };
+  });
+  const issues = errors.Total_Pontos ? [{ code: 'overBudget', pointer: '/points/spent', message: errors.Total_Pontos }] : [];
+  return { experimental: Boolean(flags.experimental), rulesCompliant: deviations.length === 0 && issues.length === 0, deviations, issues };
 }
 
 // ---------------- Document -> sheet ----------------
@@ -466,6 +542,15 @@ export function fromCharacter(doc, layout) {
   put('PV_Atual', doc.secondary.hp.current);
   put('PF_Atual', doc.secondary.fp.current);
 
+  const costMods = {};
+  const sources = [['ST', doc.attributes.st], ['DX', doc.attributes.dx], ['IQ', doc.attributes.iq], ['HT', doc.attributes.ht],
+    ['PV', doc.secondary.hp], ['Vont', doc.secondary.will], ['Per', doc.secondary.per], ['PF', doc.secondary.fp],
+    ['Vel_Basica', doc.secondary.basicSpeed], ['Desl_Basico', doc.secondary.basicMove]];
+  for (const [id, c] of sources) {
+    if (c.costModifiers?.length) costMods[id] = c.costModifiers.map(({ name, percent }) => ({ name, percent }));
+  }
+  if (Object.keys(costMods).length) values[COST_MODS] = costMods;
+
   if (doc.techLevel) {
     put('NT', doc.techLevel.level);
     if (doc.techLevel.points) put('Custo_NT', doc.techLevel.points);
@@ -500,13 +585,16 @@ export function fromCharacter(doc, layout) {
   });
 
   const skills = fits(doc.skills, ROWS.skills, 'Perícias');
+  const bonuses = {};
   skills.forEach((s, i) => {
+    if (s.bonuses?.length) bonuses[String(i + 1)] = s.bonuses.map(({ name, amount }) => ({ name, amount }));
     put(`Pericia${i + 1}`, s.name);
     put(`NH_Relativo_${i + 1}A`, ATTR_TO_SHEET[s.attribute]);
     put(`NH_Relativo_${i + 1}B`, signedLevel(s.relativeLevel));
     put(`Tipo_${i + 1}`, DIFF_TO_SHEET[s.difficulty]);
     if (s.notes) warnings.push(`Perícia "${s.name}": notas não têm lugar na planilha.`);
   });
+  if (Object.keys(bonuses).length) values[SKILL_BONUSES] = bonuses;
   put('Aparar2', doc.defenses.parry.skill);
   put('Bloqueio2', doc.defenses.block.skill);
 
@@ -590,6 +678,10 @@ export function fromCharacter(doc, layout) {
   const s = doc.secondary;
   const enc = doc.encumbrance;
   const cost = (id, points) => [id, points, true]; // costs show blank at their default; blank == 0
+  // Before 1.2 the ST/HP costs ignored Size: an old file's unmodified cost is recalculated (with a warning), not kept as a deviation.
+  const minor = Number(/^1\.(\d+)/.exec(doc.formatVersion ?? '')?.[1] ?? SUPPORTED_MINOR);
+  const legacySize = minor < 2 && doc.profile.sizeModifier >= 1;
+  let recalculated = false;
   const groups = [
     [['PV', s.hp.value], ['Vont', s.will.value], ['Per', s.per.value], ['PF', s.fp.value], ['Vel_Basica', s.basicSpeed.value]],
     [['Desl_Basico', s.basicMove.value],
@@ -605,18 +697,56 @@ export function fromCharacter(doc, layout) {
       ...skills.map((sk, i) => cost(`Custo_Pericia_${i + 1}`, sk.points))],
   ];
   for (const group of groups) {
-    const { out } = compute(values);
+    const { out, costs } = compute(values);
     for (const [id, want, blankIsZero] of group) {
       if (want === null || want === undefined) continue;
       const have = typeof want === 'number' ? (num(out[id]) ?? (blankIsZero ? 0 : null)) : out[id];
+      if (legacySize && (id === 'Custo_ST' || id === 'Custo_PV') && want === costs[id.slice(6)]?.rawCost) {
+        if (have !== want) {
+          recalculated = true;
+          warnings.push(`${fieldLabel(id)} recalculado com o desconto de Tamanho (MT +${doc.profile.sizeModifier}), regra adotada na versão 1.2 do formato: ${want} → ${have} pts.`);
+        }
+        continue;
+      }
       if (have !== want) values[id] = str(want);
     }
+  }
+  // Justifications: matched by sheetField, else by pointer (files from other writers); kept only for real deviations.
+  const skillIndex = Object.fromEntries(skills.map((_, i) => [String(i + 1), i]));
+  const byPointer = Object.fromEntries([...STRICT_FIELDS].map((id) => [pointerFor(id, skillIndex), id]).filter(([ptr]) => ptr));
+  const final = compute(values); // justifications don't affect the rules: one computation serves every check below
+  const found = sheetDeviations(values, final.out);
+  const deviating = new Set(found.map((d) => d.id));
+  const reasons = {};
+  for (const d of doc.integrity?.deviations ?? []) {
+    if (!d.justification) continue;
+    const id = STRICT_FIELDS.has(d.sheetField) && pointerFor(d.sheetField, skillIndex) === d.pointer ? d.sheetField : byPointer[d.pointer];
+    if (id && deviating.has(id)) reasons[id] = d.justification;
+    else warnings.push(`Justificativa "${d.justification}" ignorada: ${d.label ?? d.pointer} não está fora das regras nesta ficha.`);
+  }
+  if (Object.keys(reasons).length) values[JUSTIFICATIONS] = reasons;
+
+  // A file is never trusted about its own compliance or totals: recompute and compare with what it claims.
+  if (doc.integrity?.rulesCompliant) {
+    if (found.length) warnings.push(`O arquivo se declarava dentro das regras, mas tem ${found.length} desvio(s): ${found.map((d) => fieldLabel(d.id, values)).join(', ')}.`);
+    const issues = sheetIssues(values, final.out, final.errors);
+    if (issues.length) warnings.push(`O arquivo se declarava dentro das regras, mas: ${issues.map((i) => i.message).join(' ')}`);
+  }
+  const totals = [
+    ['Total de Pontos', doc.points.spent, 'Total_Pontos'], ['Atributos', doc.points.breakdown.attributes, 'Resumo_Pontos1'],
+    ['Vantagens', doc.points.breakdown.advantages, 'Resumo_Pontos2'], ['Desvantagens', doc.points.breakdown.disadvantages, 'Resumo_Pontos3'],
+    ['Perícias', doc.points.breakdown.skills, 'Resumo_Pontos4'],
+    ['Custo total', doc.possessionsTotal?.cost, 'Preço_Total'], ['Peso total', doc.possessionsTotal?.weight, 'Peso_Total'],
+  ].filter(([, inFile, id]) => typeof inFile === 'number' && Math.abs(inFile - (num(final.out[id]) ?? 0)) > 0.005 + 1e-9); // sheet totals display 2 decimals
+  if (totals.length && !recalculated) {
+    warnings.push(`Totais do arquivo diferentes dos calculados pelas regras (${totals.map(([label, inFile, id]) => `${label}: arquivo ${inFile}, regras ${num(final.out[id]) ?? 0}`).join('; ')}); a ficha usa os valores calculados.`);
   }
   return {
     values,
     warnings,
     createdAt: doc.meta?.createdAt,
     context: { locale: doc.meta?.locale, currency: doc.ruleset?.currency },
+    flags: { experimental: doc.integrity?.experimental === true },
   };
 }
 
@@ -687,7 +817,7 @@ export function formatAjvErrors(errors = [], labels = null) {
  * @returns {(doc: object, labels?: object) => { valid: boolean, problems: string[] }}
  */
 export function createValidator(Ajv2020, addFormats, schema, vocabulary) {
-  const ajv = new Ajv2020({ strict: true, allErrors: true });
+  const ajv = new Ajv2020({ strict: true, allErrors: true, allowUnionTypes: true });
   addFormats(ajv);
   ajv.addKeyword({ keyword: 'x-gurps', metaSchema: vocabulary.$defs.annotation });
   ajv.addKeyword({ keyword: 'x-gurps-tables', metaSchema: vocabulary.$defs.tables });
@@ -711,7 +841,7 @@ function jsonSyntaxMessage(err, text) {
 }
 
 /**
- * Parses and validates a sheet file. Only gurps-character 1.0.x is accepted.
+ * Parses and validates a sheet file. gurps-character 1.0 to 1.3 are accepted.
  * @throws {SheetFileError} with user-facing problems
  */
 export function parseCharacterFile(text, validate, layout) {
