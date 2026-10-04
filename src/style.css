@@ -1,0 +1,171 @@
+:root {
+  --pt: 1.5; /* CSS px per PDF point; set by fitToWidth() */
+  --ink: #0f1f52;
+  --calc-bg: rgba(40, 110, 220, 0.07);
+  --override-bg: rgba(230, 150, 20, 0.22);
+  --noprint-bg: rgba(140, 140, 140, 0.16);
+  --chrome-bg: #2b2b2b;
+  --chrome-fg: #f2f2f2;
+  --desk: #d9d6cf;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--desk);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 8px 16px;
+  background: var(--chrome-bg);
+  color: var(--chrome-fg);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+.toolbar .logo { height: 28px; }
+.toolbar h1 { margin: 0; font-size: 16px; font-weight: 600; }
+.toolbar .status { flex: 1; font-size: 12px; opacity: 0.75; min-width: 120px; }
+.toolbar nav { display: flex; flex-wrap: wrap; gap: 6px; }
+.toolbar button {
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 12px;
+  border: 1px solid #666;
+  border-radius: 4px;
+  background: #3d3d3d;
+  color: inherit;
+  cursor: pointer;
+}
+.toolbar button:hover { background: #4a4a4a; }
+.toolbar button.primary { background: #8a1c1c; border-color: #a52a2a; }
+.toolbar button.primary:hover { background: #a02323; }
+.toolbar button:disabled { opacity: 0.6; cursor: progress; }
+
+.legend {
+  margin: 10px auto 0;
+  padding: 0 16px;
+  max-width: calc(var(--page-w) * var(--pt) * 1px + 32px);
+  font-size: 12px;
+  color: #333;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+.swatch { display: inline-block; width: 14px; height: 10px; border: 1px solid #999; margin-left: 10px; }
+.swatch.calc { background: var(--calc-bg); }
+.swatch.override { background: var(--override-bg); }
+.swatch.noprint { background: var(--noprint-bg); }
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px 32px;
+}
+
+.page {
+  position: relative;
+  width: calc(var(--page-w) * var(--pt) * 1px);
+  height: calc(var(--page-h) * var(--pt) * 1px);
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  flex: none;
+}
+.page .bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  pointer-events: none;
+}
+
+.field {
+  position: absolute;
+  left: calc(var(--x) * var(--pt) * 1px);
+  top: calc(var(--y) * var(--pt) * 1px);
+  width: calc(var(--w) * var(--pt) * 1px);
+  height: calc(var(--h) * var(--pt) * 1px);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: calc(var(--fs) * var(--pt) * 1px);
+  padding: 0 calc(1.5 * var(--pt) * 1px);
+  margin: 0;
+  border: 0;
+  border-radius: 1px;
+  background: transparent;
+  color: var(--ink);
+  outline: none;
+}
+.field:hover { background: rgba(40, 110, 220, 0.06); }
+.field:focus { background: rgba(255, 245, 170, 0.55); box-shadow: 0 0 0 1px rgba(200, 160, 0, 0.8); }
+.field.align-center { text-align: center; }
+.field.align-right { text-align: right; }
+.field.calc { background: var(--calc-bg); color: #000; }
+.field.override { background: var(--override-bg); }
+.field.noprint { background: var(--noprint-bg); }
+.field.error { background: rgba(220, 30, 30, 0.25); box-shadow: 0 0 0 1px #c00; }
+.field[readonly] { cursor: default; }
+/* Datalist arrow would eat most of the 20pt-wide attribute/difficulty columns. */
+.field::-webkit-calendar-picker-indicator { display: none !important; }
+.field[list] { text-overflow: clip; }
+
+/* "Ajuda imediata": hotspots over printed titles, active only when the toolbar flag is on. */
+.toolbar .toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 0 6px;
+  cursor: pointer;
+  user-select: none;
+}
+.toolbar .toggle input { width: 15px; height: 15px; margin: 0; accent-color: #d9a400; cursor: pointer; }
+
+.label-help {
+  position: absolute;
+  left: calc(var(--x) * var(--pt) * 1px);
+  top: calc(var(--y) * var(--pt) * 1px);
+  width: calc(var(--w) * var(--pt) * 1px);
+  height: calc(var(--h) * var(--pt) * 1px);
+  display: none;
+  cursor: help;
+  border-bottom: 1px dotted rgba(200, 140, 0, 0.9);
+}
+body.help-on .label-help { display: block; }
+.label-help:hover { background: rgba(255, 210, 60, 0.3); }
+
+.tip {
+  position: fixed;
+  z-index: 100;
+  max-width: 320px;
+  padding: 7px 10px;
+  border-radius: 5px;
+  background: #1f1f1f;
+  color: #f5f5f5;
+  font: 12.5px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  white-space: pre-line;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+.tip[hidden] { display: none; }
+
+@media print {
+  .label-help, .tip { display: none !important; }
+  .toolbar, .legend { display: none; }
+  body { background: #fff; }
+  main { padding: 0; gap: 0; }
+  .page { box-shadow: none; break-after: page; }
+  .field, .field.calc, .field.override, .field.noprint { background: transparent; box-shadow: none; }
+  .field.noprint { visibility: hidden; }
+}

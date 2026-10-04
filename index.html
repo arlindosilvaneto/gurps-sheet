@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GURPS 4ed — Planilha de Personagem</title>
+    <link rel="icon" type="image/png" href="/img/gurps-logo.png" />
+  </head>
+  <body>
+    <header class="toolbar">
+      <img class="logo" src="/img/gurps-logo.png" alt="GURPS" />
+      <h1>Planilha de Personagem</h1>
+      <span id="status" class="status" role="status"></span>
+      <nav>
+        <label class="toggle" title="Mostra explicações ao passar o mouse sobre títulos e campos">
+          <input id="help-toggle" type="checkbox" /> Ajuda imediata
+        </label>
+        <button id="btn-pdf" class="primary" type="button">Exportar PDF</button>
+        <button id="btn-save" type="button">Salvar ficha</button>
+        <button id="btn-open" type="button">Abrir ficha</button>
+        <button id="btn-clear" type="button">Limpar</button>
+        <input id="file-open" type="file" accept="application/json,.json" hidden />
+      </nav>
+    </header>
+    <p class="legend">
+      <span class="swatch calc"></span> calculado automaticamente
+      <span class="swatch override"></span> valor manual (apague para recalcular)
+      <span class="swatch noprint"></span> não sai no PDF (dificuldade F/M/D/MD)
+    </p>
+    <main id="sheet"></main>
+    <div id="tip" class="tip" role="tooltip" hidden></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
