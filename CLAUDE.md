@@ -14,7 +14,7 @@ It is an npm-workspaces monorepo:
 ## Commands
 
 ```bash
-npm install          # installs both workspaces (links packages/character into node_modules)
+npm install          # installs all workspaces (links packages/* into node_modules; builds nothing)
 npm run dev          # Vite dev server (http://localhost:5173)
 npm run build        # static build -> dist/
 npm test             # app tests, then each library's (typecheck, tests, generated-file freshness, dist consumer check)
@@ -25,10 +25,23 @@ node --test test/rules.test.js                         # one file
 node --test --test-name-pattern="skill cost" test/     # one test by name
 GURPS_PDF_OUT=/tmp/out.pdf node --test test/pdf.test.js  # also write a sample export to inspect
 npm run types -w @gurps-sheet/character      # regenerate src/character.generated.ts after a schema change
-npm run build -w @gurps-sheet/character      # compile the library to packages/character/dist (also runs on npm install)
+npm run build -w @gurps-sheet/character      # compile the library to packages/character/dist (also runs on npm pack/publish)
 npm run generate -w @gurps-sheet/npcs        # rewrite packages/npcs/data/*.json after changing an NPC or the catalog
 npm run report -w @gurps-sheet/npcs          # per-NPC points, defenses and skill levels (for tuning definitions)
 ```
+
+## CI and releases
+
+- **`.github/workflows/ci.yml`** runs on every PR and every push to `main`. It runs `npm ci`, `npm test` and `npm run build` on Node 20.19 and 22. On PRs, the release check (`node scripts/release.mjs check`) also requires two things:
+  - every package changed outside its `test/` folder carries a version that isn't published yet;
+  - every workspace dependency range is satisfied by the local version. Otherwise npm would install the registry copy instead of linking the workspace.
+- **`.github/workflows/release.yml`** runs on pushes to `main` that touch `packages/**`, and manually (with an optional dry run). It runs the tests, then `node scripts/release.mjs publish`, which publishes each package whose version isn't on the registry yet:
+  - dependencies go first (`character` before `npcs`);
+  - prerelease versions use their own dist-tag;
+  - it creates a git tag `<dir>-v<version>` (e.g. `character-v0.2.0`) and a GitHub release with that package's commits since its previous tag.
+- **To release**, bump the version in the PR: `npm version patch -w @gurps-sheet/character --no-git-tag-version`. If a dependent's range no longer matches (internal dependencies use `^`, so this happens on a 0.x minor bump), update it too. Merging publishes. `main` only accepts PRs, so CI never commits version bumps itself.
+- **Registry auth** uses the `NPM_REGISTRY_TOKEN` secret. The registry defaults to npmjs; set the repository variable `NPM_REGISTRY_URL` to use another registry, which also turns off provenance. Publishing to npmjs needs an npm organization named `gurps-sheet` that the token's account can publish to.
+- **No build on install:** packages build only on `prepack`. Nothing in the repo needs `dist/` (everything uses the `@gurps-sheet/source` condition). `npm install` runs workspace lifecycle scripts in parallel, so a `prepare` build of `npcs` would race with `character`'s. The `npcs` build therefore builds `character` first.
 
 ## Architecture
 
