@@ -6,10 +6,17 @@
 // user value overrides it, and downstream rules use that override.
 
 export const ATTRS = ['ST', 'DX', 'IQ', 'HT', 'Vont', 'Per'];
-export const SKILL_ROWS = 25;
-export const ITEM_ROWS = 49; // Preço/Peso rows on page 2 (5 melee + 10 ranged + 34 armour/possessions)
+/** Rows per list on the sheet — single source for the rules and the file mapping (src/character.js). */
+export const ROWS = {
+  advantages: 12, disadvantages: 13, skills: 25, languages: 5, familiarities: 3,
+  dr: 6, notes: 9, otherReactions: 4, // Reputação2..5
+  items: 49, // Preço/Peso rows on page 2 (5 melee + 10 ranged + 34 armour/possessions)
+};
+export const SKILL_ROWS = ROWS.skills;
+export const ITEM_ROWS = ROWS.items;
 
-const range = (n) => Array.from({ length: n }, (_, i) => i + 1);
+/** [1, 2, …, n] */
+export const range = (n) => Array.from({ length: n }, (_, i) => i + 1);
 
 // Shown but never user-editable.
 export const READ_ONLY = new Set([
@@ -184,11 +191,12 @@ export function compute(values) {
   const blankZero = (n) => (n === 0 ? null : n);
   const r1 = sum(['ST', 'DX', 'IQ', 'HT', 'PV', 'Vont', 'Per', 'PF', 'Vel_Basica', 'Desl_Basico'].map((a) => eff(`Custo_${a}`)));
   const r2 = sum([
-    'Custo_NT', 'Custo_FC1', 'Custo_FC2', 'Custo_FC3',
-    ...range(12).map((i) => `Custo_Vantagem_${i}`),
-    ...range(5).map((i) => `Custo_lingua_${i}`),
+    'Custo_NT',
+    ...range(ROWS.familiarities).map((i) => `Custo_FC${i}`),
+    ...range(ROWS.advantages).map((i) => `Custo_Vantagem_${i}`),
+    ...range(ROWS.languages).map((i) => `Custo_lingua_${i}`),
   ].map(eff));
-  const r3 = sum(range(13).map((i) => eff(`Custo_desvantagem_${i}`)));
+  const r3 = sum(range(ROWS.disadvantages).map((i) => eff(`Custo_desvantagem_${i}`)));
   const r4 = sum(range(SKILL_ROWS).map((i) => eff(`Custo_Pericia_${i}`)));
   const r5 = num(raw('Resumo_Pontos5'));
   set('Resumo_Pontos1', blankZero(r1));

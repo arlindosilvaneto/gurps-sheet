@@ -3,6 +3,8 @@ import layout from './layout.json';
 import labels from './labels.json';
 import { compute, display, COMPUTED, READ_ONLY, ATTRS } from './rules.js';
 import { resolveHelp } from './help.js';
+import { toCharacter, parseCharacterFile, SheetFileError, MAX_FILE_BYTES } from './character.js';
+import { version } from '../package.json';
 
 const STORAGE_KEY = 'gurps-sheet:v1';
 const HELP_KEY = 'gurps-sheet:help';
@@ -13,28 +15,35 @@ const BASE = import.meta.env.BASE_URL;
 const DATALISTS = {
   attrs: ATTRS,
   tipos: ['F', 'M', 'D', 'MD'],
+  niveis: ['Nativo', 'Sotaque', 'Rudimentar', 'Nenhum'],
 };
-const listFor = (id) => (/^NH_Relativo_\d+A$/.test(id) ? 'attrs' : /^Tipo_\d+$/.test(id) ? 'tipos' : null);
+const listFor = (id) => (/^NH_Relativo_\d+A$/.test(id) ? 'attrs'
+  : /^Tipo_\d+$/.test(id) ? 'tipos'
+    : /^(Falada|Escrita)\d+$/.test(id) ? 'niveis' : null);
 
-let values = load();
+// Browser autosave is the app's internal draft (tolerant of half-typed values); files use the gurps-character schema.
+// `context` keeps a loaded file's locale/currency so re-saving doesn't overwrite them.
+let { values, createdAt, context } = load();
 let computed = { out: {}, errors: {} };
 const inputs = new Map();
 
 function load() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY))?.values ?? {};
+    const draft = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return { values: draft?.values ?? {}, createdAt: draft?.createdAt, context: draft?.context ?? {} };
   } catch {
-    return {};
+    return { values: {}, createdAt: undefined, context: {} };
   }
 }
 
 let saveTimer;
-function save() {
+/** Debounced autosave; `quiet` keeps the current status message (e.g. "Ficha salva") instead of overwriting it. */
+function save({ quiet = false } = {}) {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ values }));
-      setStatus('Salvo neste navegador');
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ values, createdAt, context }));
+      if (!quiet) setStatus('Salvo neste navegador');
     } catch {
       setStatus('Não foi possível salvar no navegador — use "Salvar ficha"');
     }
@@ -221,9 +230,24 @@ function wireToolbar() {
     }
   });
 
-  document.getElementById('btn-save').addEventListener('click', () => {
-    const json = JSON.stringify({ format: 'gurps-sheet', version: 1, values }, null, 2);
-    download(json, 'application/json', `${fileBase()}.json`);
+  document.getElementById('btn-save').addEventListener('click', async () => {
+    try {
+      const { validateCharacter } = await import('./validate.js'); // Ajv is large; load on demand
+      const { doc, problems, labels } = toCharacter(values, layout, { createdAt, context, generator: { name: 'gurps-sheet', version } });
+      // Sheet-level problems first (they name rows); schema errors only once those are fixed, mapped to sheet rows.
+      const all = problems.length ? problems : validateCharacter(doc, labels).problems;
+      if (all.length) {
+        showProblems('Não foi possível salvar a ficha', all, 'Corrija os itens abaixo e salve de novo. Nada foi baixado.');
+        return;
+      }
+      createdAt = doc.meta.createdAt;
+      save({ quiet: true });
+      download(JSON.stringify(doc, null, 2), 'application/json', `${fileBase()}.json`);
+      setStatus('Ficha salva (formato gurps-character)');
+    } catch (err) {
+      console.error(err);
+      showProblems('Erro inesperado ao salvar a ficha', [String(err?.message ?? err)], 'Nada foi baixado.');
+    }
   });
 
   const fileInput = document.getElementById('file-open');
@@ -232,24 +256,61 @@ function wireToolbar() {
     const file = fileInput.files[0];
     fileInput.value = '';
     if (!file) return;
+    const untouched = `Arquivo: ${file.name}. A ficha atual não foi alterada.`;
     try {
-      const data = JSON.parse(await file.text());
-      if (data?.format !== 'gurps-sheet' || typeof data.values !== 'object') throw new Error('arquivo não é uma ficha');
-      values = Object.fromEntries(Object.entries(data.values).filter(([k, v]) => inputs.has(k) && typeof v === 'string'));
+      if (file.size > MAX_FILE_BYTES) {
+        throw new SheetFileError('Arquivo grande demais.', [`O arquivo tem ${Math.round(file.size / 1024)} KB; uma ficha tem poucos KB.`]);
+      }
+      let text;
+      try {
+        text = await file.text();
+      } catch (err) {
+        throw new SheetFileError('Não foi possível ler o arquivo.', [String(err?.message ?? err)]);
+      }
+      const { validateCharacter } = await import('./validate.js');
+      const loaded = parseCharacterFile(text, validateCharacter, layout);
+      values = loaded.values;
+      createdAt = loaded.createdAt;
+      context = loaded.context;
       refresh();
-      save();
+      save({ quiet: true });
       setStatus(`Ficha "${file.name}" carregada`);
+      if (loaded.warnings.length) {
+        showProblems('Ficha carregada com avisos', loaded.warnings, 'Estes dados do arquivo não têm lugar na planilha e não serão mantidos ao salvar:', 'warning');
+      }
     } catch (err) {
-      setStatus(`Não foi possível abrir: ${err.message}`);
+      if (err instanceof SheetFileError) {
+        showProblems(err.title, err.problems, untouched);
+      } else {
+        console.error(err);
+        showProblems('Erro inesperado ao abrir a ficha', [String(err?.message ?? err)], untouched);
+      }
+      setStatus(`Não foi possível abrir "${file.name}"`);
     }
   });
 
   document.getElementById('btn-clear').addEventListener('click', () => {
     if (!confirm('Limpar todos os campos da ficha?')) return;
     values = {};
+    createdAt = undefined;
+    context = {};
     refresh();
     save();
   });
+}
+
+/** Modal list of problems (load/save errors or warnings). */
+function showProblems(title, problems, lead = '', kind = 'error') {
+  const dialog = document.getElementById('problems');
+  const MAX = 30;
+  dialog.className = `problems ${kind}`;
+  dialog.querySelector('h2').textContent = title;
+  dialog.querySelector('.lead').textContent = lead;
+  const list = dialog.querySelector('ul');
+  list.replaceChildren(...problems.slice(0, MAX).map((p) => Object.assign(document.createElement('li'), { textContent: p })));
+  if (problems.length > MAX) list.append(Object.assign(document.createElement('li'), { textContent: `… e mais ${problems.length - MAX}.` }));
+  hideTip();
+  if (!dialog.open) dialog.showModal();
 }
 
 buildPages();

@@ -20,8 +20,15 @@ from lxml import etree
 ROOT = Path(__file__).resolve().parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "Planilha Personagem Editavel v2.12 GURPS 4ed.pdf"
 
-# Screen-only/decorative widgets that make no sense outside Adobe Reader.
-SKIP = {"Alerta", "ResetButton1", "Copyright"}
+# Screen-only/decorative widgets that make no sense outside Adobe Reader, plus "totalPosição":
+# a free-text box in the totals row of the Posição column, which has nothing to total.
+SKIP = {"Alerta", "ResetButton1", "Copyright", "totalPosição"}
+
+
+def overlap(a, b):
+    """Intersection area / smaller area of two pymupdf rects."""
+    inter = a & b
+    return 0 if inter.is_empty else inter.get_area() / min(a.get_area(), b.get_area())
 
 
 def xfa_template(doc):
@@ -64,12 +71,19 @@ def main():
 
     fields, seen = [], set()
     for page in doc:
-        for w in page.widgets():
+        widgets = list(page.widgets())
+        for w in widgets:
             # GURPS[0].Page1[0].AlcanceArma1CC[2] -> AlcanceArma1CC[2] ; ...Nome[0] -> Nome
             name = re.sub(r"^GURPS\[0\]\.Page\d\[0\]\.", "", w.field_name)
             name = re.sub(r"\[0\]$", "", name)
             base = re.sub(r"\[\d+\]$", "", name)
             if base in SKIP:
+                continue
+            # The PDF stacks duplicate widgets on 8 ranged-weapon ST cells (STArmaCD{n} + STArmaCD{n}[1]).
+            # Keep only the first: two inputs on the same spot hide edits and print twice.
+            if name != base and any(
+                o is not w and o.field_name.endswith(f".{base}[0]") and overlap(o.rect, w.rect) > 0.5 for o in widgets
+            ):
                 continue
             fid = name if name not in seen else f"{name}_p{page.number + 1}"
             seen.add(fid)

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gurps-sheet:schema:x-gurps-vocabulary:1.0.0",
+  "title": "x-gurps annotation vocabulary",
+  "description": "Defines the custom annotation keywords used by gurps-character.schema.json. Validators that do not know these keywords can ignore them; tools that do (e.g. Ajv addKeyword with these metaSchemas) can validate them.",
+  "$defs": {
+    "annotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "role": {
+          "enum": ["input", "derived", "overridable", "state"],
+          "description": "input: entered by the player. derived: always equals its formula. overridable: formula gives the default, a different stored value is a deliberate override (e.g. bought-up HP). state: changes during play (current HP/FP)."
+        },
+        "formula": { "type": "string", "minLength": 1, "description": "Expression in the language described in schema/README.md." },
+        "unit": { "enum": ["points", "kg", "m", "m/s", "currency"] },
+        "default": { "description": "Value assumed when the property is absent." },
+        "costPerLevel": { "type": "number", "description": "Character points per level above/below the base." },
+        "reference": { "type": "string", "pattern": "^B\\d+$", "description": "Page in the GURPS 4e Basic Set (Módulo Básico)." },
+        "sheetField": { "type": "string", "description": "Field id(s) in the original PDF sheet / web app layout; {n} marks row numbers." },
+        "label": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[a-z]{2,3}(-[A-Z]{2})?$" },
+          "additionalProperties": { "type": "string" },
+          "description": "Localized display labels keyed by BCP 47 tag (English is the schema title/key)."
+        },
+        "description": { "type": "string" }
+      }
+    },
+    "tables": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["mode", "entries"],
+        "additionalProperties": false,
+        "properties": {
+          "description": { "type": "string" },
+          "mode": { "enum": ["map", "step"], "description": "map: exact key. step: value of the largest key <= lookup key; null below the first key." },
+          "valueType": { "enum": ["number", "dice"], "default": "number" },
+          "entries": {
+            "oneOf": [
+              { "type": "object", "description": "map mode: key -> value" },
+              { "type": "array", "items": { "type": "array", "prefixItems": [{ "type": "number" }, {}], "minItems": 2, "maxItems": 2 }, "description": "step mode: ascending [key, value] pairs" }
+            ]
+          },
+          "extrapolate": {
+            "type": "object",
+            "required": ["from", "every", "add"],
+            "additionalProperties": false,
+            "description": "Above `from`: value(from) + floor((key - from) / every) * add (for dice, add is a dice count).",
+            "properties": { "from": { "type": "number" }, "every": { "type": "number", "exclusiveMinimum": 0 }, "add": { "type": "number" } }
+          }
+        }
+      }
+    }
+  }
+}

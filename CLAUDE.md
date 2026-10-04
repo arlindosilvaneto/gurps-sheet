@@ -52,6 +52,34 @@ At runtime the same `layout.json` drives both outputs, which keeps screen and PD
 - Skill rows use hidden-in-print helper columns: `NH_Relativo_nA` (attribute ST/DX/IQ/HT/Vont/Per), `NH_Relativo_nB` (relative level), `Tipo_n` (difficulty F/M/D/MD, also E/A/H/VH; `print:false`). Parry/Block find their skill by matching the name typed in `Aparar2`/`Bloqueio2` against `Pericia1..25`.
 - `Total_Pontos` is points **spent**: attributes + advantages/languages/TL/cultures + disadvantages + skills + "Outros" (`Resumo_Pontos5` on page 2). `Pontos_Gastar` is the campaign **budget** (plain input, not added to the total). When spent > budget, `Total_Pontos` gets an error highlight and a tooltip showing the overrun. This changes the original PDF, which added `Pontos_Gastar` into the total; the owner chose this meaning.
 
+### Interchange schema (`schema/`)
+
+`schema/gurps-character.schema.json` (JSON Schema 2020-12) is the engine-neutral character format, specified in `schema/README.md`. Its keys are English. Each parameter carries an `x-gurps` annotation (role, formula, unit, cost, Basic Set page, original `sheetField`, pt-BR label), and rule tables live in `x-gurps-tables`. `schema/formula.js` is the reference evaluator for those formulas.
+
+The schema and `src/rules.js` encode the same rules twice. `test/schema.test.js` keeps them in sync: tables are checked against `damage()`/`skillCost()`, and the example character is recomputed through both. When a rule changes, update both.
+
+**Save/load** (`src/character.js`, pure; `src/validate.js` wraps Ajv and is loaded on demand). The goal is that sheet → file → sheet returns exactly the same values, and nothing is ever silently dropped. `test/character.test.js` round-trips a deliberately messy sheet to enforce this.
+- **Files:** only `gurps-character` 1.0.x documents are read. The schema is closed (`additionalProperties: false`), so a newer minor version (1.1+) gets an "update the reader" message rather than a misleading schema error. The old flat `gurps-sheet` format is rejected and never converted.
+- **Saving:** `toCharacter()` returns `{ doc, problems, labels }`.
+  - Every numeric field goes through `numField()`. Text in a number field, a non-integer where the schema wants an integer, or an out-of-range value becomes a problem named by sheet row ("Desvantagens, linha 1 (Teimosia) › custo: …"), never a silent 0. Rows with problems are left out.
+  - `main.js` runs Ajv only once there are no problems, passing `labels` (JSON pointer → sheet row) so schema errors also name sheet rows. Any problem blocks the download.
+- **Loading:** `parseCharacterFile()` checks, in order: file size, JSON syntax (translated to pt-BR with line and column), `format`, version, schema. It then calls `fromCharacter()`, which returns `{ values, warnings, createdAt, context }`.
+  - Lists longer than the sheet's rows raise a `SheetFileError`; nothing is ever truncated.
+  - Anything that won't survive a re-save unchanged becomes a `warning`: trait level/notes, a 1-point advantage saved as a perk, reaction sources on the generic lines, structured weapon fields that don't match their notation, extensions.
+  - `context` (locale, currency) is kept in the draft and passed back to `toCharacter()`, so re-saving doesn't overwrite them.
+  - Overrides of every kind (secondaries, costs, encumbrance rows, damage, NH, defenses) are restored only where the document differs from what `rules.js` computes, group by group in dependency order. Numbers are written without rounding.
+  - `main.js` shows every failure in the `#problems` dialog and leaves the current sheet untouched.
+- **Free-text conventions:**
+  - DR "4 (2 contra contusão)" ↔ `{ dr: 4, notes: "(2 contra contusão)" }`.
+  - A reaction modifier needs an explicit sign ("+1 Herói", "+0 Comum"); "10 anos de serviço" stays text.
+  - Weapon damage keeps its notation, and a type that is only in the structured fields is appended to the text.
+- **Page-2 tables:** these field ids are irregular (`Preço14` is ranged row 1, two armour rows are named `ArmaCD8[1]`/`ArmaCD9[1]`). `sheetTables()` therefore groups rows by position (anchor column + an asymmetric y window), not by name.
+- **Extractor clean-up:** the extractor drops the PDF's stacked duplicate ranged-ST widgets (`STArmaCD{n}[1]`) and the meaningless `totalPosição` box.
+- **Perks and quirks:** the sheet only has advantage and disadvantage lists, so on export a 1-point advantage becomes `perk` and a −1-point disadvantage becomes `quirk`.
+- **Row counts:** `ROWS` in `rules.js` is the single source for how many rows each list has; both the rules and the mapping use it.
+- **Browser autosave:** `localStorage` key `gurps-sheet:v1` holds the internal draft `{ values, createdAt, context }`, deliberately not the schema, so half-typed values never fail validation.
+- **Dev server:** `vite.config.js` pre-bundles pdf-lib and Ajv. Without that, Vite discovers them on first use and reloads the page in the middle of an export or file open.
+
 ### Deliberate deviations from the original XFA scripts
 
 **Policy (owner's decision): when the PDF's scripts diverge from the GURPS 4e Basic Set (Módulo Básico), follow the Basic Set.** Keep these fixes, and don't "restore" PDF behavior when comparing against the original:

@@ -4594,19 +4594,6 @@
    "tip": "Armaduras e posses."
   },
   {
-   "id": "totalPosição",
-   "page": 1,
-   "x": 390.1,
-   "y": 761.27,
-   "w": 62.65,
-   "h": 13.93,
-   "kind": "text",
-   "align": "left",
-   "size": 10.0,
-   "print": true,
-   "tip": "Totais"
-  },
-  {
    "id": "Posição32",
    "page": 1,
    "x": 389.59,
@@ -8115,110 +8102,6 @@
    "size": 5.0,
    "print": true,
    "tip": "Dano GdP"
-  },
-  {
-   "id": "STArmaCD8[1]",
-   "page": 1,
-   "x": 304.88,
-   "y": 236.42,
-   "w": 24.41,
-   "h": 13.5,
-   "kind": "text",
-   "align": "left",
-   "size": 10.0,
-   "print": true,
-   "tip": ""
-  },
-  {
-   "id": "STArmaCD7[1]",
-   "page": 1,
-   "x": 304.88,
-   "y": 222.48,
-   "w": 24.41,
-   "h": 13.93,
-   "kind": "text",
-   "align": "left",
-   "size": 10.0,
-   "print": true,
-   "tip": ""
-  },
-  {
-   "id": "STArmaCD6[1]",
-   "page": 1,
-   "x": 304.88,
-   "y": 209.57,
-   "w": 24.41,
-   "h": 13.35,
-   "kind": "text",
-   "align": "left",
-   "size": 10.0,
-   "print": true,
-   "tip": ""
-  },
-  {
-   "id": "STArmaCD5[1]",
-   "page": 1,
-   "x": 304.88,
-   "y": 196.07,
-   "w": 24.41,
-   "h": 13.07,
-   "kind": "text",
-   "align": "left",
-   "size": 10.0,
-   "print": true,
-   "tip": ""
-  },
-  {
-   "id": "STArmaCD4[1]",
-   "page": 1,
-   "x": 304.88,
-   "y": 182.28,
-   "w": 24.41,
-   "h": 13.93,
-   "kind": "text",
-   "align": "left",
-   "size": 10.0,
-   "print": true,
-   "tip": ""
-  },
-  {
-   "id": "STArmaCD3[1]",
-   "page": 1,
-   "x": 305.54,
-   "y": 169.51,
-   "w": 24.41,
-   "h": 13.93,
-   "kind": "text",
-   "align": "left",
-   "size": 10.0,
-   "print": true,
-   "tip": ""
-  },
-  {
-   "id": "STArmaCD2[1]",
-   "page": 1,
-   "x": 304.88,
-   "y": 156.09,
-   "w": 24.41,
-   "h": 13.13,
-   "kind": "text",
-   "align": "left",
-   "size": 10.0,
-   "print": true,
-   "tip": ""
-  },
-  {
-   "id": "STArmaCD1[1]",
-   "page": 1,
-   "x": 304.88,
-   "y": 142.5,
-   "w": 24.41,
-   "h": 13.18,
-   "kind": "text",
-   "align": "left",
-   "size": 10.0,
-   "print": true,
-   "tip": ""
   }
  ]
 }
