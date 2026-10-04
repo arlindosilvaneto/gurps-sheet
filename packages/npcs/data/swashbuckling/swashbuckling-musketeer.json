@@ -1,0 +1,414 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.3.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Henri de Valcourt",
+    "height": "1.80 m",
+    "weight": "74 kg",
+    "age": "26",
+    "sizeModifier": 0,
+    "appearance": "Blue tabard with silver cross, magnificent mustache"
+  },
+  "points": {
+    "budget": 125,
+    "spent": 125,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 105,
+      "advantages": 24,
+      "disadvantages": -26,
+      "skills": 22,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 11,
+      "points": 10
+    },
+    "dx": {
+      "value": 14,
+      "points": 80
+    },
+    "iq": {
+      "value": 10,
+      "points": 0
+    },
+    "ht": {
+      "value": 11,
+      "points": 10
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 11,
+      "base": 11,
+      "points": 0,
+      "current": 11
+    },
+    "will": {
+      "value": 10,
+      "base": 10,
+      "points": 0
+    },
+    "per": {
+      "value": 11,
+      "base": 10,
+      "points": 5
+    },
+    "fp": {
+      "value": 11,
+      "base": 11,
+      "points": 0,
+      "current": 11
+    },
+    "basicSpeed": {
+      "value": 6.25,
+      "base": 6.25,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 6,
+      "base": 6,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 12,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 12,
+        "move": 6,
+        "dodge": 9
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 24,
+        "move": 4,
+        "dodge": 8
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 36,
+        "move": 3,
+        "dodge": 7
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 72,
+        "move": 2,
+        "dodge": 6
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 120,
+        "move": 1,
+        "dodge": 5
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    },
+    "swing": {
+      "notation": "1d+1",
+      "dice": 1,
+      "adds": 1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 9
+    },
+    "parry": {
+      "skill": "Rapier",
+      "value": 11
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [
+    {
+      "location": "Torso",
+      "locationId": "torso",
+      "dr": 2
+    },
+    {
+      "location": "Arms",
+      "locationId": "arms",
+      "dr": 2
+    },
+    {
+      "location": "Legs",
+      "locationId": "legs",
+      "dr": 2
+    },
+    {
+      "location": "Feet",
+      "locationId": "feet",
+      "dr": 2
+    }
+  ],
+  "reactionModifiers": [
+    {
+      "source": "appearance",
+      "modifier": 1,
+      "description": "Attractive"
+    },
+    {
+      "source": "status",
+      "modifier": 1,
+      "description": "Gentleman"
+    }
+  ],
+  "techLevel": {
+    "level": 4,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "French",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Combat Reflexes",
+      "type": "advantage",
+      "points": 15
+    },
+    {
+      "name": "Appearance (Attractive)",
+      "type": "advantage",
+      "points": 4
+    },
+    {
+      "name": "Status 1",
+      "type": "advantage",
+      "points": 5
+    },
+    {
+      "name": "Code of Honor (Gentleman's)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Duty (the King's Musketeers, 12 or less)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Overconfidence (12)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Duels anyone who mocks his hat",
+      "type": "quirk",
+      "points": -1
+    }
+  ],
+  "skills": [
+    {
+      "name": "Rapier",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 3,
+      "level": 17,
+      "points": 12
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 15,
+      "points": 2
+    },
+    {
+      "name": "Guns (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 15,
+      "points": 2
+    },
+    {
+      "name": "Riding (Horse)",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Savoir-Faire (High Society)",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 10,
+      "points": 1
+    },
+    {
+      "name": "Carousing",
+      "attribute": "ht",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    },
+    {
+      "name": "Fast-Draw (Sword)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 15,
+      "points": 1,
+      "bonuses": [
+        {
+          "name": "Combat Reflexes",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "name": "Brawling",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Rapier",
+        "damage": [
+          {
+            "notation": "thr+1 imp",
+            "base": "thrust",
+            "adds": 1,
+            "type": "imp"
+          }
+        ],
+        "reach": "1,2",
+        "parry": {
+          "notation": "0F",
+          "modifier": 0,
+          "unbalanced": false
+        },
+        "notes": "ST 9",
+        "cost": 500,
+        "weight": 1.375
+      },
+      {
+        "name": "Dagger",
+        "damage": [
+          {
+            "notation": "thr-1 imp",
+            "base": "thrust",
+            "adds": -1,
+            "type": "imp"
+          }
+        ],
+        "reach": "C",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 5",
+        "cost": 20,
+        "weight": 0.125
+      }
+    ],
+    "ranged": [
+      {
+        "name": "Flintlock Pistol, .51",
+        "damage": {
+          "notation": "2d-1 pi+",
+          "base": "fixed",
+          "dice": 2,
+          "adds": -1,
+          "type": "pi+"
+        },
+        "accuracy": "1",
+        "range": {
+          "notation": "75/450",
+          "halfDamage": 75,
+          "max": 450
+        },
+        "rateOfFire": "1",
+        "shots": "1(20)",
+        "minST": "10",
+        "bulk": -3,
+        "recoil": 2,
+        "legalityClass": 3,
+        "cost": 200,
+        "weight": 1.5
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Buff Coat",
+      "location": "Body",
+      "cost": 210,
+      "weight": 8
+    },
+    {
+      "name": "Boots",
+      "location": "Feet",
+      "cost": 80,
+      "weight": 1.5
+    },
+    {
+      "name": "Personal Basics",
+      "cost": 5,
+      "weight": 0.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 1015,
+    "weight": 13
+  },
+  "notes": [
+    "Fires his pistol once, then closes with the rapier; always fights for the honor of the regiment."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

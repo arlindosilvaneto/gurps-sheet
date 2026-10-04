@@ -1,0 +1,595 @@
+{
+  "description": "NPCs built from GURPS Basic Set material; see the @gurps-sheet/npcs README.",
+  "styles": [
+    {
+      "id": "fantasy",
+      "title": "Medieval fantasy",
+      "techLevel": 3,
+      "description": "Walled towns, mercenary knights, guild thieves and court wizards; swords, bows and Basic Set spells."
+    },
+    {
+      "id": "swashbuckling",
+      "title": "Swashbuckling",
+      "techLevel": 4,
+      "description": "17th-century intrigue and piracy: rapiers, cutlasses and flintlock pistols."
+    },
+    {
+      "id": "western",
+      "title": "Wild West",
+      "techLevel": 5,
+      "description": "Frontier towns of the 1870s: revolvers, lever-action rifles, shotguns and horses."
+    },
+    {
+      "id": "modern",
+      "title": "Modern action",
+      "techLevel": 8,
+      "description": "Street crime, police, special forces, spies and hackers with contemporary firearms and body armor."
+    },
+    {
+      "id": "horror",
+      "title": "1920s horror",
+      "techLevel": 6,
+      "description": "Occult investigation in the Jazz Age: cultists, monster hunters, sinister doctors and mediums."
+    },
+    {
+      "id": "science-fiction",
+      "title": "Science fiction",
+      "techLevel": 10,
+      "description": "Starship crews, space marines and smugglers with beam weapons and ultra-tech armor."
+    }
+  ],
+  "npcs": [
+    {
+      "id": "fantasy-town-guard",
+      "style": "fantasy",
+      "name": "Aldric Brenn",
+      "role": "Town watchman",
+      "threat": "mook",
+      "points": 50,
+      "budget": 50,
+      "techLevel": 3,
+      "tags": [
+        "melee",
+        "unarmed-combat",
+        "shield",
+        "armored",
+        "illiterate"
+      ],
+      "file": "fantasy/fantasy-town-guard.json"
+    },
+    {
+      "id": "fantasy-mercenary-knight",
+      "style": "fantasy",
+      "name": "Ser Gareth of Highmoor",
+      "role": "Mercenary knight",
+      "threat": "boss",
+      "points": 150,
+      "budget": 150,
+      "techLevel": 3,
+      "tags": [
+        "melee",
+        "unarmed-combat",
+        "shield",
+        "armored",
+        "mounted"
+      ],
+      "file": "fantasy/fantasy-mercenary-knight.json"
+    },
+    {
+      "id": "fantasy-court-wizard",
+      "style": "fantasy",
+      "name": "Magister Ilsabet Vonn",
+      "role": "Court wizard",
+      "threat": "boss",
+      "points": 150,
+      "budget": 150,
+      "techLevel": 3,
+      "tags": [
+        "melee",
+        "spellcaster",
+        "skill-bonuses"
+      ],
+      "file": "fantasy/fantasy-court-wizard.json"
+    },
+    {
+      "id": "fantasy-forest-ranger",
+      "style": "fantasy",
+      "name": "Wren Ashdown",
+      "role": "Forest ranger",
+      "threat": "standard",
+      "points": 100,
+      "budget": 100,
+      "techLevel": 3,
+      "tags": [
+        "melee",
+        "ranged",
+        "muscle-powered",
+        "armored"
+      ],
+      "file": "fantasy/fantasy-forest-ranger.json"
+    },
+    {
+      "id": "fantasy-thief",
+      "style": "fantasy",
+      "name": "Nim \"Quickfingers\" Darrow",
+      "role": "Guild cutpurse",
+      "threat": "mook",
+      "points": 75,
+      "budget": 75,
+      "techLevel": 3,
+      "tags": [
+        "melee",
+        "ranged",
+        "muscle-powered",
+        "armored"
+      ],
+      "file": "fantasy/fantasy-thief.json"
+    },
+    {
+      "id": "fantasy-temple-priest",
+      "style": "fantasy",
+      "name": "Brother Osric",
+      "role": "Temple priest and healer",
+      "threat": "non-combatant",
+      "points": 75,
+      "budget": 75,
+      "techLevel": 3,
+      "tags": [
+        "melee",
+        "skill-bonuses"
+      ],
+      "file": "fantasy/fantasy-temple-priest.json"
+    },
+    {
+      "id": "swashbuckling-musketeer",
+      "style": "swashbuckling",
+      "name": "Henri de Valcourt",
+      "role": "King's Musketeer",
+      "threat": "standard",
+      "points": 125,
+      "budget": 125,
+      "techLevel": 4,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "unarmed-combat",
+        "armored",
+        "mounted",
+        "skill-bonuses"
+      ],
+      "file": "swashbuckling/swashbuckling-musketeer.json"
+    },
+    {
+      "id": "swashbuckling-pirate-captain",
+      "style": "swashbuckling",
+      "name": "Captain Bess Harrow",
+      "role": "Pirate captain",
+      "threat": "boss",
+      "points": 150,
+      "budget": 150,
+      "techLevel": 4,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "unarmed-combat",
+        "armored",
+        "skill-bonuses"
+      ],
+      "file": "swashbuckling/swashbuckling-pirate-captain.json"
+    },
+    {
+      "id": "swashbuckling-bosun",
+      "style": "swashbuckling",
+      "name": "Grogan \"Ironhand\" Mace",
+      "role": "Ship's bosun",
+      "threat": "standard",
+      "points": 75,
+      "budget": 75,
+      "techLevel": 4,
+      "tags": [
+        "melee",
+        "unarmed-combat",
+        "illiterate"
+      ],
+      "file": "swashbuckling/swashbuckling-bosun.json"
+    },
+    {
+      "id": "swashbuckling-cardinals-spy",
+      "style": "swashbuckling",
+      "name": "Madame Corvina Lestrange",
+      "role": "The Cardinal's spy",
+      "threat": "standard",
+      "points": 125,
+      "budget": 125,
+      "techLevel": 4,
+      "tags": [
+        "melee",
+        "skill-bonuses"
+      ],
+      "file": "swashbuckling/swashbuckling-cardinals-spy.json"
+    },
+    {
+      "id": "swashbuckling-highwayman",
+      "style": "swashbuckling",
+      "name": "Jack Ravensworth",
+      "role": "Highwayman",
+      "threat": "standard",
+      "points": 100,
+      "budget": 100,
+      "techLevel": 4,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "mounted"
+      ],
+      "file": "swashbuckling/swashbuckling-highwayman.json"
+    },
+    {
+      "id": "western-gunslinger",
+      "style": "western",
+      "name": "\"Dead-Eye\" Dalton Pike",
+      "role": "Gunslinger",
+      "threat": "boss",
+      "points": 150,
+      "budget": 150,
+      "techLevel": 5,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "unarmed-combat",
+        "armored",
+        "mounted",
+        "skill-bonuses"
+      ],
+      "file": "western/western-gunslinger.json"
+    },
+    {
+      "id": "western-marshal",
+      "style": "western",
+      "name": "Marshal Ezra Holloway",
+      "role": "Town marshal",
+      "threat": "standard",
+      "points": 125,
+      "budget": 125,
+      "techLevel": 5,
+      "tags": [
+        "ranged",
+        "firearms",
+        "unarmed-combat",
+        "armored",
+        "mounted",
+        "skill-bonuses"
+      ],
+      "file": "western/western-marshal.json"
+    },
+    {
+      "id": "western-outlaw",
+      "style": "western",
+      "name": "Black Tom Slade",
+      "role": "Outlaw",
+      "threat": "mook",
+      "points": 75,
+      "budget": 75,
+      "techLevel": 5,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "unarmed-combat",
+        "mounted",
+        "illiterate"
+      ],
+      "file": "western/western-outlaw.json"
+    },
+    {
+      "id": "western-gambler",
+      "style": "western",
+      "name": "Lucien \"Lucky\" Beaumont",
+      "role": "Riverboat gambler",
+      "threat": "non-combatant",
+      "points": 100,
+      "budget": 100,
+      "techLevel": 5,
+      "tags": [
+        "ranged",
+        "firearms"
+      ],
+      "file": "western/western-gambler.json"
+    },
+    {
+      "id": "western-scout",
+      "style": "western",
+      "name": "Abigail Thorne",
+      "role": "Frontier scout",
+      "threat": "standard",
+      "points": 100,
+      "budget": 100,
+      "techLevel": 5,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "mounted",
+        "skill-bonuses"
+      ],
+      "file": "western/western-scout.json"
+    },
+    {
+      "id": "modern-street-thug",
+      "style": "modern",
+      "name": "Rico Vance",
+      "role": "Street thug",
+      "threat": "mook",
+      "points": 25,
+      "budget": 25,
+      "techLevel": 8,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "unarmed-combat"
+      ],
+      "file": "modern/modern-street-thug.json"
+    },
+    {
+      "id": "modern-police-officer",
+      "style": "modern",
+      "name": "Officer Dana Kowalski",
+      "role": "Patrol officer",
+      "threat": "standard",
+      "points": 75,
+      "budget": 75,
+      "techLevel": 8,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "unarmed-combat",
+        "armored"
+      ],
+      "file": "modern/modern-police-officer.json"
+    },
+    {
+      "id": "modern-special-forces",
+      "style": "modern",
+      "name": "Sgt. Marcus Okafor",
+      "role": "Special forces soldier",
+      "threat": "boss",
+      "points": 150,
+      "budget": 150,
+      "techLevel": 8,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "grenades",
+        "unarmed-combat",
+        "armored",
+        "text-only-damage"
+      ],
+      "file": "modern/modern-special-forces.json"
+    },
+    {
+      "id": "modern-spy",
+      "style": "modern",
+      "name": "Natalia Reyes",
+      "role": "Intelligence officer",
+      "threat": "boss",
+      "points": 200,
+      "budget": 200,
+      "techLevel": 8,
+      "tags": [
+        "ranged",
+        "firearms",
+        "unarmed-combat",
+        "skill-bonuses"
+      ],
+      "file": "modern/modern-spy.json"
+    },
+    {
+      "id": "modern-hacker",
+      "style": "modern",
+      "name": "Theo \"Null\" Park",
+      "role": "Hacker",
+      "threat": "non-combatant",
+      "points": 75,
+      "budget": 75,
+      "techLevel": 8,
+      "tags": [
+        "no-weapons"
+      ],
+      "file": "modern/modern-hacker.json"
+    },
+    {
+      "id": "modern-mob-enforcer",
+      "style": "modern",
+      "name": "Vincent \"The Ox\" Moretti",
+      "role": "Mob enforcer",
+      "threat": "standard",
+      "points": 100,
+      "budget": 100,
+      "techLevel": 8,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "unarmed-combat"
+      ],
+      "file": "modern/modern-mob-enforcer.json"
+    },
+    {
+      "id": "horror-occult-investigator",
+      "style": "horror",
+      "name": "Professor Edmund Hale",
+      "role": "Occult investigator",
+      "threat": "standard",
+      "points": 125,
+      "budget": 125,
+      "techLevel": 6,
+      "tags": [
+        "ranged",
+        "firearms"
+      ],
+      "file": "horror/horror-occult-investigator.json"
+    },
+    {
+      "id": "horror-cultist",
+      "style": "horror",
+      "name": "Brother Silas",
+      "role": "Cult acolyte",
+      "threat": "mook",
+      "points": 50,
+      "budget": 50,
+      "techLevel": 6,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "unarmed-combat"
+      ],
+      "file": "horror/horror-cultist.json"
+    },
+    {
+      "id": "horror-monster-hunter",
+      "style": "horror",
+      "name": "Margaret \"Mags\" Calloway",
+      "role": "Monster hunter",
+      "threat": "boss",
+      "points": 150,
+      "budget": 150,
+      "techLevel": 6,
+      "tags": [
+        "melee",
+        "ranged",
+        "firearms",
+        "armored",
+        "text-only-damage"
+      ],
+      "file": "horror/horror-monster-hunter.json"
+    },
+    {
+      "id": "horror-asylum-doctor",
+      "style": "horror",
+      "name": "Dr. Viktor Strand",
+      "role": "Asylum director",
+      "threat": "non-combatant",
+      "points": 100,
+      "budget": 100,
+      "techLevel": 6,
+      "tags": [
+        "melee"
+      ],
+      "file": "horror/horror-asylum-doctor.json"
+    },
+    {
+      "id": "horror-spirit-medium",
+      "style": "horror",
+      "name": "Madame Odette Fairweather",
+      "role": "Spirit medium",
+      "threat": "non-combatant",
+      "points": 75,
+      "budget": 75,
+      "techLevel": 6,
+      "tags": [
+        "ranged",
+        "firearms",
+        "skill-bonuses"
+      ],
+      "file": "horror/horror-spirit-medium.json"
+    },
+    {
+      "id": "science-fiction-starship-pilot",
+      "style": "science-fiction",
+      "name": "Lt. Kira Valez",
+      "role": "Starfighter pilot",
+      "threat": "standard",
+      "points": 150,
+      "budget": 150,
+      "techLevel": 10,
+      "tags": [
+        "ranged",
+        "beam-weapons",
+        "armored",
+        "skill-bonuses",
+        "text-only-damage"
+      ],
+      "file": "science-fiction/science-fiction-starship-pilot.json"
+    },
+    {
+      "id": "science-fiction-space-marine",
+      "style": "science-fiction",
+      "name": "Cpl. Dax Brenner",
+      "role": "Space marine",
+      "threat": "boss",
+      "points": 200,
+      "budget": 200,
+      "techLevel": 11,
+      "tags": [
+        "melee",
+        "ranged",
+        "beam-weapons",
+        "unarmed-combat",
+        "armored",
+        "text-only-damage"
+      ],
+      "file": "science-fiction/science-fiction-space-marine.json"
+    },
+    {
+      "id": "science-fiction-ship-doctor",
+      "style": "science-fiction",
+      "name": "Dr. Amara Osei",
+      "role": "Ship's doctor",
+      "threat": "non-combatant",
+      "points": 100,
+      "budget": 100,
+      "techLevel": 10,
+      "tags": [
+        "ranged",
+        "beam-weapons",
+        "skill-bonuses"
+      ],
+      "file": "science-fiction/science-fiction-ship-doctor.json"
+    },
+    {
+      "id": "science-fiction-smuggler",
+      "style": "science-fiction",
+      "name": "Jonah \"Slick\" Mercer",
+      "role": "Smuggler captain",
+      "threat": "standard",
+      "points": 125,
+      "budget": 125,
+      "techLevel": 11,
+      "tags": [
+        "ranged",
+        "beam-weapons",
+        "unarmed-combat",
+        "armored",
+        "text-only-damage"
+      ],
+      "file": "science-fiction/science-fiction-smuggler.json"
+    },
+    {
+      "id": "science-fiction-engineer",
+      "style": "science-fiction",
+      "name": "Chief Tomas Rourke",
+      "role": "Chief engineer",
+      "threat": "non-combatant",
+      "points": 100,
+      "budget": 100,
+      "techLevel": 10,
+      "tags": [
+        "melee",
+        "ranged",
+        "beam-weapons",
+        "unarmed-combat",
+        "skill-bonuses",
+        "text-only-damage"
+      ],
+      "file": "science-fiction/science-fiction-engineer.json"
+    }
+  ]
+}

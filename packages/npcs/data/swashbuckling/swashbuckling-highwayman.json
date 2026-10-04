@@ -1,0 +1,349 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Jack Ravensworth",
+    "height": "1.78 m",
+    "weight": "72 kg",
+    "age": "24",
+    "sizeModifier": 0,
+    "appearance": "Black mask, tricorn hat, roguish grin"
+  },
+  "points": {
+    "budget": 100,
+    "spent": 100,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 80,
+      "advantages": 15,
+      "disadvantages": -20,
+      "skills": 25,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 11,
+      "points": 10
+    },
+    "dx": {
+      "value": 12,
+      "points": 40
+    },
+    "iq": {
+      "value": 11,
+      "points": 20
+    },
+    "ht": {
+      "value": 11,
+      "points": 10
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 11,
+      "base": 11,
+      "points": 0,
+      "current": 11
+    },
+    "will": {
+      "value": 11,
+      "base": 11,
+      "points": 0
+    },
+    "per": {
+      "value": 11,
+      "base": 11,
+      "points": 0
+    },
+    "fp": {
+      "value": 11,
+      "base": 11,
+      "points": 0,
+      "current": 11
+    },
+    "basicSpeed": {
+      "value": 5.75,
+      "base": 5.75,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 12,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 12,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 24,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 36,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 72,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 120,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    },
+    "swing": {
+      "notation": "1d+1",
+      "dice": 1,
+      "adds": 1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": "Saber",
+      "value": 9
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 4,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Daredevil",
+      "type": "advantage",
+      "points": 15
+    },
+    {
+      "name": "Impulsiveness (12)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Overconfidence (12)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Social Stigma (Criminal Record)",
+      "type": "disadvantage",
+      "points": -5
+    }
+  ],
+  "skills": [
+    {
+      "name": "Riding (Horse)",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Guns (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 3,
+      "level": 15,
+      "points": 8
+    },
+    {
+      "name": "Saber",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Fast-Draw (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 13,
+      "points": 2
+    },
+    {
+      "name": "Intimidation",
+      "attribute": "will",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 2
+    },
+    {
+      "name": "Animal Handling (Equines)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 10,
+      "points": 1
+    },
+    {
+      "name": "Stealth",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Area Knowledge (the King's Road)",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    },
+    {
+      "name": "Carousing",
+      "attribute": "ht",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Saber",
+        "damage": [
+          {
+            "notation": "sw-1 cut",
+            "base": "swing",
+            "adds": -1,
+            "type": "cut"
+          },
+          {
+            "notation": "thr+1 imp",
+            "base": "thrust",
+            "adds": 1,
+            "type": "imp"
+          }
+        ],
+        "reach": "1",
+        "parry": {
+          "notation": "0F",
+          "modifier": 0,
+          "unbalanced": false
+        },
+        "notes": "ST 8",
+        "cost": 700,
+        "weight": 1
+      }
+    ],
+    "ranged": [
+      {
+        "name": "Flintlock Pistol, .51",
+        "damage": {
+          "notation": "2d-1 pi+",
+          "base": "fixed",
+          "dice": 2,
+          "adds": -1,
+          "type": "pi+"
+        },
+        "accuracy": "1",
+        "range": {
+          "notation": "75/450",
+          "halfDamage": 75,
+          "max": 450
+        },
+        "rateOfFire": "1",
+        "shots": "1(20)",
+        "minST": "10",
+        "bulk": -3,
+        "recoil": 2,
+        "legalityClass": 3,
+        "cost": 200,
+        "weight": 1.5
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Saddle and Tack",
+      "location": "Horse",
+      "cost": 150,
+      "weight": 7.5
+    },
+    {
+      "name": "Personal Basics",
+      "cost": 5,
+      "weight": 0.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 1055,
+    "weight": 10.5
+  },
+  "notes": [
+    "\"Stand and deliver!\" Robs coaches at dusk and escapes on horseback rather than fight."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

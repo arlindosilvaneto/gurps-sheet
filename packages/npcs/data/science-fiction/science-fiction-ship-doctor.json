@@ -1,0 +1,374 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.3.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Dr. Amara Osei",
+    "height": "1.68 m",
+    "weight": "63 kg",
+    "age": "44",
+    "sizeModifier": 0,
+    "appearance": "Medical scanner on her wrist, tired kind eyes"
+  },
+  "points": {
+    "budget": 100,
+    "spent": 100,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 90,
+      "advantages": 15,
+      "disadvantages": -30,
+      "skills": 25,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 9,
+      "points": -10
+    },
+    "dx": {
+      "value": 11,
+      "points": 20
+    },
+    "iq": {
+      "value": 14,
+      "points": 80
+    },
+    "ht": {
+      "value": 10,
+      "points": 0
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 9,
+      "base": 9,
+      "points": 0,
+      "current": 9
+    },
+    "will": {
+      "value": 14,
+      "base": 14,
+      "points": 0
+    },
+    "per": {
+      "value": 14,
+      "base": 14,
+      "points": 0
+    },
+    "fp": {
+      "value": 10,
+      "base": 10,
+      "points": 0,
+      "current": 10
+    },
+    "basicSpeed": {
+      "value": 5.25,
+      "base": 5.25,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 8.1,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 8.1,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 16.2,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 24.3,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 48.6,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 81,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-2",
+      "dice": 1,
+      "adds": -2
+    },
+    "swing": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": null,
+      "value": null
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 10,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "Galactic Standard",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Healer 1",
+      "type": "advantage",
+      "points": 10
+    },
+    {
+      "name": "Empathy (Sensitive)",
+      "type": "advantage",
+      "points": 5
+    },
+    {
+      "name": "Pacifism (Cannot Harm Innocents)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Honesty (12)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Sense of Duty (her patients)",
+      "type": "disadvantage",
+      "points": -10
+    }
+  ],
+  "skills": [
+    {
+      "name": "Physician",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 1,
+      "level": 16,
+      "points": 8,
+      "bonuses": [
+        {
+          "name": "Healer 1",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "name": "Surgery",
+      "attribute": "iq",
+      "difficulty": "VH",
+      "relativeLevel": -1,
+      "level": 14,
+      "points": 4,
+      "bonuses": [
+        {
+          "name": "Healer 1",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "name": "Diagnosis",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 0,
+      "level": 15,
+      "points": 4,
+      "bonuses": [
+        {
+          "name": "Healer 1",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "name": "First Aid",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 16,
+      "points": 2,
+      "bonuses": [
+        {
+          "name": "Healer 1",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "name": "Pharmacy (Synthetic)",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": -2,
+      "level": 13,
+      "points": 1,
+      "bonuses": [
+        {
+          "name": "Healer 1",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "name": "Electronics Operation (Medical)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Psychology",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": -2,
+      "level": 14,
+      "points": 1,
+      "bonuses": [
+        {
+          "name": "Healer 1",
+          "amount": 1
+        },
+        {
+          "name": "Empathy (Sensitive)",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "name": "Free Fall",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 10,
+      "points": 1
+    },
+    {
+      "name": "Vacc Suit",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 10,
+      "points": 1
+    },
+    {
+      "name": "Beam Weapons (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [],
+    "ranged": [
+      {
+        "name": "Electrolaser Pistol",
+        "damage": {
+          "notation": "1d-3 burn",
+          "base": "fixed",
+          "dice": 1,
+          "adds": -3,
+          "type": "burn"
+        },
+        "accuracy": "4",
+        "range": {
+          "notation": "40/80",
+          "halfDamage": 40,
+          "max": 80
+        },
+        "rateOfFire": "3",
+        "shots": "180(3)",
+        "minST": "4",
+        "bulk": -2,
+        "recoil": 1,
+        "legalityClass": null,
+        "cost": 1800,
+        "weight": 1.1
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "First Aid Kit",
+      "cost": 50,
+      "weight": 1
+    },
+    {
+      "name": "Personal Basics",
+      "cost": 5,
+      "weight": 0.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 1855,
+    "weight": 2.6
+  },
+  "notes": [
+    "Carries an electrolaser to stun, never to kill."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

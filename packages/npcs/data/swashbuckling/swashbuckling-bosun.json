@@ -1,0 +1,339 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Grogan \"Ironhand\" Mace",
+    "height": "1.90 m",
+    "weight": "110 kg",
+    "age": "41",
+    "sizeModifier": 0,
+    "appearance": "Bald, tattooed forearms, missing two teeth"
+  },
+  "points": {
+    "budget": 75,
+    "spent": 75,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 64,
+      "advantages": 11,
+      "disadvantages": -15,
+      "skills": 15,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 14,
+      "points": 40
+    },
+    "dx": {
+      "value": 11,
+      "points": 20
+    },
+    "iq": {
+      "value": 9,
+      "points": -20
+    },
+    "ht": {
+      "value": 12,
+      "points": 20
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 16,
+      "base": 14,
+      "points": 4,
+      "current": 16
+    },
+    "will": {
+      "value": 9,
+      "base": 9,
+      "points": 0
+    },
+    "per": {
+      "value": 9,
+      "base": 9,
+      "points": 0
+    },
+    "fp": {
+      "value": 12,
+      "base": 12,
+      "points": 0,
+      "current": 12
+    },
+    "basicSpeed": {
+      "value": 5.75,
+      "base": 5.75,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 20,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 20,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 40,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 60,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 120,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 200,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d",
+      "dice": 1,
+      "adds": 0
+    },
+    "swing": {
+      "notation": "2d",
+      "dice": 2,
+      "adds": 0
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": "Brawling",
+      "value": 9
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 4,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "none",
+      "points": -3
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "High Pain Threshold",
+      "type": "advantage",
+      "points": 10
+    },
+    {
+      "name": "Hard to Kill 2",
+      "type": "advantage",
+      "points": 4
+    },
+    {
+      "name": "Bully (12)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Odious Personal Habit (spits and swears constantly)",
+      "type": "disadvantage",
+      "points": -5
+    }
+  ],
+  "skills": [
+    {
+      "name": "Brawling",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 2,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Broadsword",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 12,
+      "points": 4
+    },
+    {
+      "name": "Seamanship",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 9,
+      "points": 1
+    },
+    {
+      "name": "Intimidation",
+      "attribute": "will",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 10,
+      "points": 4
+    },
+    {
+      "name": "Wrestling",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 10,
+      "points": 1
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Light Club",
+        "damage": [
+          {
+            "notation": "sw+1 cr",
+            "base": "swing",
+            "adds": 1,
+            "type": "cr"
+          },
+          {
+            "notation": "thr+1 cr",
+            "base": "thrust",
+            "adds": 1,
+            "type": "cr"
+          }
+        ],
+        "reach": "1",
+        "parry": {
+          "notation": "0",
+          "modifier": 0,
+          "unbalanced": false
+        },
+        "notes": "ST 10",
+        "cost": 5,
+        "weight": 1.5
+      },
+      {
+        "name": "Brass Knuckles",
+        "damage": [
+          {
+            "notation": "thr cr",
+            "base": "thrust",
+            "adds": 0,
+            "type": "cr"
+          }
+        ],
+        "reach": "C",
+        "parry": {
+          "notation": "0",
+          "modifier": 0,
+          "unbalanced": false
+        },
+        "cost": 10,
+        "weight": 0.125
+      },
+      {
+        "name": "Large Knife",
+        "damage": [
+          {
+            "notation": "sw-2 cut",
+            "base": "swing",
+            "adds": -2,
+            "type": "cut"
+          },
+          {
+            "notation": "thr imp",
+            "base": "thrust",
+            "adds": 0,
+            "type": "imp"
+          }
+        ],
+        "reach": "C,1",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 6",
+        "cost": 40,
+        "weight": 0.5
+      }
+    ],
+    "ranged": []
+  },
+  "equipment": [
+    {
+      "name": "Personal Basics",
+      "cost": 5,
+      "weight": 0.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 60,
+    "weight": 2.625
+  },
+  "notes": [
+    "Fights with a belaying pin (light club); grapples anyone who gets close."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

@@ -1,0 +1,396 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.3.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Madame Corvina Lestrange",
+    "height": "1.65 m",
+    "weight": "54 kg",
+    "age": "29",
+    "sizeModifier": 0,
+    "appearance": "Black lace, a fan, a smile that never reaches her eyes"
+  },
+  "points": {
+    "budget": 125,
+    "spent": 125,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 95,
+      "advantages": 23,
+      "disadvantages": -35,
+      "skills": 42,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 9,
+      "points": -10
+    },
+    "dx": {
+      "value": 12,
+      "points": 40
+    },
+    "iq": {
+      "value": 13,
+      "points": 60
+    },
+    "ht": {
+      "value": 10,
+      "points": 0
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 9,
+      "base": 9,
+      "points": 0,
+      "current": 9
+    },
+    "will": {
+      "value": 13,
+      "base": 13,
+      "points": 0
+    },
+    "per": {
+      "value": 14,
+      "base": 13,
+      "points": 5
+    },
+    "fp": {
+      "value": 10,
+      "base": 10,
+      "points": 0,
+      "current": 10
+    },
+    "basicSpeed": {
+      "value": 5.5,
+      "base": 5.5,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 8.1,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 8.1,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 16.2,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 24.3,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 48.6,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 81,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-2",
+      "dice": 1,
+      "adds": -2
+    },
+    "swing": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": "Smallsword",
+      "value": 10
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [
+    {
+      "source": "appearance",
+      "modifier": 1,
+      "description": "Attractive"
+    }
+  ],
+  "techLevel": {
+    "level": 4,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "French",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    },
+    {
+      "name": "English",
+      "spoken": "accented",
+      "written": "accented",
+      "points": 4
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Appearance (Attractive)",
+      "type": "advantage",
+      "points": 4
+    },
+    {
+      "name": "Eidetic Memory",
+      "type": "advantage",
+      "points": 5
+    },
+    {
+      "name": "Voice",
+      "type": "advantage",
+      "points": 10
+    },
+    {
+      "name": "Secret (agent of the Cardinal)",
+      "type": "disadvantage",
+      "points": -30
+    },
+    {
+      "name": "Selfish (12)",
+      "type": "disadvantage",
+      "points": -5
+    }
+  ],
+  "skills": [
+    {
+      "name": "Smallsword",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 2,
+      "level": 14,
+      "points": 8
+    },
+    {
+      "name": "Acting",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 14,
+      "points": 4
+    },
+    {
+      "name": "Disguise",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 14,
+      "points": 4
+    },
+    {
+      "name": "Holdout",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 13,
+      "points": 2
+    },
+    {
+      "name": "Savoir-Faire (High Society)",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 14,
+      "points": 2
+    },
+    {
+      "name": "Fast-Talk",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 16,
+      "points": 4,
+      "bonuses": [
+        {
+          "name": "Voice",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "name": "Sex Appeal",
+      "attribute": "ht",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 13,
+      "points": 4,
+      "bonuses": [
+        {
+          "name": "Voice",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "name": "Poisons",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 0,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Stealth",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Lockpicking",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 12,
+      "points": 1
+    },
+    {
+      "name": "Detect Lies",
+      "attribute": "per",
+      "difficulty": "H",
+      "relativeLevel": 0,
+      "level": 14,
+      "points": 4
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Smallsword",
+        "damage": [
+          {
+            "notation": "thr+1 imp",
+            "base": "thrust",
+            "adds": 1,
+            "type": "imp"
+          }
+        ],
+        "reach": "1",
+        "parry": {
+          "notation": "0F",
+          "modifier": 0,
+          "unbalanced": false
+        },
+        "notes": "ST 5",
+        "cost": 400,
+        "weight": 0.75
+      },
+      {
+        "name": "Dagger",
+        "damage": [
+          {
+            "notation": "thr-1 imp",
+            "base": "thrust",
+            "adds": -1,
+            "type": "imp"
+          }
+        ],
+        "reach": "C",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 5",
+        "cost": 20,
+        "weight": 0.125
+      }
+    ],
+    "ranged": []
+  },
+  "equipment": [
+    {
+      "name": "Lockpicks",
+      "cost": 50,
+      "weight": 0
+    },
+    {
+      "name": "Pouch, Small",
+      "location": "Belt",
+      "cost": 10,
+      "weight": 0.25
+    },
+    {
+      "name": "Personal Basics",
+      "cost": 5,
+      "weight": 0.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 485,
+    "weight": 1.625
+  },
+  "notes": [
+    "Prefers poison and blackmail to steel; carries a smallsword hidden in a walking cane."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

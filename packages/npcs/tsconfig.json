@@ -1,0 +1,21 @@
+{
+  // Type-checks sources, tests and scripts (`npm run typecheck`); tsconfig.build.json emits dist/.
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    // Workspace imports resolve to the libraries' src/*.ts, as they do at run time in tests and Vite.
+    "customConditions": ["@gurps-sheet/source"],
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": false,
+    "noEmit": true
+  },
+  "include": ["src", "test/*.ts", "scripts/*.ts"]
+}

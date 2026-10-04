@@ -1,0 +1,335 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Professor Edmund Hale",
+    "height": "1.75 m",
+    "weight": "70 kg",
+    "age": "58",
+    "sizeModifier": 0,
+    "appearance": "Tweed jacket, round spectacles, nervous hands"
+  },
+  "points": {
+    "budget": 125,
+    "spent": 125,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 100,
+      "advantages": 13,
+      "disadvantages": -30,
+      "skills": 42,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 9,
+      "points": -10
+    },
+    "dx": {
+      "value": 10,
+      "points": 0
+    },
+    "iq": {
+      "value": 15,
+      "points": 100
+    },
+    "ht": {
+      "value": 11,
+      "points": 10
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 9,
+      "base": 9,
+      "points": 0,
+      "current": 9
+    },
+    "will": {
+      "value": 15,
+      "base": 15,
+      "points": 0
+    },
+    "per": {
+      "value": 15,
+      "base": 15,
+      "points": 0
+    },
+    "fp": {
+      "value": 11,
+      "base": 11,
+      "points": 0,
+      "current": 11
+    },
+    "basicSpeed": {
+      "value": 5.25,
+      "base": 5.25,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 8.1,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 8.1,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 16.2,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 24.3,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 48.6,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 81,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-2",
+      "dice": 1,
+      "adds": -2
+    },
+    "swing": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": null,
+      "value": null
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 6,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    },
+    {
+      "name": "Latin",
+      "spoken": "broken",
+      "written": "native",
+      "points": 4
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Eidetic Memory",
+      "type": "advantage",
+      "points": 5
+    },
+    {
+      "name": "Fearlessness 2",
+      "type": "advantage",
+      "points": 4
+    },
+    {
+      "name": "Curious (12)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Obsession (unmask the Yellow Sign cult) (12)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Bad Sight (Nearsighted, corrected)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Nightmares (12)",
+      "type": "disadvantage",
+      "points": -5
+    }
+  ],
+  "skills": [
+    {
+      "name": "Occultism",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 3,
+      "level": 18,
+      "points": 12
+    },
+    {
+      "name": "Hidden Lore (Demon Lore)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 16,
+      "points": 4
+    },
+    {
+      "name": "Research",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 2,
+      "level": 17,
+      "points": 8
+    },
+    {
+      "name": "History (Ancient)",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 1,
+      "level": 16,
+      "points": 8
+    },
+    {
+      "name": "Archaeology",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 0,
+      "level": 15,
+      "points": 4
+    },
+    {
+      "name": "Guns (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 11,
+      "points": 2
+    },
+    {
+      "name": "Teaching",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 15,
+      "points": 2
+    },
+    {
+      "name": "Writing",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 15,
+      "points": 2
+    }
+  ],
+  "weapons": {
+    "melee": [],
+    "ranged": [
+      {
+        "name": "Revolver, .38",
+        "damage": {
+          "notation": "2d-1 pi",
+          "base": "fixed",
+          "dice": 2,
+          "adds": -1,
+          "type": "pi"
+        },
+        "accuracy": "2",
+        "range": {
+          "notation": "120/1500",
+          "halfDamage": 120,
+          "max": 1500
+        },
+        "rateOfFire": "3",
+        "shots": "6(3i)",
+        "minST": "8",
+        "bulk": -2,
+        "recoil": 2,
+        "legalityClass": 3,
+        "cost": 400,
+        "weight": 1
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Flashlight, Heavy",
+      "location": "Belt",
+      "cost": 20,
+      "weight": 0.5
+    },
+    {
+      "name": "Camera, 35mm",
+      "cost": 50,
+      "weight": 1.5
+    },
+    {
+      "name": "Personal Basics",
+      "cost": 5,
+      "weight": 0.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 475,
+    "weight": 3.5
+  },
+  "notes": [
+    "Knows the right ritual, the right book and the right question; terrible with a gun."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

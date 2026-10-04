@@ -1,0 +1,438 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Wren Ashdown",
+    "height": "1.70 m",
+    "weight": "62 kg",
+    "age": "31",
+    "sizeModifier": 0,
+    "appearance": "Green-brown cloak, quiet as moss"
+  },
+  "points": {
+    "budget": 100,
+    "spent": 100,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 85,
+      "advantages": 7,
+      "disadvantages": -11,
+      "skills": 19,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 11,
+      "points": 10
+    },
+    "dx": {
+      "value": 12,
+      "points": 40
+    },
+    "iq": {
+      "value": 11,
+      "points": 20
+    },
+    "ht": {
+      "value": 11,
+      "points": 10
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 11,
+      "base": 11,
+      "points": 0,
+      "current": 11
+    },
+    "will": {
+      "value": 11,
+      "base": 11,
+      "points": 0
+    },
+    "per": {
+      "value": 12,
+      "base": 11,
+      "points": 5
+    },
+    "fp": {
+      "value": 11,
+      "base": 11,
+      "points": 0,
+      "current": 11
+    },
+    "basicSpeed": {
+      "value": 5.75,
+      "base": 5.75,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 12,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 12,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 24,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 36,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 72,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 120,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    },
+    "swing": {
+      "notation": "1d+1",
+      "dice": 1,
+      "adds": 1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": "Shortsword",
+      "value": 9
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [
+    {
+      "location": "Torso",
+      "locationId": "torso",
+      "dr": 1
+    },
+    {
+      "location": "Arms",
+      "locationId": "arms",
+      "dr": 1
+    },
+    {
+      "location": "Legs",
+      "locationId": "legs",
+      "dr": 1
+    },
+    {
+      "location": "Feet",
+      "locationId": "feet",
+      "dr": 2
+    }
+  ],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 3,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "Common",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Acute Vision 1",
+      "type": "advantage",
+      "points": 2
+    },
+    {
+      "name": "Absolute Direction",
+      "type": "advantage",
+      "points": 5
+    },
+    {
+      "name": "Loner (12)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Sense of Duty (the forest villages)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Never sleeps under a roof",
+      "type": "quirk",
+      "points": -1
+    }
+  ],
+  "skills": [
+    {
+      "name": "Bow",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 1,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Stealth",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Survival (Woodlands)",
+      "attribute": "per",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Tracking",
+      "attribute": "per",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Camouflage",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 13,
+      "points": 2
+    },
+    {
+      "name": "Shortsword",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Observation",
+      "attribute": "per",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Climbing",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 11,
+      "points": 1
+    },
+    {
+      "name": "Fast-Draw (Arrow)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Shortsword",
+        "damage": [
+          {
+            "notation": "sw cut",
+            "base": "swing",
+            "adds": 0,
+            "type": "cut"
+          },
+          {
+            "notation": "thr imp",
+            "base": "thrust",
+            "adds": 0,
+            "type": "imp"
+          }
+        ],
+        "reach": "1",
+        "parry": {
+          "notation": "0",
+          "modifier": 0,
+          "unbalanced": false
+        },
+        "notes": "ST 8",
+        "cost": 400,
+        "weight": 1
+      },
+      {
+        "name": "Large Knife",
+        "damage": [
+          {
+            "notation": "sw-2 cut",
+            "base": "swing",
+            "adds": -2,
+            "type": "cut"
+          },
+          {
+            "notation": "thr imp",
+            "base": "thrust",
+            "adds": 0,
+            "type": "imp"
+          }
+        ],
+        "reach": "C,1",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 6",
+        "cost": 40,
+        "weight": 0.5
+      }
+    ],
+    "ranged": [
+      {
+        "name": "Longbow",
+        "damage": {
+          "notation": "thr+2 imp",
+          "base": "thrust",
+          "adds": 2,
+          "type": "imp"
+        },
+        "accuracy": "3",
+        "range": {
+          "notation": "165/220",
+          "halfDamage": 165,
+          "max": 220
+        },
+        "rateOfFire": "1",
+        "shots": "1(2)",
+        "minST": "11†",
+        "bulk": -8,
+        "recoil": null,
+        "legalityClass": null,
+        "cost": 200,
+        "weight": 1.5
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Leather Jacket",
+      "location": "Torso",
+      "cost": 50,
+      "weight": 2
+    },
+    {
+      "name": "Leather Pants",
+      "location": "Legs",
+      "cost": 40,
+      "weight": 1.5
+    },
+    {
+      "name": "Boots",
+      "location": "Feet",
+      "cost": 80,
+      "weight": 1.5
+    },
+    {
+      "name": "Shoulder Quiver",
+      "location": "Back",
+      "cost": 10,
+      "weight": 0.25
+    },
+    {
+      "name": "Backpack, Small",
+      "location": "Back",
+      "cost": 60,
+      "weight": 1.5
+    },
+    {
+      "name": "Blanket",
+      "location": "Back",
+      "cost": 20,
+      "weight": 2
+    },
+    {
+      "name": "Traveler's Rations",
+      "cost": 2,
+      "weight": 0.25
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 902,
+    "weight": 12
+  },
+  "notes": [
+    "Shoots from cover at long range, then relocates; avoids melee."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

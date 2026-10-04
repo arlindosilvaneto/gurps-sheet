@@ -6,33 +6,50 @@
   "license": "UNLICENSED",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
-      "default": "./src/index.js"
+      "@gurps-sheet/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./formula": {
-      "types": "./types/formula.d.ts",
-      "default": "./src/formula.js"
+      "@gurps-sheet/source": "./src/formula.ts",
+      "types": "./dist/formula.d.ts",
+      "default": "./dist/formula.js"
     },
-    "./constants": "./src/constants.js",
+    "./constants": {
+      "@gurps-sheet/source": "./src/constants.ts",
+      "types": "./dist/constants.d.ts",
+      "default": "./dist/constants.js"
+    },
     "./schema": "./schema/gurps-character.schema.json",
     "./vocabulary": "./schema/x-gurps-vocabulary.schema.json",
     "./package.json": "./package.json"
   },
+  "types": "./dist/index.d.ts",
   "files": [
+    "dist",
     "src",
     "schema",
     "examples",
-    "types",
     "README.md"
   ],
   "scripts": {
-    "test": "node --test test/ && node scripts/generate-types.mjs --check && npm run typecheck",
-    "types": "node scripts/generate-types.mjs",
-    "typecheck": "tsc --noEmit --strict --module nodenext --moduleResolution nodenext --target es2022 --skipLibCheck false types/usage.ts"
+    "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.build.json",
+    "prepare": "npm run build",
+    "test": "npm run typecheck && npm run test:unit && npm run types -- --check && npm run test:dist",
+    "test:unit": "node --conditions=@gurps-sheet/source --import tsx --test test/*.test.ts",
+    "test:dist": "npm run build && tsc -p test/consumer/tsconfig.json && node test/consumer/smoke.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "types": "node scripts/generate-types.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "json-schema-to-typescript": "^15.0.4",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=20.19"
@@ -43,10 +60,5 @@
     "character-sheet",
     "json-schema",
     "combat-engine"
-  ],
-  "devDependencies": {
-    "json-schema-to-typescript": "^15.0.4",
-    "typescript": "^5.9.3"
-  },
-  "types": "./types/index.d.ts"
+  ]
 }

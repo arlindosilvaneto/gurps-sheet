@@ -1,0 +1,353 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.3.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Abigail Thorne",
+    "height": "1.68 m",
+    "weight": "60 kg",
+    "age": "28",
+    "sizeModifier": 0,
+    "appearance": "Buckskin jacket, long rifle, sunburned face"
+  },
+  "points": {
+    "budget": 100,
+    "spent": 100,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 95,
+      "advantages": 5,
+      "disadvantages": -15,
+      "skills": 15,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 11,
+      "points": 10
+    },
+    "dx": {
+      "value": 12,
+      "points": 40
+    },
+    "iq": {
+      "value": 11,
+      "points": 20
+    },
+    "ht": {
+      "value": 12,
+      "points": 20
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 11,
+      "base": 11,
+      "points": 0,
+      "current": 11
+    },
+    "will": {
+      "value": 11,
+      "base": 11,
+      "points": 0
+    },
+    "per": {
+      "value": 12,
+      "base": 11,
+      "points": 5
+    },
+    "fp": {
+      "value": 12,
+      "base": 12,
+      "points": 0,
+      "current": 12
+    },
+    "basicSpeed": {
+      "value": 6,
+      "base": 6,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 6,
+      "base": 6,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 12,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 12,
+        "move": 6,
+        "dodge": 9
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 24,
+        "move": 4,
+        "dodge": 8
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 36,
+        "move": 3,
+        "dodge": 7
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 72,
+        "move": 2,
+        "dodge": 6
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 120,
+        "move": 1,
+        "dodge": 5
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    },
+    "swing": {
+      "notation": "1d+1",
+      "dice": 1,
+      "adds": 1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 9
+    },
+    "parry": {
+      "skill": "Knife",
+      "value": 9
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 5,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Absolute Direction",
+      "type": "advantage",
+      "points": 5
+    },
+    {
+      "name": "Loner (12)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Stubbornness",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Sense of Duty (the wagon trains she guides)",
+      "type": "disadvantage",
+      "points": -5
+    }
+  ],
+  "skills": [
+    {
+      "name": "Guns (Rifle)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 2,
+      "level": 14,
+      "points": 4
+    },
+    {
+      "name": "Tracking",
+      "attribute": "per",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Survival (Plains)",
+      "attribute": "per",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Riding (Horse)",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Stealth",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Navigation (Land)",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 13,
+      "points": 1,
+      "bonuses": [
+        {
+          "name": "Absolute Direction",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 1
+    },
+    {
+      "name": "First Aid",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Large Knife",
+        "damage": [
+          {
+            "notation": "sw-2 cut",
+            "base": "swing",
+            "adds": -2,
+            "type": "cut"
+          },
+          {
+            "notation": "thr imp",
+            "base": "thrust",
+            "adds": 0,
+            "type": "imp"
+          }
+        ],
+        "reach": "C,1",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 6",
+        "cost": 40,
+        "weight": 0.5
+      }
+    ],
+    "ranged": [
+      {
+        "name": "Cartridge Rifle, .45",
+        "damage": {
+          "notation": "5d pi+",
+          "base": "fixed",
+          "dice": 5,
+          "adds": 0,
+          "type": "pi+"
+        },
+        "accuracy": "3",
+        "range": {
+          "notation": "600/2000",
+          "halfDamage": 600,
+          "max": 2000
+        },
+        "rateOfFire": "1",
+        "shots": "1(4)",
+        "minST": "10†",
+        "bulk": -6,
+        "recoil": 3,
+        "legalityClass": 3,
+        "cost": 200,
+        "weight": 3
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "Saddle and Tack",
+      "location": "Horse",
+      "cost": 150,
+      "weight": 7.5
+    },
+    {
+      "name": "Blanket",
+      "location": "Back",
+      "cost": 20,
+      "weight": 2
+    },
+    {
+      "name": "Traveler's Rations",
+      "cost": 2,
+      "weight": 0.25
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 412,
+    "weight": 13.25
+  },
+  "notes": [
+    "Never lost; picks off pursuers at long range with the rifle."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

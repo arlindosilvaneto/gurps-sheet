@@ -1,0 +1,315 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Brother Silas",
+    "height": "1.72 m",
+    "weight": "68 kg",
+    "age": "33",
+    "sizeModifier": 0,
+    "appearance": "Hooded yellow robe over a dock worker's clothes"
+  },
+  "points": {
+    "budget": 50,
+    "spent": 50,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 40,
+      "advantages": 15,
+      "disadvantages": -21,
+      "skills": 16,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 11,
+      "points": 10
+    },
+    "dx": {
+      "value": 11,
+      "points": 20
+    },
+    "iq": {
+      "value": 10,
+      "points": 0
+    },
+    "ht": {
+      "value": 10,
+      "points": 0
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 11,
+      "base": 11,
+      "points": 0,
+      "current": 11
+    },
+    "will": {
+      "value": 12,
+      "base": 10,
+      "points": 10
+    },
+    "per": {
+      "value": 10,
+      "base": 10,
+      "points": 0
+    },
+    "fp": {
+      "value": 10,
+      "base": 10,
+      "points": 0,
+      "current": 10
+    },
+    "basicSpeed": {
+      "value": 5.25,
+      "base": 5.25,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 12,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 12,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 24,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 36,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 72,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 120,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    },
+    "swing": {
+      "notation": "1d+1",
+      "dice": 1,
+      "adds": 1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": "Knife",
+      "value": 9
+    },
+    "block": {
+      "skill": null,
+      "value": null
+    }
+  },
+  "damageResistance": [],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 6,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "English",
+      "spoken": "native",
+      "written": "native",
+      "points": 0
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Unfazeable",
+      "type": "advantage",
+      "points": 15
+    },
+    {
+      "name": "Fanaticism (the Yellow Sign)",
+      "type": "disadvantage",
+      "points": -15
+    },
+    {
+      "name": "Intolerance (unbelievers)",
+      "type": "disadvantage",
+      "points": -5
+    },
+    {
+      "name": "Hums a tuneless hymn",
+      "type": "quirk",
+      "points": -1
+    }
+  ],
+  "skills": [
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 2,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Religious Ritual (the Yellow Sign)",
+      "attribute": "iq",
+      "difficulty": "H",
+      "relativeLevel": 0,
+      "level": 10,
+      "points": 4
+    },
+    {
+      "name": "Occultism",
+      "attribute": "iq",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 10,
+      "points": 2
+    },
+    {
+      "name": "Stealth",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 2
+    },
+    {
+      "name": "Intimidation",
+      "attribute": "will",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Brawling",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    },
+    {
+      "name": "Guns (Pistol)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Dagger",
+        "damage": [
+          {
+            "notation": "thr-1 imp",
+            "base": "thrust",
+            "adds": -1,
+            "type": "imp"
+          }
+        ],
+        "reach": "C",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 5",
+        "cost": 20,
+        "weight": 0.125
+      }
+    ],
+    "ranged": [
+      {
+        "name": "Snub Revolver, .38",
+        "damage": {
+          "notation": "1d+2 pi",
+          "base": "fixed",
+          "dice": 1,
+          "adds": 2,
+          "type": "pi"
+        },
+        "accuracy": "1",
+        "range": {
+          "notation": "120/1250",
+          "halfDamage": 120,
+          "max": 1250
+        },
+        "rateOfFire": "3",
+        "shots": "5(3i)",
+        "minST": "8",
+        "bulk": -1,
+        "recoil": 3,
+        "legalityClass": 3,
+        "cost": 250,
+        "weight": 0.75
+      }
+    ]
+  },
+  "equipment": [],
+  "possessionsTotal": {
+    "cost": 270,
+    "weight": 0.875
+  },
+  "notes": [
+    "Fights to the death in front of the altar; never flees, never talks."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}

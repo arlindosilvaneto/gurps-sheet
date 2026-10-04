@@ -9,6 +9,7 @@ A POC web version of the Brazilian-Portuguese GURPS 4e character sheet "Planilha
 It is an npm-workspaces monorepo:
 - **The sheet editor** (the Vite app) lives at the root.
 - **`packages/character`** (`@gurps-sheet/character`) is the engine-facing library. It owns the `gurps-character` format, its schema and formula evaluator, plus loading, validation, verification, in-play updates and TypeScript types. External tools (combat engines etc.) depend on it, and so does the app.
+- **`packages/npcs`** (`@gurps-sheet/npcs`) is a library of ready-made NPCs, grouped by adventure style and built only from Basic Set material. It serves as examples and as engine test fixtures, and depends on `@gurps-sheet/character`.
 
 ## Commands
 
@@ -16,13 +17,17 @@ It is an npm-workspaces monorepo:
 npm install          # installs both workspaces (links packages/character into node_modules)
 npm run dev          # Vite dev server (http://localhost:5173)
 npm run build        # static build -> dist/
-npm test             # app tests, then the library's (tests + types freshness + typecheck)
-npm run test:app     # node:test on test/ (built-in runner; Vitest 5 needs Node 22, this targets Node 20.19+)
-npm run test:lib     # library only
+npm test             # app tests, then each library's (typecheck, tests, generated-file freshness, dist consumer check)
+npm run test:app     # node:test on test/ (built-in runner; Vitest 5 needs Node 22, this targets Node 20.19+); the library runs from its .ts source via tsx
+npm run test:lib     # @gurps-sheet/character only
+npm run test:npcs    # @gurps-sheet/npcs only
 node --test test/rules.test.js                         # one file
 node --test --test-name-pattern="skill cost" test/     # one test by name
 GURPS_PDF_OUT=/tmp/out.pdf node --test test/pdf.test.js  # also write a sample export to inspect
-npm run types -w @gurps-sheet/character      # regenerate types/character.d.ts after a schema change
+npm run types -w @gurps-sheet/character      # regenerate src/character.generated.ts after a schema change
+npm run build -w @gurps-sheet/character      # compile the library to packages/character/dist (also runs on npm install)
+npm run generate -w @gurps-sheet/npcs        # rewrite packages/npcs/data/*.json after changing an NPC or the catalog
+npm run report -w @gurps-sheet/npcs          # per-NPC points, defenses and skill levels (for tuning definitions)
 ```
 
 ## Architecture
@@ -56,23 +61,45 @@ At runtime the same `layout.json` drives both outputs, which keeps screen and PD
 
 `schema/gurps-character.schema.json` (JSON Schema 2020-12) is the engine-neutral character format, specified in the package `README.md`, which is also the API guide for engine authors. Its keys are English. Each parameter carries an `x-gurps` annotation (role, formula, unit, cost, Basic Set page, original `sheetField`, pt-BR label, `bounds` for in-play state), and rule tables live in `x-gurps-tables`.
 
+The library is TypeScript (strict, `module: nodenext`, so relative imports use `.js` extensions). `tsc -p tsconfig.build.json` compiles `src/` to `dist/` (git-ignored), which is what outside consumers get.
+- **Source condition:** the `exports` map has a custom `@gurps-sheet/source` condition pointing at `src/*.ts`. Everything in this repo enables it: Vite (`resolve.conditions` in `vite.config.js`), the tests (`node --conditions=@gurps-sheet/source --import tsx`), and `tsc` (`customConditions`). Dev, build and tests therefore always use the current source, and a stale `dist/` can't affect them.
+- **Consumer check:** `npm run test:dist` builds, then checks the package without the condition, the way consumers see it. `test/consumer/usage.ts` type-checks against `dist/*.d.ts` with no Node or DOM types, and `test/consumer/smoke.mjs` runs `dist/` on plain Node.
+- **Schema JSON:** the schema files are imported once, in `src/schemas.ts`, and typed there as `CharacterSchema` (`src/schema-types.ts` types the x-gurps vocabulary and rule tables). The `../schema/` paths resolve the same from `src/` and `dist/`.
+- **Ajv interop:** `Ajv2020` is a named import. `ajv-formats` is CommonJS with only a default export, so it is called through `.default`, which works in Node, `tsc` and Vite.
+
 Modules in `src/`:
-- `formula.js`: the dependency-free evaluator, `recompute()` and `deviations()`.
-- `constants.js`: dependency-free.
-- `validate.js`: Ajv, compiled lazily, with structured errors `{ pointer, keyword, params, message }`.
-- `load.js`: `parseCharacter` / `serializeCharacter` / `checkEnvelope`, throwing `CharacterError` with a stable `code` and `details`.
-- `verify.js`: `verifyCharacter`, which never trusts `integrity`.
-- `update.js`: `getUpdatableFields` / `updateCharacter` and the HP/FP helpers.
-- `stats.js`: `combatStats`.
+- `formula.ts`: the dependency-free evaluator, `recompute()` and `deviations()`.
+- `constants.ts`: dependency-free.
+- `validate.ts`: Ajv, compiled lazily, with structured errors `{ pointer, keyword, params, message }`.
+- `load.ts`: `parseCharacter` / `serializeCharacter` / `checkEnvelope`, throwing `CharacterError` with a stable `code` and `details`.
+- `verify.ts`: `verifyCharacter`, which never trusts `integrity`.
+- `update.ts`: `getUpdatableFields` / `updateCharacter` and the HP/FP helpers.
+- `stats.ts`: `combatStats`.
+- `character.generated.ts`: the document types, generated from the schema.
 
 Rules for the library:
 - **The schema decides what engines may update.** Values with `x-gurps.role: "state"` (today current HP/FP), within `x-gurps.bounds`. `updateCharacter` is strict (throws, all-or-nothing); the combat helpers clamp. Never add updatable fields in code: annotate the schema.
 - **The library never mutates inputs.** Updates return a new document and set `meta.updatedAt`.
 - **Messages:** engine-facing messages are English. The app translates `CharacterError` codes into pt-BR (`sheetError()` in `src/character.js`).
-- **Types:** `types/character.d.ts` is generated (`npm run types`), and the library's `npm test` fails when it is stale. `types/index.d.ts` / `formula.d.ts` are hand-written, and `types/usage.ts` is compiled by `npm run typecheck` to keep them honest. Update them when the API changes.
+- **Types:** `src/character.generated.ts` is generated (`npm run types`); never edit it by hand. The library's `npm test` fails when it is stale. Public API types live next to their code, and `src/index.ts` re-exports them.
 - **The app keeps Ajv out of its main bundle.** It imports only `@gurps-sheet/character/formula` and `/constants` statically, and loads the full library with `import()` when saving or opening a file.
 
 The schema and `src/rules.js` (the app's rules engine) encode the same rules twice. `test/schema-sync.test.js` keeps them in sync: tables are checked against `damage()`/`skillCost()`, and the example character is recomputed through both. When a rule changes, update both. Schema-only tests live in `packages/character/test/`.
+
+### The NPC library (`packages/npcs`, `@gurps-sheet/npcs`)
+
+It is TypeScript with the same setup as the character library: the `@gurps-sheet/source` condition, `tsx` tests and `dist/` for consumers.
+- **Catalog** (`src/catalog/`): Basic Set skills, spells, traits, weapons, armor and gear. Every entry cites its Basic Set page, and the tests reject an NPC part without one. Traits that raise skills declare `skillBonuses` (Magery, Combat Reflexes, Absolute Direction, talents, Voice, Charisma, Empathy, Callous).
+- **Definitions** (`src/styles/<style>.ts`): compact NPCs with attributes, traits, skills at relative levels, and equipment.
+- **Builder** (`src/build.ts`): `buildNpc()` computes every derived value from the schema formulas until they settle. It applies trait bonuses as NH bonuses and fails on over-budget NPCs or unknown defense skills. It mirrors the editor's notation parsing (damage, parry, range) so files round-trip.
+- **Generated files** (`data/<style>/<id>.json` and `data/index.json`): committed. `npm test` fails when they differ from the build.
+
+Rules for adding or changing NPCs:
+- Use only catalog entries. To add an entry, copy its stats from the Basic Set with the page number.
+- Keep 4 to 6 NPCs per style, and make each spend exactly its `budget` (use `npm run report`).
+- Give every weapon's skill to the NPC that carries it, and keep weapons at or below the NPC's TL.
+- Run `npm run generate` afterwards.
+- `test/npcs.test.js` (app) loads every NPC into the sheet and saves it back unchanged, which also enforces the sheet's row limits. The editor accepts English hit-location names and the Basic Set's `F` (fencing) parry mark for this reason.
 
 **Save/load** (`src/character.js`, pure; validation and loading come from the lazily imported library). The goal is that sheet → file → sheet returns exactly the same values, and nothing is ever silently dropped. `test/character.test.js` round-trips a deliberately messy sheet to enforce this.
 - **Files:** `gurps-character` 1.0 to 1.3 are read (`SUPPORTED_MINOR`). The schema is closed (`additionalProperties: false`), so a newer minor version gets an "update the reader" message rather than a misleading schema error.

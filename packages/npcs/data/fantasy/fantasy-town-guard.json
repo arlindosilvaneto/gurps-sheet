@@ -1,0 +1,362 @@
+{
+  "format": "gurps-character",
+  "formatVersion": "1.1.0",
+  "ruleset": {
+    "system": "GURPS",
+    "edition": 4,
+    "units": "metric",
+    "currency": "$"
+  },
+  "meta": {
+    "locale": "en-US",
+    "createdAt": "2026-10-04T12:00:00Z",
+    "updatedAt": "2026-10-04T12:00:00Z",
+    "generator": {
+      "name": "@gurps-sheet/npcs",
+      "version": "0.1.0"
+    }
+  },
+  "profile": {
+    "name": "Aldric Brenn",
+    "height": "1.76 m",
+    "weight": "78 kg",
+    "age": "27",
+    "sizeModifier": 0,
+    "appearance": "Dented pot-helm, watch tabard over leather"
+  },
+  "points": {
+    "budget": 50,
+    "spent": 50,
+    "unspent": 0,
+    "breakdown": {
+      "attributes": 50,
+      "advantages": 2,
+      "disadvantages": -21,
+      "skills": 19,
+      "other": 0
+    }
+  },
+  "attributes": {
+    "st": {
+      "value": 11,
+      "points": 10
+    },
+    "dx": {
+      "value": 11,
+      "points": 20
+    },
+    "iq": {
+      "value": 10,
+      "points": 0
+    },
+    "ht": {
+      "value": 12,
+      "points": 20
+    }
+  },
+  "secondary": {
+    "hp": {
+      "value": 11,
+      "base": 11,
+      "points": 0,
+      "current": 11
+    },
+    "will": {
+      "value": 10,
+      "base": 10,
+      "points": 0
+    },
+    "per": {
+      "value": 10,
+      "base": 10,
+      "points": 0
+    },
+    "fp": {
+      "value": 12,
+      "base": 12,
+      "points": 0,
+      "current": 12
+    },
+    "basicSpeed": {
+      "value": 5.75,
+      "base": 5.75,
+      "points": 0
+    },
+    "basicMove": {
+      "value": 5,
+      "base": 5,
+      "points": 0
+    }
+  },
+  "encumbrance": {
+    "basicLift": 12,
+    "levels": [
+      {
+        "level": 0,
+        "id": "none",
+        "maxLoad": 12,
+        "move": 5,
+        "dodge": 8
+      },
+      {
+        "level": 1,
+        "id": "light",
+        "maxLoad": 24,
+        "move": 4,
+        "dodge": 7
+      },
+      {
+        "level": 2,
+        "id": "medium",
+        "maxLoad": 36,
+        "move": 3,
+        "dodge": 6
+      },
+      {
+        "level": 3,
+        "id": "heavy",
+        "maxLoad": 72,
+        "move": 2,
+        "dodge": 5
+      },
+      {
+        "level": 4,
+        "id": "extraHeavy",
+        "maxLoad": 120,
+        "move": 1,
+        "dodge": 4
+      }
+    ]
+  },
+  "damage": {
+    "thrust": {
+      "notation": "1d-1",
+      "dice": 1,
+      "adds": -1
+    },
+    "swing": {
+      "notation": "1d+1",
+      "dice": 1,
+      "adds": 1
+    }
+  },
+  "defenses": {
+    "dodge": {
+      "value": 8
+    },
+    "parry": {
+      "skill": "Spear",
+      "value": 9
+    },
+    "block": {
+      "skill": "Shield (Shield)",
+      "value": 9
+    }
+  },
+  "damageResistance": [
+    {
+      "location": "Head",
+      "locationId": "head",
+      "dr": 4
+    },
+    {
+      "location": "Torso",
+      "locationId": "torso",
+      "dr": 2
+    },
+    {
+      "location": "Feet",
+      "locationId": "feet",
+      "dr": 2
+    }
+  ],
+  "reactionModifiers": [],
+  "techLevel": {
+    "level": 3,
+    "points": 0
+  },
+  "languages": [
+    {
+      "name": "Common",
+      "spoken": "native",
+      "written": "none",
+      "points": -3
+    }
+  ],
+  "culturalFamiliarities": [],
+  "traits": [
+    {
+      "name": "Fit",
+      "type": "advantage",
+      "points": 5
+    },
+    {
+      "name": "Duty (Town Watch, 12 or less)",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Laziness",
+      "type": "disadvantage",
+      "points": -10
+    },
+    {
+      "name": "Gossips with every innkeeper",
+      "type": "quirk",
+      "points": -1
+    }
+  ],
+  "skills": [
+    {
+      "name": "Spear",
+      "attribute": "dx",
+      "difficulty": "A",
+      "relativeLevel": 2,
+      "level": 13,
+      "points": 8
+    },
+    {
+      "name": "Shield (Shield)",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 2,
+      "level": 13,
+      "points": 4
+    },
+    {
+      "name": "Brawling",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 1,
+      "level": 12,
+      "points": 2
+    },
+    {
+      "name": "Knife",
+      "attribute": "dx",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 11,
+      "points": 1
+    },
+    {
+      "name": "Observation",
+      "attribute": "per",
+      "difficulty": "A",
+      "relativeLevel": 0,
+      "level": 10,
+      "points": 2
+    },
+    {
+      "name": "Area Knowledge (Millbrook)",
+      "attribute": "iq",
+      "difficulty": "E",
+      "relativeLevel": 0,
+      "level": 10,
+      "points": 1
+    },
+    {
+      "name": "Intimidation",
+      "attribute": "will",
+      "difficulty": "A",
+      "relativeLevel": -1,
+      "level": 9,
+      "points": 1
+    }
+  ],
+  "weapons": {
+    "melee": [
+      {
+        "name": "Spear",
+        "damage": [
+          {
+            "notation": "thr+2 imp",
+            "base": "thrust",
+            "adds": 2,
+            "type": "imp"
+          }
+        ],
+        "reach": "1*",
+        "parry": {
+          "notation": "0",
+          "modifier": 0,
+          "unbalanced": false
+        },
+        "notes": "ST 9",
+        "cost": 40,
+        "weight": 2
+      },
+      {
+        "name": "Large Knife",
+        "damage": [
+          {
+            "notation": "sw-2 cut",
+            "base": "swing",
+            "adds": -2,
+            "type": "cut"
+          },
+          {
+            "notation": "thr imp",
+            "base": "thrust",
+            "adds": 0,
+            "type": "imp"
+          }
+        ],
+        "reach": "C,1",
+        "parry": {
+          "notation": "-1",
+          "modifier": -1,
+          "unbalanced": false
+        },
+        "notes": "ST 6",
+        "cost": 40,
+        "weight": 0.5
+      }
+    ],
+    "ranged": []
+  },
+  "equipment": [
+    {
+      "name": "Leather Armor",
+      "location": "Torso",
+      "cost": 100,
+      "weight": 5
+    },
+    {
+      "name": "Pot-Helm",
+      "location": "Head",
+      "cost": 100,
+      "weight": 2.5
+    },
+    {
+      "name": "Boots",
+      "location": "Feet",
+      "cost": 80,
+      "weight": 1.5
+    },
+    {
+      "name": "Medium Shield (DB 2)",
+      "location": "Left arm",
+      "cost": 60,
+      "weight": 7.5
+    },
+    {
+      "name": "Personal Basics",
+      "cost": 5,
+      "weight": 0.5
+    }
+  ],
+  "possessionsTotal": {
+    "cost": 425,
+    "weight": 19.5
+  },
+  "notes": [
+    "Works in pairs; blows a whistle and falls back to the gatehouse when outnumbered."
+  ],
+  "integrity": {
+    "experimental": false,
+    "rulesCompliant": true,
+    "deviations": [],
+    "issues": []
+  }
+}
